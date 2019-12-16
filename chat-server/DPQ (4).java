@@ -1,6 +1,11 @@
-// Java implementation of Dijkstra's Algorithm 
-// using Priority Queue 
+/**
+ * Adapted implementation of Djikstra's SSP Algo
+ * Finds Shortest bus path between NUS bus stops
+ * Currently functioning with assumption that a user will not change buses
+ * Base implementation from Geek for Geeks
+ */
 import java.util.*; 
+
 public class DPQ { 
 	private Map<String,Double> dist; 
 	private Map<String,Integer> stops; 
