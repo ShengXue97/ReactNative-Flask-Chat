@@ -6,6 +6,8 @@ import {
     TextInput,
     StyleSheet
 } from "react-native";
+import BusButton from "./components/Services/BusButton";
+
 
 class Inbox extends Component {
     render() {
@@ -24,6 +26,12 @@ class Inbox extends Component {
                     </View>
 
                 </View>
+                <View style = {{flex : 1, flexDirection: 'column'}}>
+                            <BusButton onPress = {()=>this.showAlert('PGP -> KR MRT -> LT27 -> Opp UHC --> YIH')}>BIZ2</BusButton>
+                            <BusButton onPress = {()=>this.showAlert('A2')}>COM2</BusButton>
+                            <BusButton onPress = {()=>this.showAlert('D1')}>Ventus</BusButton>
+                            <BusButton onPress = {()=>this.showAlert('D2')}>NUS IT</BusButton>
+                            </View>
             </SafeAreaView>
         );
     }

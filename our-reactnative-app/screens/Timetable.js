@@ -2,26 +2,17 @@ import React, { Component } from "react";
 import {
     View,
     Text,
-    StyleSheet,
     SafeAreaView,
     TextInput,
     Platform,
     StatusBar,
     ScrollView,
-    TouchableHighlight,
-    Image,
     Dimensions,
-    Alert,
-    Button,
     TouchableOpacity
 } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Category from './components/Timetable/Category.js'
 
 import { createStackNavigator } from 'react-navigation'; 
-import AwesomeButton from "react-native-really-awesome-button";
-
-const { height, width } = Dimensions.get('window')
 
 export class Monday extends Component {
     componentWillMount() {

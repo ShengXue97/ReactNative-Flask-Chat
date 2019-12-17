@@ -8,21 +8,12 @@ import {
   Platform,
   StatusBar,
   ScrollView,
-  Dimensions,
   Alert,
   Button,
   Slider,
   Clipboard,
-  TouchableOpacity
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Constants } from 'expo';
-import Category from './components/Timetable/Category.js';
-
-import { createStackNavigator } from 'react-navigation';
-import AwesomeButton from 'react-native-really-awesome-button';
-
-const { height, width } = Dimensions.get('window');
 
 export class Settings extends Component {
   constructor(props) {
@@ -95,8 +86,9 @@ export class Settings extends Component {
                 underlineColorAndroid="transparent"
                 placeholder="NusMods sharing link"
                 placeholderTextColor="black"
+                //selectTextOnFocus = 'true'
                 onChangeText={(text) => this.setState({text})}
-              value={this.state.text}
+                value={this.state.text}
                 style={{
                   height: 40,
                   borderColor: 'gray',
@@ -105,19 +97,7 @@ export class Settings extends Component {
                 }}
               />
               
-              <TouchableOpacity onPress=
-              {this.get_Text_From_Clipboard} 
-              activeOpacity={0.8} 
-              style={styles.button} >
-              <Text style={styles.TextStyle}> 
-              PASTE NUS MODS LINK </Text>
-              </TouchableOpacity>
 
-              <Text>{this.state.clipboardContent}</Text>
-        <Button
-          onPress={this.readFromClipboard}
-          title="Paste from Clipboard"
-        />
             </View>
 
 
