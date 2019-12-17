@@ -1,83 +1,161 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-
-import { createBottomTabNavigator } from 'react-navigation'
-import Icon from 'react-native-vector-icons/FontAwesome';
-import BusStops from './screens/BusStops'
-import Settings from './screens/Settings'
-import BusServices from './screens/BusServices'
-import Timetable from './screens/Timetable'
-import Messages from './screens/Messages'
-import Favourites from './screens/Favourites'
+import { StyleSheet, Text, View, TextInput, Button, FlatList } from 'react-native';
 import { SafeAreaView } from "react-navigation";
+import axios from 'axios';
+import tail from 'lodash/tail';
+import Constants from 'expo-constants';
 
-export default createBottomTabNavigator({
-  Settings: {
-    screen: Settings,
-    navigationOptions: {
-      tabBarLabel: 'Settings',
-      tabBarIcon: ({ tintColor }) => (
-        <Image source={require('./assets/settingsIcon.png')} style={{ height: 25, width: 25, tintColor: tintColor }} />
-      )
-    }
-  },
-  Timetable: {
-    screen: Timetable,
-    navigationOptions: {
-      tabBarLabel: 'Crowd Levels',
-      tabBarIcon: ({ tintColor }) => (
-        <Image source={require('./assets/timetableIcon.png')} style={{ height: 25, width: 25, tintColor: tintColor }} />
-      )
-    }
-  },
-  
-  BusStops: {
-    screen: BusStops,
-    navigationOptions: {
-      tabBarLabel: 'Bus Stops',
-      tabBarIcon: ({ tintColor }) => (
-        <Image source={require('./assets/busStopIcon.png')} style={{ height: 25, width: 25, tintColor: tintColor }} />
-      )
-    }
-  },
-  BusServices: {
-    screen: BusServices,
-    navigationOptions: {
-      tabBarLabel: 'Bus Services',
-      tabBarIcon: ({ tintColor }) => (
-        <Image source={require('./assets/busIcon.png')} style={{ height: 25, width: 25, tintColor: tintColor }} />
-      )
-    }
-  },
-  Favourites: {
-    screen: Favourites,
-    navigationOptions: {
-      tabBarLabel: 'Favourites',
-      tabBarIcon: ({ tintColor }) => (
-        <Image source={require('./assets/starIcon.png')} style={{ height: 25, width: 25, tintColor: tintColor }} />
-      )
-    }
-  },
-  Messages: {
-    screen: Messages,
-    navigationOptions: {
-      tabBarLabel: 'Messages',
-      tabBarIcon: ({ tintColor }) => (
-        <Image source={require('./assets/mailIcon.png')} style={{ height: 25, width: 25, tintColor: tintColor }} />
-      )
-    }
+const serverURL = 'http://172.17.143.41:8668';
+const http = axios.create({
+  baseURL: serverURL,
+});
+
+const DATA = [
+      {
+        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+        title: 'First Item',
+      },
+      {
+        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+        title: 'Second Item',
+      },
+      {
+        id: '58694a0f-3da1-471f-bd96-145571e29d72',
+        title: 'Third Item',
+      },
+];
+
+function Item({ title }) {
+  return (
+    <View style={styles.item}>
+      <Text style={styles.title}>{title}</Text>
+    </View>
+  );
+}
+
+export default class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      input: '',
+      msgs: [],
+    };
   }
-}, {
-    tabBarOptions: {
-      activeTintColor: '#376dcf',
-      inactiveTintColor: 'grey',
-      style: {
-        backgroundColor: 'white',
-        borderTopWidth: 0,
-        shadowOffset: { width: 3, height: 3 },
-        shadowColor: 'black',
-        shadowOpacity: 0.5,
-        elevation: 5
-      }
+
+  
+
+  onLogin(){
+    const { isLoggedIn, username } = this.state;
+    if(!isLoggedIn){
+      // POST to Flask Server
+      http.post('http://172.17.143.41:8668/login', {username})
+      .then(() => this.onLoginSuccess())
+      .catch((err) => console.log(err));
+    } else {
+      alert('You are already logged in !');
     }
-  })
+
+    //const response = await fetch('http://dummy.restapiexample.com/api/v1/employees');
+    //console.log("response : " + JSON.stringify());
+  }
+
+  onLoginSuccess(){
+    this.setState({isLoggedIn: true});
+    this.getMessages();
+  }
+
+  addMessage(data){
+    console.log("UO: " + JSON.stringify(data));
+    const { msgs } = this.state;
+    const { id, message } = data;
+    msgs.push(data);
+    this.setState({
+      lastUpdated: new Date(),
+      lastID: id,
+    });
+  }
+
+  addMessageList(list){
+    if (!list || list.length == 0) {
+      return;
+    } 
+    const { msgs } = this.state;
+    this.setState({
+      msgs: [...msgs, ...list],
+      lastUpdated: new Date(),
+      lastID: tail(list).id,
+    });
+  }
+
+  getMessages(){
+    const { lastID } = this.state;
+    // Get request to Flask Server
+    http.get(lastID ? `http://172.17.143.41:8668/get/${lastID}` : '/get')
+    .then((response) => this.addMessageList(response.data))
+    .catch((err) => console.log(err));
+  }
+
+  onMsgSend(){
+    const { input, username } = this.state;
+    // POST to Flask Server
+    http.post('http://172.17.143.41:8668/send', {
+      username,
+      message: input,
+    })
+    .then((response) => this.addMessage({
+      message: input,
+      id: response.data.id,
+    }));
+  }
+
+
+  render() {
+    const { msgs, isLoggedIn, lastUpdated } = this.state;
+    return (
+
+    <View style={styles.container}>
+
+        <View>
+          <Text>Login</Text>
+          <TextInput style={{ backgroundColor: '#ededed' }} onChangeText={(val) => this.setState({username: val})} />
+          <Button title='Login' onPress={() => this.onLogin()} />
+          <Text>Online Status: {isLoggedIn ? 'Online' : 'Offline'}</Text>
+        </View>
+
+        <FlatList
+        data={msgs}
+        renderItem={({ item }) => <Item title={item.data} />}
+        keyExtractor={item => item.data}
+        extraData = {lastUpdated}
+        />
+
+        <View>
+          <TextInput style={{ backgroundColor: '#ededed' }} onChangeText={(val) => this.setState({input: val})} />
+          <Button title='send' onPress={() => this.onMsgSend()} />
+        </View>
+
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: Constants.statusBarHeight,
+  },
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 32,
+  },
+});
+
+/*
+# TODO
+1. add Update(Check for new messages) function
+*/
