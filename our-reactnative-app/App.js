@@ -7,7 +7,7 @@ import BusStops from './screens/BusStops'
 import Settings from './screens/Settings'
 import BusServices from './screens/BusServices'
 import Timetable from './screens/Timetable'
-import Messages from './screens/Messages'
+import Path from './screens/Path'
 import Favourites from './screens/Favourites'
 import { SafeAreaView } from "react-navigation";
 
@@ -58,10 +58,10 @@ export default createBottomTabNavigator({
       )
     }
   },
-  Messages: {
-    screen: Messages,
+  Path: {
+    screen: Path,
     navigationOptions: {
-      tabBarLabel: 'Messages',
+      tabBarLabel: 'Path',
       tabBarIcon: ({ tintColor }) => (
         <Image source={require('./assets/mailIcon.png')} style={{ height: 25, width: 25, tintColor: tintColor }} />
       )

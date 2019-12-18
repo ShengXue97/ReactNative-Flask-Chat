@@ -8,6 +8,7 @@ import {
   Divider
 } from 'react-native';
 
+
 export default class BusButton extends Component {
 	render() {
 		return (
