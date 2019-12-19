@@ -667,15 +667,19 @@ class Graph():
                       "OTHBldg"]
         hm["BTC2"] = ["OTHBldg", "BGMRT", "Museum", "EA", "KRBusTerminal"]
 
-        print("hell")
-        print(str(bus))
-        #stops = hm[bus]
-        return "hello"
+        stops = hm[bus]
+        routeWithArrows= ""
+        for n, string in enumerate(stops):
+            if n == len(stops) -1 :
+                routeWithArrows = routeWithArrows + string + " "
+            else :    
+                routeWithArrows = routeWithArrows + string + " -> "
+        return routeWithArrows
 
 
 # Driver program
 g = Graph()
 #Shortest distance from source lesson location to destination lesson location
-results = g.dijkstra("COM1", "OppUHall");
-print(results)
+#results = g.dijkstra("COM1", "OppUHall");
+#print(results)
 

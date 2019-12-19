@@ -10,12 +10,10 @@ import {
 
 import BusButton from "./components/Services/BusButton";
 import Crowd from "./components/Stops/Crowd";
-import { createStackNavigator } from 'react-navigation'; 
 
 
 
 export default class BusStops extends Component {
-    
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>

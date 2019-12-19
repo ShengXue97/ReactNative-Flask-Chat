@@ -33,7 +33,6 @@ def login():
 @app.route("/getBus", methods = ["GET","POST"])
 def getBus():
     busNumber = request.json.get('busNumber',None)
-    print("Something" + busNumber)
     g = DPQ.Graph()
     stops = g.getBusRoute(busNumber)
     return jsonify({
@@ -44,4 +43,4 @@ def getBus():
 
 
 if __name__ == '__main__':
-    app.run(host = '172.17.127.250', debug=True, port=8668)
+    app.run(host = '172.17.124.194', debug=True, port=8668)

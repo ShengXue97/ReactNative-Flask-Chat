@@ -5,7 +5,7 @@ import axios from 'axios';
 import tail from 'lodash/tail';
 import Constants from 'expo-constants';
 
-const serverURL = 'http://172.23.91.24:8668';
+const serverURL = 'http://172.17.124.194:8668';
 const http = axios.create({
   baseURL: serverURL,
 });
@@ -58,7 +58,7 @@ export default class App extends React.Component {
   onLogin(){
     const { originLocation, destLocation } = this.state;
     // POST to Flask Server
-      http.post('http://172.23.91.24:8668/login', {
+      http.post('http://172.17.124.194:8668/login', {
       originLocation : originLocation,
       destLocation : destLocation,
       })
