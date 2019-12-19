@@ -15,7 +15,7 @@ export default class BusButton extends Component {
 			<TouchableOpacity
       style={styles.button} 
       onPress={this.props.onPress}>
-			<Text style={styles.whiteFont}>{this.props.children}</Text>
+			<Text style={styles.whiteFont}>{this.props.name}</Text>
 			</TouchableOpacity>
 
 		);
@@ -24,7 +24,7 @@ export default class BusButton extends Component {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor:'black',
+    backgroundColor:'blue',
     padding: 20,
     alignItems: 'center',
     borderWidth: 0,

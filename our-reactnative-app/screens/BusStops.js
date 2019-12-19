@@ -1,68 +1,487 @@
 import React, { Component } from "react";
 import {
     View,
-    Text,
     SafeAreaView,
     TextInput,
-    StyleSheet
+    TouchableOpacity,
+    Button,
+    Text,
+    ScrollView
 } from "react-native";
-
-
-import BusButton from "./components/Services/BusButton";
-import Crowd from "./components/Stops/Crowd";
+import { createStackNavigator } from 'react-navigation'; 
 
 
 
-export default class BusStops extends Component {
+import BusStop from "./components/Stops/BusStop"
+
+
+export class KRMRT extends Component {
+    componentWillMount() {
+        this.startHeaderHeight = 50
+        if (Platform.OS == 'android') {
+           // this.startHeaderHeight = 100 + StatusBar.currentHeight
+        }
+    }
     render() {
         return (
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
                 <View style={{ flex: 1 }}>
-                    <View style={{ height: 50, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd' }}>
-                        <View>
+
+                    <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
+                        <View style={{flexDirection : 'row', justifyContent : 'flex-start'}}>
                             <TextInput
                                 underlineColorAndroid="transparent"
-                                placeholder="Bus Stops"
+                                placeholder="Recommended Timetable"
                                 placeholderTextColor="white"
-                                style={{ flex: 1, fontWeight: '700', paddingTop : 20, paddingLeft: 15}}
+                                style={{fontWeight: '700', paddingLeft : 15, paddingTop : 15}}
                             />
                         </View>
                     </View>
+                    <View style={{ flex: 1, flexDirection : 'column'}}>
+                      <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('KRMRT'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  KR MRT
+                            </Text>
+                            
+                          </TouchableOpacity>
 
-                </View>
-                <View style = {{flex : 1, flexDirection: 'column'}}>
-                            <BusButton onPress = {()=>this.showAlert('PGP -> KR MRT -> LT27 -> Opp UHC --> YIH')}>BIZ2</BusButton>
-                            <BusButton onPress = {()=>this.props.navigation.navigate('COM2')}>COM2</BusButton>
-                            <BusButton onPress = {()=>this.showAlert('D1')}>Ventus</BusButton>
-                            <BusButton onPress = {()=>this.showAlert('D2')}>NUS IT</BusButton>
-                            </View>
-                            <View style = {{flex : 1, flexDirection: 'column'}}>
-                            <Crowd>Hi</Crowd>
-                            </View>
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('BIZ2'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  BIZ2
+                            </Text>
+                            
+                          </TouchableOpacity>
 
-            </SafeAreaView>
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('IT'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  IT
+                            </Text>
+                            
+                          </TouchableOpacity>
+
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('UTown'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  UTown
+                            </Text>
+                            
+                          </TouchableOpacity>
+                      </View>
+                      </View>
+                      
+                    <ScrollView scrollEventThrottle={16} style={{}}>
+                          <View style={{ flex: 1, paddingTop: 5 }}>
+                              <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
+                                Kent Ridge MRT                              
+                                </Text>
+                              <BusStop name1 = 'A1'></BusStop>
+                              <BusStop name1 = 'D2'></BusStop>
+                              </View>
+                      </ScrollView>
+                      </View>
+          </SafeAreaView>
         );
     }
 }
 
-export class COM2 extends Component {
+export class BIZ2 extends Component {
+    componentWillMount() {
+        this.startHeaderHeight = 50
+        if (Platform.OS == 'android') {
+           // this.startHeaderHeight = 100 + StatusBar.currentHeight
+        }
+    }
     render() {
         return (
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
                 <View style={{ flex: 1 }}>
-                    <View style={{ height: 50, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd' }}>
-                        <View>
+
+                    <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
+                        <View style={{flexDirection : 'row', justifyContent : 'flex-start'}}>
                             <TextInput
                                 underlineColorAndroid="transparent"
-                                placeholder="Timetable"
+                                placeholder="Recommended Timetable"
                                 placeholderTextColor="white"
-                                style={{ flex: 1, fontWeight: '700', paddingTop : 20, paddingLeft: 15}}
+                                style={{fontWeight: '700', paddingLeft : 15, paddingTop : 15}}
                             />
                         </View>
                     </View>
+                    <View style={{ flex: 1, flexDirection : 'column'}}>
+                      <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('KRMRT'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  KRMRT
+                            </Text>
+                            
+                          </TouchableOpacity>
 
-                </View>
-            </SafeAreaView>
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('BIZ2'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  BIZ2
+                            </Text>
+                            
+                          </TouchableOpacity>
+
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('IT'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  IT
+                            </Text>
+                            
+                          </TouchableOpacity>
+
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('UTown'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  UTown
+                            </Text>
+                            
+                          </TouchableOpacity>
+                      </View>
+                      </View>
+                      
+                    <ScrollView scrollEventThrottle={16} style={{}}>
+                          <View style={{ flex: 1, paddingTop: 5 }}>
+                              <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
+                                Biz 2                              
+                                </Text>
+                                <BusStop name1 = 'A1'></BusStop>
+                              <BusStop name1 = 'D1'></BusStop>   
+                              </View>                           
+                      </ScrollView>
+                      </View>
+          </SafeAreaView>
         );
     }
 }
+
+export class IT extends Component {
+    componentWillMount() {
+        this.startHeaderHeight = 50
+        if (Platform.OS == 'android') {
+           // this.startHeaderHeight = 100 + StatusBar.currentHeight
+        }
+    }
+    render() {
+        return (
+            <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
+                <View style={{ flex: 1 }}>
+
+                    <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
+                        <View style={{flexDirection : 'row', justifyContent : 'flex-start'}}>
+                            <TextInput
+                                underlineColorAndroid="transparent"
+                                placeholder="Recommended Timetable"
+                                placeholderTextColor="white"
+                                style={{fontWeight: '700', paddingLeft : 15, paddingTop : 15}}
+                            />
+                        </View>
+                    </View>
+                    <View style={{ flex: 1, flexDirection : 'column'}}>
+                      <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('KRMRT'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  KRMRT
+                            </Text>
+                            
+                          </TouchableOpacity>
+
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('BIZ2'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  BIZ2
+                            </Text>
+                            
+                          </TouchableOpacity>
+
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('IT'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  IT
+                            </Text>
+                            
+                          </TouchableOpacity>
+
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('UTown'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  UTown
+                            </Text>
+                            
+                          </TouchableOpacity>
+                      </View>
+                      </View>
+                      
+                    <ScrollView scrollEventThrottle={16} style={{}}>
+                          <View style={{ flex: 1, paddingTop: 5 }}>
+                              <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
+                                Information Technology                              
+                                </Text>
+                                <BusStop name1 = 'A2'></BusStop>
+                              <BusStop name1 = 'D1'></BusStop>   
+                              </View>   
+                      </ScrollView>
+                      </View>
+          </SafeAreaView>
+        );
+    }
+}
+
+export class UTown extends Component {
+    componentWillMount() {
+        this.startHeaderHeight = 50
+        if (Platform.OS == 'android') {
+            //this.startHeaderHeight = 100 + StatusBar.currentHeight
+        }
+    }
+    render() {
+        return (
+            <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
+                <View style={{ flex: 1 }}>
+
+                    <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
+                        <View style={{flexDirection : 'row', justifyContent : 'flex-start'}}>
+                            <TextInput
+                                underlineColorAndroid="transparent"
+                                placeholder="Recommended Timetable"
+                                placeholderTextColor="white"
+                                style={{fontWeight: '700', paddingLeft : 15, paddingTop : 15}}
+                            />
+                        </View>
+                    </View>
+                    <View style={{ flex: 1, flexDirection : 'column'}}>
+                      <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('KRMRT'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  KRMRT
+                            </Text>
+                            
+                          </TouchableOpacity>
+
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('BIZ2'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  BIZ2
+                            </Text>
+                            
+                          </TouchableOpacity>
+
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('IT'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  IT
+                            </Text>
+                            
+                          </TouchableOpacity>
+
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('UTown'); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                                  UTown
+                            </Text>
+                            
+                          </TouchableOpacity>
+                      </View>
+                      </View>
+                      
+                    <ScrollView scrollEventThrottle={16} style={{}}>
+                          <View style={{ flex: 1, paddingTop: 5 }}>
+                              <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
+                                University Town                              
+                                </Text>
+                                <BusStop name1 = 'D1'></BusStop>
+                              <BusStop name1 = 'D2'></BusStop>   
+                              </View>   
+                      </ScrollView>
+                      </View>
+          </SafeAreaView>
+        );
+    }
+}
+
+
+export default createStackNavigator (
+    {
+        KRMRT:KRMRT,
+        BIZ2:BIZ2,
+        IT:IT,
+        UTown:UTown,
+    },{
+        initialRouteName:'KRMRT',
+        headerMode: 'none',
+        transitionConfig: () => ({
+        transitionSpec: {
+          duration: 0,  // Set the animation duration time as 0 !!
+        },
+        }),
+    }
+    
+)

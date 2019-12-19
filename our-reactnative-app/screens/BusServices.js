@@ -57,7 +57,6 @@ async doStuff(busNum) {
   render() {
     const { busNumber } = this.state;
     return (
-
     <SafeAreaView style = {{flex : 1}}>
                     <View style={{ flex: 1 }}>
                     <View style={{ height: 50, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd' }}>
