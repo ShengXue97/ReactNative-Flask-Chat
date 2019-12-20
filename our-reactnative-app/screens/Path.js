@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
 
 
-const serverURL = 'http://172.17.143.41:8668';
+const serverURL = 'http://172.17.127.241:8668';
 const http = axios.create({
   baseURL: serverURL,
 });
@@ -204,7 +204,7 @@ export default class App extends React.Component {
   onLogin(){
     const { originLocation, destLocation } = this.state;
     // POST to Flask Server
-      http.post('http://172.17.143.41:8668/login', {
+      http.post('http://172.17.127.241:8668/login', {
       originLocation : originLocation,
       destLocation : destLocation,
       })

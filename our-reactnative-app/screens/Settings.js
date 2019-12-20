@@ -28,12 +28,6 @@ export class Settings extends Component {
     };
   }
 
-  readFromClipboard = async () => {
-    //To get the text from clipboard
-    const clipboardContent = await Clipboard.getString();   
-    this.setState({ clipboardContent }); 
-  };
-
 
   componentWillMount() {
     this.startHeaderHeight = 50;

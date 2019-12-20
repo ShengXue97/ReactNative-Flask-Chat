@@ -14,7 +14,7 @@ import axios from 'axios';
 
 
 import BusButton from "./components/Services/BusButton";
-const serverURL = 'http://172.17.124.194:8668';
+const serverURL = 'http://172.17.127.241:8668';
 const http = axios.create({
   baseURL: serverURL,
 });
@@ -38,7 +38,7 @@ async doStuff(busNum) {
   onGetBus() {
     const { busNumber} = this.state;
     // POST to Flask Server
-      http.post('http://172.17.124.194:8668/getBus', {
+      http.post('http://172.17.127.241:8668/getBus', {
       busNumber : busNumber,
       })
       .then((response) => this.onGetBusSuccess(response))
@@ -71,10 +71,10 @@ async doStuff(busNum) {
                     </View>
                 </View>
           <View style = {{flex : 1, flexDirection: 'column'}}>
-                            <BusButton onPress = {()=>this.doStuff('A1')}>A1</BusButton>
-                            <BusButton onPress = {()=>this.doStuff('A2')}>A2</BusButton>
-                            <BusButton onPress = {()=>this.doStuff('D1')}>D1</BusButton>
-                            <BusButton onPress = {()=>this.doStuff('D2')}>D2</BusButton>
+                            <BusButton name = 'A1' onPress = {()=>this.doStuff('A1')}></BusButton>
+                            <BusButton name = 'A2' onPress = {()=>this.doStuff('A2')}>A2</BusButton>
+                            <BusButton name = 'D1' onPress = {()=>this.doStuff('D1')}>D1</BusButton>
+                            <BusButton name = 'D2' onPress = {()=>this.doStuff('D2')}>D2</BusButton>
 
                             </View>
                             <View>

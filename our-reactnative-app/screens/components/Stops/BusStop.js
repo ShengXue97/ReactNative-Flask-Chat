@@ -14,7 +14,7 @@ export default class BusStop extends Component {
         super(props);
         this.state = {
             name: "",
-            show: true,
+            show: false,
         };
       }
 

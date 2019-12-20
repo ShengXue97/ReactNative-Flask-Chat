@@ -30,18 +30,21 @@ Crowd Level  </Text>
   <LineChart
     data={linedata}
     width={Dimensions.get('window').width} // from react-native
-    height={220}
+    height={160}
     chartConfig={{
+      backgroundColor: '#1cc910',
+      backgroundGradientFrom: '#eff3ff',
+      backgroundGradientTo: '#efefef',
       decimalPlaces: 2, // optional, defaults to 2dp
-      color: (opacity = 1) => `blue`,
+      color: (opacity = 255) => `rgba(0, 0, 0, ${opacity})`,
       style: {
         borderRadius: 16
       }
     }}
     bezier
     style={{
-      marginVertical: 8,
-      borderRadius: 16
+      marginVertical: 4,
+      borderRadius: 8
     }}
   />
 </View>

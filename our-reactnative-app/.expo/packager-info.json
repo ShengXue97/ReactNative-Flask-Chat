@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 18445,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
   "expoServerNgrokUrl": "https://sm-y4d.tishyakhanna97.our-reactnative-app.exp.direct",
   "packagerNgrokUrl": "https://packager.sm-y4d.tishyakhanna97.our-reactnative-app.exp.direct",
-  "ngrokPid": 18473
+  "ngrokPid": 39417
 }

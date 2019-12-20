@@ -695,7 +695,7 @@ class Graph():
                 else:
                     prev = stops[i]
 
-        return results
+        return result
 
         
         

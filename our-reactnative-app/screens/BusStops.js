@@ -24,7 +24,7 @@ export class KRMRT extends Component {
     }
     render() {
         return (
-            <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
+            <SafeAreaView style={{flex : 1, backgroundColor: 'white'}}>
                 <View style={{ flex: 1 }}>
 
                     <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
@@ -51,8 +51,8 @@ export class KRMRT extends Component {
                               borderRadius:50,
                             }}
                             >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  KR MRT
+                            <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                                  KR
                             </Text>
                             
                           </TouchableOpacity>
@@ -69,8 +69,8 @@ export class KRMRT extends Component {
                               borderRadius:50,
                             }}
                             >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  BIZ2
+                            <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                                  BZ
                             </Text>
                             
                           </TouchableOpacity>
@@ -87,7 +87,7 @@ export class KRMRT extends Component {
                               borderRadius:50,
                             }}
                             >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                            <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
                                   IT
                             </Text>
                             
@@ -105,8 +105,8 @@ export class KRMRT extends Component {
                               borderRadius:50,
                             }}
                             >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  UTown
+                            <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                                  UT
                             </Text>
                             
                           </TouchableOpacity>
@@ -137,95 +137,94 @@ export class BIZ2 extends Component {
     }
     render() {
         return (
-            <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
-                <View style={{ flex: 1 }}>
+          <SafeAreaView style={{flex : 1, backgroundColor: 'white'}}>
+          <View style={{ flex: 1 }}>
 
-                    <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
-                        <View style={{flexDirection : 'row', justifyContent : 'flex-start'}}>
-                            <TextInput
-                                underlineColorAndroid="transparent"
-                                placeholder="Recommended Timetable"
-                                placeholderTextColor="white"
-                                style={{fontWeight: '700', paddingLeft : 15, paddingTop : 15}}
-                            />
-                        </View>
-                    </View>
-                    <View style={{ flex: 1, flexDirection : 'column'}}>
-                      <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('KRMRT'); }}
-                            style={{
-                              borderWidth:1,
-                              borderColor:'grey',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width:60,
-                              height:60,
-                              backgroundColor:'#fff',
-                              borderRadius:50,
-                            }}
-                            >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  KRMRT
-                            </Text>
-                            
-                          </TouchableOpacity>
-
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('BIZ2'); }}
-                            style={{
-                              borderWidth:1,
-                              borderColor:'grey',
-                              alignItems:'center',
-                              justifyContent:'center',
-                              width:60,
-                              height:60,
-                              backgroundColor:'#fff',
-                              borderRadius:50,
-                            }}
-                            >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  BIZ2
-                            </Text>
-                            
-                          </TouchableOpacity>
-
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('IT'); }}
-                            style={{
-                              borderWidth:1,
-                              borderColor:'grey',
-                              alignItems:'center',
-                              justifyContent:'center',
-                              width:60,
-                              height:60,
-                              backgroundColor:'#fff',
-                              borderRadius:50,
-                            }}
-                            >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  IT
-                            </Text>
-                            
-                          </TouchableOpacity>
-
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('UTown'); }}
-                            style={{
-                              borderWidth:1,
-                              borderColor:'grey',
-                              alignItems:'center',
-                              justifyContent:'center',
-                              width:60,
-                              height:60,
-                              backgroundColor:'#fff',
-                              borderRadius:50,
-                            }}
-                            >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  UTown
-                            </Text>
-                            
-                          </TouchableOpacity>
-                      </View>
-                      </View>
+              <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
+                  <View style={{flexDirection : 'row', justifyContent : 'flex-start'}}>
+                      <TextInput
+                          underlineColorAndroid="transparent"
+                          placeholder="Recommended Timetable"
+                          placeholderTextColor="white"
+                          style={{fontWeight: '700', paddingLeft : 15, paddingTop : 15}}
+                      />
+                  </View>
+              </View>
+              <View style={{ flex: 1, flexDirection : 'column'}}>
+                <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
+                    <TouchableOpacity onPress={() => {this.props.navigation.navigate('KRMRT'); }}
+                      style={{
+                        borderWidth:1,
+                        borderColor:'grey',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width:60,
+                        height:60,
+                        backgroundColor:'#fff',
+                        borderRadius:50,
+                      }}
+                      >
+                      <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                            KR
+                      </Text>
                       
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => {this.props.navigation.navigate('BIZ2'); }}
+                      style={{
+                        borderWidth:1,
+                        borderColor:'grey',
+                        alignItems:'center',
+                        justifyContent:'center',
+                        width:60,
+                        height:60,
+                        backgroundColor:'#fff',
+                        borderRadius:50,
+                      }}
+                      >
+                      <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                            BZ
+                      </Text>
+                      
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => {this.props.navigation.navigate('IT'); }}
+                      style={{
+                        borderWidth:1,
+                        borderColor:'grey',
+                        alignItems:'center',
+                        justifyContent:'center',
+                        width:60,
+                        height:60,
+                        backgroundColor:'#fff',
+                        borderRadius:50,
+                      }}
+                      >
+                      <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                            IT
+                      </Text>
+                      
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => {this.props.navigation.navigate('UTown'); }}
+                      style={{
+                        borderWidth:1,
+                        borderColor:'grey',
+                        alignItems:'center',
+                        justifyContent:'center',
+                        width:60,
+                        height:60,
+                        backgroundColor:'#fff',
+                        borderRadius:50,
+                      }}
+                      >
+                      <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                            UT
+                      </Text>
+                      
+                    </TouchableOpacity>
+                </View>
+                </View>
                     <ScrollView scrollEventThrottle={16} style={{}}>
                           <View style={{ flex: 1, paddingTop: 5 }}>
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
@@ -250,94 +249,94 @@ export class IT extends Component {
     }
     render() {
         return (
-            <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
-                <View style={{ flex: 1 }}>
+          <SafeAreaView style={{flex : 1, backgroundColor: 'white'}}>
+          <View style={{ flex: 1 }}>
 
-                    <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
-                        <View style={{flexDirection : 'row', justifyContent : 'flex-start'}}>
-                            <TextInput
-                                underlineColorAndroid="transparent"
-                                placeholder="Recommended Timetable"
-                                placeholderTextColor="white"
-                                style={{fontWeight: '700', paddingLeft : 15, paddingTop : 15}}
-                            />
-                        </View>
-                    </View>
-                    <View style={{ flex: 1, flexDirection : 'column'}}>
-                      <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('KRMRT'); }}
-                            style={{
-                              borderWidth:1,
-                              borderColor:'grey',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width:60,
-                              height:60,
-                              backgroundColor:'#fff',
-                              borderRadius:50,
-                            }}
-                            >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  KRMRT
-                            </Text>
-                            
-                          </TouchableOpacity>
+              <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
+                  <View style={{flexDirection : 'row', justifyContent : 'flex-start'}}>
+                      <TextInput
+                          underlineColorAndroid="transparent"
+                          placeholder="Recommended Timetable"
+                          placeholderTextColor="white"
+                          style={{fontWeight: '700', paddingLeft : 15, paddingTop : 15}}
+                      />
+                  </View>
+              </View>
+              <View style={{ flex: 1, flexDirection : 'column'}}>
+                <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
+                    <TouchableOpacity onPress={() => {this.props.navigation.navigate('KRMRT'); }}
+                      style={{
+                        borderWidth:1,
+                        borderColor:'grey',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width:60,
+                        height:60,
+                        backgroundColor:'#fff',
+                        borderRadius:50,
+                      }}
+                      >
+                      <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                            KR
+                      </Text>
+                      
+                    </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('BIZ2'); }}
-                            style={{
-                              borderWidth:1,
-                              borderColor:'grey',
-                              alignItems:'center',
-                              justifyContent:'center',
-                              width:60,
-                              height:60,
-                              backgroundColor:'#fff',
-                              borderRadius:50,
-                            }}
-                            >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  BIZ2
-                            </Text>
-                            
-                          </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {this.props.navigation.navigate('BIZ2'); }}
+                      style={{
+                        borderWidth:1,
+                        borderColor:'grey',
+                        alignItems:'center',
+                        justifyContent:'center',
+                        width:60,
+                        height:60,
+                        backgroundColor:'#fff',
+                        borderRadius:50,
+                      }}
+                      >
+                      <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                            BZ
+                      </Text>
+                      
+                    </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('IT'); }}
-                            style={{
-                              borderWidth:1,
-                              borderColor:'grey',
-                              alignItems:'center',
-                              justifyContent:'center',
-                              width:60,
-                              height:60,
-                              backgroundColor:'#fff',
-                              borderRadius:50,
-                            }}
-                            >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  IT
-                            </Text>
-                            
-                          </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {this.props.navigation.navigate('IT'); }}
+                      style={{
+                        borderWidth:1,
+                        borderColor:'grey',
+                        alignItems:'center',
+                        justifyContent:'center',
+                        width:60,
+                        height:60,
+                        backgroundColor:'#fff',
+                        borderRadius:50,
+                      }}
+                      >
+                      <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                            IT
+                      </Text>
+                      
+                    </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('UTown'); }}
-                            style={{
-                              borderWidth:1,
-                              borderColor:'grey',
-                              alignItems:'center',
-                              justifyContent:'center',
-                              width:60,
-                              height:60,
-                              backgroundColor:'#fff',
-                              borderRadius:50,
-                            }}
-                            >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  UTown
-                            </Text>
-                            
-                          </TouchableOpacity>
-                      </View>
-                      </View>
+                    <TouchableOpacity onPress={() => {this.props.navigation.navigate('UTown'); }}
+                      style={{
+                        borderWidth:1,
+                        borderColor:'grey',
+                        alignItems:'center',
+                        justifyContent:'center',
+                        width:60,
+                        height:60,
+                        backgroundColor:'#fff',
+                        borderRadius:50,
+                      }}
+                      >
+                      <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                            UT
+                      </Text>
+                      
+                    </TouchableOpacity>
+                </View>
+                </View>
                       
                     <ScrollView scrollEventThrottle={16} style={{}}>
                           <View style={{ flex: 1, paddingTop: 5 }}>
@@ -363,7 +362,7 @@ export class UTown extends Component {
     }
     render() {
         return (
-            <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
+          <SafeAreaView style={{flex : 1, backgroundColor: 'white'}}>
                 <View style={{ flex: 1 }}>
 
                     <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
@@ -390,8 +389,8 @@ export class UTown extends Component {
                               borderRadius:50,
                             }}
                             >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  KRMRT
+                            <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                                  KR
                             </Text>
                             
                           </TouchableOpacity>
@@ -408,8 +407,8 @@ export class UTown extends Component {
                               borderRadius:50,
                             }}
                             >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  BIZ2
+                            <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                                  BZ
                             </Text>
                             
                           </TouchableOpacity>
@@ -426,7 +425,7 @@ export class UTown extends Component {
                               borderRadius:50,
                             }}
                             >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
+                            <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
                                   IT
                             </Text>
                             
@@ -444,8 +443,8 @@ export class UTown extends Component {
                               borderRadius:50,
                             }}
                             >
-                            <Text style={{ fontSize: 9, fontWeight: '400', paddingHorizontal: 20, color :'black' }}>
-                                  UTown
+                            <Text style={{ fontSize: 12, fontWeight: '800', paddingHorizontal: 20, color :'black' }}>
+                                  UT
                             </Text>
                             
                           </TouchableOpacity>
