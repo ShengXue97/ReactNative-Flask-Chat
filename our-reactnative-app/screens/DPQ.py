@@ -116,10 +116,10 @@ class Graph():
         #self.out.append(self.destLocation + "(Destination)")
         if len(self.out) == 1 or len(self.out) == 0:
             mockList = ""
-            results = ("None", "None", "Walk", round(self.dist["Destination"],2) * 3, mockList)
+            results = ("None", "None", "Walk", round(self.dist["Destination"],3) * 3, mockList)
             return results
         else:
-            results = (self.out[0], self.out[-1], self.busTaken, round(self.dist["Destination"]) * 3, self.out)
+            results = (self.out[0], self.out[-1], self.busTaken, round(self.dist["Destination"],3) * 3, self.out)
             return results
 
     def e_Neighbours(self, u):
