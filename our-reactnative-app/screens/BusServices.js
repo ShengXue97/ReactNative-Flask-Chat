@@ -14,8 +14,8 @@ import axios from 'axios';
 
 
 import BusButton from "./components/Services/BusButton";
-const serverURL = 'http://172.17.127.241:8668';
-const http = axios.create({
+const ip_address = '172.17.125.132'
+const serverURL = 'http://' + ip_address + ':8668';const http = axios.create({
   baseURL: serverURL,
 });
 
@@ -38,7 +38,7 @@ async doStuff(busNum) {
   onGetBus() {
     const { busNumber} = this.state;
     // POST to Flask Server
-      http.post('http://172.17.127.241:8668/getBus', {
+      http.post(serverURL+ '/getBus', {
       busNumber : busNumber,
       })
       .then((response) => this.onGetBusSuccess(response))

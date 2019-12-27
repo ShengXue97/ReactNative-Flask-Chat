@@ -11,9 +11,42 @@ import {
   Alert,
   Button,
   Slider,
-  Clipboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
+import { List } from 'react-native-elements';
+
+
+const ip_address = '172.17.125.132'
+const serverURL = 'http://' + ip_address + ':8668';
+const http = axios.create({
+  baseURL: serverURL,
+});
+const sampleNUSMODs = 'https://nusmods.com/timetable/sem-1/share?CS2100=LAB:09,TUT:03,LEC:1&CS2101=&CS2102=TUT:08,LEC:1&CS2103T=LEC:G13&GEH1074=TUT:W04,LEC:1'
+
+const DATA = [
+      {
+        id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+        title: 'First Item',
+      },
+      {
+        id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+        title: 'Second Item',
+      },
+      {
+        id: '58694a0f-3da1-471f-bd96-145571e29d72',
+        title: 'Third Item',
+      },
+];
+
+function Item({ message, username }) {
+    console.log({message});
+  return (
+    <View style={styles.item}>
+      <Text style={styles.title}>{username} : {message}</Text>
+    </View>
+  );
+}
 
 export class Settings extends Component {
   constructor(props) {
@@ -25,6 +58,7 @@ export class Settings extends Component {
       minDistance: 0,
       maxDistance: 10,
       pointsLeft: 1,
+      timeTable: ''
     };
   }
 
@@ -35,6 +69,70 @@ export class Settings extends Component {
       this.startHeaderHeight = 100 + StatusBar.currentHeight;
     }
   }
+
+  printModCode() {
+    const {timeTable} = this.state;
+    Alert.alert("timeTable");
+    this.parseNusModsLink(timeTable)
+    //this.doStuff(timeTable)
+  }
+
+  async doStuff(timeTable) {
+    this.setState({timeTable:timeTable});
+    this.onGetTimeTable(timeTable)
+  }
+  
+    onGetTimeTable(timeTableInput) {
+      // POST to Flask Server
+        http.get(serverURL+ '/Timetable/'+ timeTableInput, {
+        moduleCode : timeTableInput,
+        })
+        .then((response) => this.onGetTimeTableSuccess(response))
+        .catch((err) => console.log(err))
+      }
+  
+  
+    onGetTimeTableSuccess(response){
+      const { answer } = response;
+          console.log(JSON.stringify(response.data));
+          console.log("hello")
+    }
+
+
+
+    parseModule(inputModule) {
+      var arrayOfCodes = [];
+      var splitModule = inputModule.split('=')
+      var moduleName = splitModule[0]
+      arrayOfCodes.push(moduleName)
+      if(splitModule.length <= 1) {
+        return arrayOfCodes
+      }
+      var classes = splitModule[1]
+      var myClassesSplit = classes.split(',')
+      console.log(myClassesSplit[0])
+
+    }
+
+    parseNusModsLink(link) {
+      var myModules = [];
+      var startIndex = link.indexOf('?') + 1
+      var linkWithoutHTTPS = link.substring(startIndex)
+      var modulesString = linkWithoutHTTPS.split('&')
+      this.parseModule(modulesString[0])
+
+
+    
+      
+      // https://nusmods.com/timetable/sem-1/share?
+      // CS2100=LAB:09,TUT:03,LEC:1&CS2101=&CS2102=TUT:08,
+      // LEC:1&CS2103T=LEC:G13&GEH1074=TUT:W04,LEC:1
+    }
+
+
+
+
+
   render() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -80,9 +178,7 @@ export class Settings extends Component {
                 underlineColorAndroid="transparent"
                 placeholder="NusMods sharing link"
                 placeholderTextColor="black"
-                //selectTextOnFocus = 'true'
-                onChangeText={(text) => this.setState({text})}
-                value={this.state.text}
+                onChangeText={(timeTable) => this.setState({timeTable})}
                 style={{
                   height: 40,
                   borderColor: 'gray',
@@ -90,6 +186,12 @@ export class Settings extends Component {
                   paddingHorizontal: 5,
                 }}
               />
+
+            <Button
+              title="Update timetable"
+              color="grey"
+              onPress={() => this.printModCode()}
+            />
               
 
             </View>

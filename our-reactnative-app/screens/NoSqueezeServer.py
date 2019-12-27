@@ -5,8 +5,11 @@ from datetime import datetime
 from flask import Flask, request, abort, jsonify
 import json
 import DPQ
+import requests
+
 
 app = Flask(__name__)
+ip_address = '172.17.125.132'
 
 @app.route("/")
 def index():
@@ -39,7 +42,17 @@ def getBus():
     'route': stops
     })
 
+@app.route("/Timetable/<moduleCode>", methods = ["GET","POST"])
+def getTimeTable(moduleCode):
+    baseUrl = 'https://api.nusmods.com/v2/2018-2019/modules/'
+    moduleCodeJSON = moduleCode + ".json"
+    finalUrl = baseUrl + moduleCodeJSON
+    r = requests.get(finalUrl)
+    print r.json()
+    return (r.json())
+      
+
 
 
 if __name__ == '__main__':
-    app.run(host = '172.17.127.241', debug=True, port=8668)
+    app.run(host = ip_address, debug=True, port=8668)
