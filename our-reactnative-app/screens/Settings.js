@@ -22,7 +22,7 @@ const serverURL = 'http://' + ip_address + ':8668';
 const http = axios.create({
   baseURL: serverURL,
 });
-const sampleNUSMODs = 'https://nusmods.com/timetable/sem-1/share?CS2100=LAB:09,TUT:03,LEC:1&CS2101=&CS2102=TUT:08,LEC:1&CS2103T=LEC:G13&GEH1074=TUT:W04,LEC:1'
+const sampleNUSMODS = 'https://nusmods.com/timetable/sem-1/share?CS2100=LAB:09,TUT:03,LEC:1&CS2101=&CS2102=TUT:08,LEC:1&CS2103T=LEC:G13&GEH1074=TUT:W04,LEC:1'
 
 const DATA = [
       {
@@ -58,7 +58,7 @@ export class Settings extends Component {
       minDistance: 0,
       maxDistance: 10,
       pointsLeft: 1,
-      timeTable: ''
+      moduleInput: ''
     };
   }
 
@@ -70,48 +70,32 @@ export class Settings extends Component {
     }
   }
 
-  printModCode() {
-    const {timeTable} = this.state;
-    Alert.alert("timeTable");
-    this.parseNusModsLink(timeTable)
-    //this.doStuff(timeTable)
-  }
-
-  async doStuff(timeTable) {
-    this.setState({timeTable:timeTable});
-    this.onGetTimeTable(timeTable)
-  }
-  
-    onGetTimeTable(timeTableInput) {
-      // POST to Flask Server
-        http.get(serverURL+ '/Timetable/'+ timeTableInput, {
-        moduleCode : timeTableInput,
-        })
-        .then((response) => this.onGetTimeTableSuccess(response))
-        .catch((err) => console.log(err))
-      }
-  
-  
-    onGetTimeTableSuccess(response){
-      const { answer } = response;
-          console.log(JSON.stringify(response.data));
-          console.log("hello")
+    printModCode() {
+      const {moduleInput} = this.state;
+      Alert.alert("timeTable");
+      this.parseNusModsLink(moduleInput)
     }
 
-
-
     parseModule(inputModule) {
-      var arrayOfCodes = [];
+      let myModuleMap = new Map()
       var splitModule = inputModule.split('=')
       var moduleName = splitModule[0]
-      arrayOfCodes.push(moduleName)
-      if(splitModule.length <= 1) {
-        return arrayOfCodes
+      myModuleMap.set("module_Code",moduleName);
+      if(splitModule.length == 1) {
+        return myModuleMap
       }
       var classes = splitModule[1]
       var myClassesSplit = classes.split(',')
-      console.log(myClassesSplit[0])
-
+      let length = myClassesSplit.length;      
+      for(let i = 0; i < length; i++) {
+        var currClass = myClassesSplit[i];
+        let currClassSplit = currClass.split(':');
+        myModuleMap.set(currClassSplit[0],currClassSplit[1])
+      }
+      myModuleMap.forEach(function(value,key) {
+        console.log(key + ' = ' + value)
+      })
+      return myModuleMap;
     }
 
     parseNusModsLink(link) {
@@ -119,14 +103,52 @@ export class Settings extends Component {
       var startIndex = link.indexOf('?') + 1
       var linkWithoutHTTPS = link.substring(startIndex)
       var modulesString = linkWithoutHTTPS.split('&')
-      this.parseModule(modulesString[0])
+      var length = modulesString.length;
+      for (let i = 0; i < length; i++) {
+      var currModule = this.parseModule(modulesString[i]);
+      myModules.push(currModule);
+      }
+      return this.fetchAllModulesInfo(myModules);
+      //returns an array of the modules, in which each module
+      //is represented as a map of key value pairs
+      //"module_Code" is the key to the module
+      //rest are "LAB","TUT","LEC","SEC"
 
-
-    
-      
       // https://nusmods.com/timetable/sem-1/share?
       // CS2100=LAB:09,TUT:03,LEC:1&CS2101=&CS2102=TUT:08,
       // LEC:1&CS2103T=LEC:G13&GEH1074=TUT:W04,LEC:1
+    }
+
+    async getModuleInfo(moduleMap) {
+      let moduleName = moduleMap.get("module_Code")
+      let answer = await this.onGetModule(moduleName)
+      return answer
+    }
+      
+    onGetModule(moduleName) {
+      // POST to Flask Server
+      console.log("Hello here")
+        http.get(serverURL+ '/Timetable/'+ moduleName, {
+        moduleCode : moduleName,
+        })
+        .then(this.handleResponse)
+        .catch((err) => console.log(err))
+      }
+  
+  
+       handleResponse = res => {
+         console.log(res)
+          return res
+      }
+
+
+    async fetchAllModulesInfo(inputArrayWithParsedModules) {
+      let firstModule = inputArrayWithParsedModules[0];
+      let dataResponse = await this.getModuleInfo(firstModule);
+      console.log("You should not pass");
+      
+      return firstModule;
+
     }
 
 
@@ -178,7 +200,7 @@ export class Settings extends Component {
                 underlineColorAndroid="transparent"
                 placeholder="NusMods sharing link"
                 placeholderTextColor="black"
-                onChangeText={(timeTable) => this.setState({timeTable})}
+                onChangeText={(moduleInput) => this.setState({moduleInput})}
                 style={{
                   height: 40,
                   borderColor: 'gray',
