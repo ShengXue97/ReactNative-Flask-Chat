@@ -40,7 +40,6 @@ const DATA = [
 ];
 
 function Item({ message, username }) {
-    console.log({message});
   return (
     <View style={styles.item}>
       <Text style={styles.title}>{username} : {message}</Text>
@@ -58,7 +57,8 @@ export class Settings extends Component {
       minDistance: 0,
       maxDistance: 10,
       pointsLeft: 1,
-      moduleInput: ''
+      moduleInput: '',
+      timetable: [],
     };
   }
 
@@ -71,9 +71,9 @@ export class Settings extends Component {
   }
 
     printModCode() {
-      const {moduleInput} = this.state;
-      Alert.alert("timeTable");
-      this.parseNusModsLink(moduleInput)
+     // const {moduleInput} = this.state;
+      Alert.alert("TimeTable Updated!");
+      return this.parseNusModsLink(this.state.moduleInput)
     }
 
     parseModule(inputModule) {
@@ -92,9 +92,6 @@ export class Settings extends Component {
         let currClassSplit = currClass.split(':');
         myModuleMap.set(currClassSplit[0],currClassSplit[1])
       }
-      myModuleMap.forEach(function(value,key) {
-        console.log(key + ' = ' + value)
-      })
       return myModuleMap;
     }
 
@@ -107,8 +104,9 @@ export class Settings extends Component {
       for (let i = 0; i < length; i++) {
       var currModule = this.parseModule(modulesString[i]);
       myModules.push(currModule);
-      }
-      return this.fetchAllModulesInfo(myModules);
+      }        
+      return myModules;
+    }
       //returns an array of the modules, in which each module
       //is represented as a map of key value pairs
       //"module_Code" is the key to the module
@@ -117,42 +115,86 @@ export class Settings extends Component {
       // https://nusmods.com/timetable/sem-1/share?
       // CS2100=LAB:09,TUT:03,LEC:1&CS2101=&CS2102=TUT:08,
       // LEC:1&CS2103T=LEC:G13&GEH1074=TUT:W04,LEC:1
-    }
+    
 
-    async getModuleInfo(moduleMap) {
-      let moduleName = moduleMap.get("module_Code")
-      let answer = await this.onGetModule(moduleName)
-      return answer
-    }
       
-    onGetModule(moduleName) {
-      // POST to Flask Server
-      console.log("Hello here")
-        http.get(serverURL+ '/Timetable/'+ moduleName, {
-        moduleCode : moduleName,
-        })
-        .then(this.handleResponse)
-        .catch((err) => console.log(err))
-      }
+    onGetModule() {
+        let moduleMap = this.printModCode();
+        let myArrayOfModules = [];
+        //Gives an array of all the modules, each module = a map
+        for(let i = 0; i< moduleMap.length; i++) {
+          let myCurrentMap = new Map();
+          let moduleName = moduleMap[i].get("module_Code");
+          console.log("currmodule " + moduleName);
+          //moduleName = the current module
+          myCurrentMap.set("module_Code",moduleName);
+          http.get(serverURL+ '/Timetable/'+ moduleName, {
+          moduleCode : moduleName,
+          })
+          .then(this.handleResponse)
+          .then((response) => {
+            //get the timetable for moduleName module
+            let firstModule = moduleMap[0];
+            let lengthOfArray = response.length
+            console.log("Hi")
+            let tutClass = firstModule.get("TUT");
+            let labClass = firstModule.get("LAB");
+            let sectClass = firstModule.get("SECT");
+            let lectClass = firstModule.get("LEC");
+            for(let j = 0; j < lengthOfArray; j++) {
+              let currObj = response[j];
+              if(currObj.classNo == tutClass && currObj.lessonType == "Tutorial") {
+                let tutMap = new Map();
+                tutMap.set("day",currObj.day);
+                tutMap.set("startTime",currObj.startTime);
+                tutMap.set("endTime",currObj.endTime);
+                tutMap.set("venue",currObj.venue);
+                myCurrentMap.set("TUT",tutMap);
+              } else if(currObj.classNo == labClass && currObj.lessonType == "Laboratory") {
+                let labMap = new Map();
+                labMap.set("day",currObj.day);
+                labMap.set("startTime",currObj.startTime);
+                labMap.set("endTime",currObj.endTime);
+                labMap.set("venue",currObj.venue);
+                myCurrentMap.set("LAB",labMap);
+              } else if(currObj.classNo == sectClass && currObj.lessonType == "Sectional") {
+                let sectMap = new Map();
+                sectMap.set("day",currObj.day);
+                sectMap.set("startTime",currObj.startTime);
+                sectMap.set("endTime",currObj.endTime);
+                sectMap.set("venue",currObj.venue);
+                myCurrentMap.set("SECT",labMap);
+              } else if(currObj.classNo == lectClass && currObj.lessonType == "Lecture") {
+                let lectMap = new Map();
+                lectMap.set("day",currObj.day);
+                lectMap.set("startTime",currObj.startTime);
+                lectMap.set("endTime",currObj.endTime);
+                lectMap.set("venue",currObj.venue);
+                myCurrentMap.set("LEC",lectMap);
+              }           
+             }
+             myArrayOfModules.push(myCurrentMap);         
+            return myCurrentMap;
+          })
+          .then((hello) => {
+          console.log(myArrayOfModules);
+          return myArrayOfModules;
+          })
+          .catch((err) => console.log(err))
+        }
+
+        }
+
   
   
-       handleResponse = res => {
-         console.log(res)
-          return res
+       handleResponse = response => {
+         this.setState({
+           timetable: response.data.semesterData[0].timetable,
+          })
+          return response.data.semesterData[0].timetable;
       }
 
-
-    async fetchAllModulesInfo(inputArrayWithParsedModules) {
-      let firstModule = inputArrayWithParsedModules[0];
-      let dataResponse = await this.getModuleInfo(firstModule);
-      console.log("You should not pass");
-      
-      return firstModule;
-
-    }
-
-
-
+    //CS2100=LAB:09,TUT:03,LEC:1&CS2101=&CS2102=TUT:08,LEC:1&CS2103T=LEC:G13&GEH1074=TUT:W04,LEC:1
 
 
   render() {
@@ -212,7 +254,7 @@ export class Settings extends Component {
             <Button
               title="Update timetable"
               color="grey"
-              onPress={() => this.printModCode()}
+              onPress={() => this.onGetModule()}
             />
               
 

@@ -44,7 +44,7 @@ def getBus():
 
 @app.route("/Timetable/<moduleCode>", methods = ["GET","POST"])
 def getTimeTable(moduleCode):
-    baseUrl = 'https://api.nusmods.com/v2/2018-2019/modules/'
+    baseUrl = 'https://api.nusmods.com/v2/2019-2020/modules/'
     moduleCodeJSON = moduleCode + ".json"
     finalUrl = baseUrl + moduleCodeJSON
     r = requests.get(finalUrl)
