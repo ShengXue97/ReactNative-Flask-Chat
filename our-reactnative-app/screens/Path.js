@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
 
 
-const ip_address = '172.17.125.132'
+const ip_address = '192.168.1.15'
 const serverURL = 'http://' + ip_address + ':8668';
 const http = axios.create({
   baseURL: serverURL,

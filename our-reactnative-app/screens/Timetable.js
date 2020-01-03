@@ -141,8 +141,8 @@ export class Monday extends Component {
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Monday
                               </Text>
-                              <Category module = {global.monday[0]} iconName="graduation-cap"/>
-                              <Category module = {global.monday[1]} iconName="graduation-cap"/>
+                              {global.monday.map((item,key) => (
+                              <Category module = {item} iconName = "graduation-cap"/>))}
 
                           </View>
                       </ScrollView>
@@ -281,8 +281,8 @@ export class Tuesday extends Component {
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Tuesday
                               </Text>
-                              <Category module = {global.tuesday[0]} iconName="graduation-cap"/>
-                              <Category module = {global.tuesday[1]} iconName="graduation-cap"/>
+                              {global.tuesday.map((item,key) => (
+                              <Category module = {item} iconName = "graduation-cap"/>))}
 
                           </View>
                       </ScrollView>
@@ -421,8 +421,8 @@ export class Wednesday extends Component {
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Wednesday
                               </Text>
-                              <Category module = {global.tuesday[0]} iconName="graduation-cap"/>
-                              <Category module = {global.tuesday[1]} iconName="graduation-cap"/>
+                              {global.wednesday.map((item,key) => (
+                              <Category module = {item} iconName = "graduation-cap"/>))}
 
                           </View>
                       </ScrollView>
@@ -561,8 +561,8 @@ export class Thursday extends Component {
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Thursday
                               </Text>
-                              <Category module = {global.tuesday[0]} iconName="graduation-cap"/>
-                              <Category module = {global.tuesday[1]} iconName="graduation-cap"/>
+                              {global.thursday.map((item,key) => (
+                              <Category module = {item} iconName = "graduation-cap"/>))}
 
                           </View>
                       </ScrollView>
@@ -701,8 +701,9 @@ export class Friday extends Component {
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Friday
                               </Text>
-                              <Category module = {global.monday[0]} iconName="graduation-cap"/>
-                              <Category module = {global.tuesday[1]} iconName="graduation-cap"/>
+                              {global.friday.map((item,key) => (
+                              <Category module = {item} iconName = "graduation-cap"/>))}
+
 
                           </View>
                       </ScrollView>

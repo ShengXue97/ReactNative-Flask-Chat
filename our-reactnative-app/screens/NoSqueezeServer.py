@@ -9,7 +9,7 @@ import requests
 
 
 app = Flask(__name__)
-ip_address = '172.17.124.131'
+ip_address = '192.168.1.15'
 
 @app.route("/")
 def index():

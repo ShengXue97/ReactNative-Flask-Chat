@@ -18,7 +18,7 @@ import axios from 'axios';
 
 
 
-const ip_address = '172.17.124.131'
+const ip_address = '192.168.1.15'
 const serverURL = 'http://' + ip_address + ':8668';
 const http = axios.create({
   baseURL: serverURL,
@@ -78,22 +78,33 @@ export class Settings extends Component {
     }
   }
 
+  makeIntoString(objectInput) {
+    return JSON.stringify(objectInput);
+  }
+
     printModCode() {
-     // const {moduleInput} = this.state;
       Alert.alert("TimeTable Updated!");
       return this.parseNusModsLink(this.state.moduleInput)
     }
 
     parseModule(inputModule) {
+      //represent each module as a map
+      //each map has the following keys and entries:
+      //module_Code = {the module name}
+      //TUT,LEC,LAB,SEC,REC, each giving the respective number
       let myModuleMap = new Map()
+      //split by = to give the mod code in [0] and the classes in [1]
       let splitModule = inputModule.split('=')
       let moduleName = splitModule[0]
       myModuleMap.set("module_Code",moduleName);
       if(splitModule.length == 1) {
+        //this basically means that the module has no classes
         return myModuleMap
       }
       let classes = splitModule[1]
       let myClassesSplit = classes.split(',')
+      //split into the name of the class 
+      //like: TUT LEC LAB SEC REC
       let length = myClassesSplit.length;      
       for(let i = 0; i < length; i++) {
         let currClass = myClassesSplit[i];
@@ -104,11 +115,16 @@ export class Settings extends Component {
     }
 
     parseNusModsLink(link) {
+      //myModules is an array of each "module" --> refer to parseModule
       let myModules = [];
+     //Take the NUS MODS link and remove the useless stuff
+
       let startIndex = link.indexOf('?') + 1
       let linkWithoutHTTPS = link.substring(startIndex)
+      //split by & to get an array of the string of each module
       let modulesString = linkWithoutHTTPS.split('&')
       let length = modulesString.length;
+      //for each module string, parse it and add to the myModules array as a module
       for (let i = 0; i < length; i++) {
       let currModule = this.parseModule(modulesString[i]);
       myModules.push(currModule);
@@ -127,76 +143,91 @@ export class Settings extends Component {
 
       
     onGetModule() {
-        let moduleMap = this.printModCode();
+        let moduleArray = this.printModCode();
+        //moduleArray is the parse array of all modules, 
+        //where each module is represented as a map
+        //each map contains module_Code and classes
         let myArrayOfModules = [];
-        //Gives an array of all the modules, each module = a map
-        for(let i = 0; i< moduleMap.length; i++) {
-          let myCurrentMap = new Map();
-          let moduleName = moduleMap[i].get("module_Code");
-          //moduleName = the current module
-          myCurrentMap.set("module_Code",moduleName);
+
+        for(let i = 0; i < moduleArray.length; i++) {
+          let myCurrentModuleMap = new Map();
+          //this map is the final version of each module, 
+          //with all the relevant info
+          let currentModuleBeingAdded = moduleArray[i];
+          let moduleName = currentModuleBeingAdded.get("module_Code");
+          myCurrentModuleMap.set("module_Code",moduleName);
+          //So set the module code for this map
           http.get(serverURL+ '/Timetable/'+ moduleName, {
           moduleCode : moduleName,
-          })
-          .then(this.handleResponse)
+          })//get this module info from NUS mods api
+          .then(response => this.handleResponse(response))
           .then((response) => {
-            //get the timetable for moduleName module
-            let firstModule = moduleMap[i];
-            let lengthOfArrayHere = response.length
-            let tutClass = firstModule.get("TUT");
-            console.log(i + " tut num " + tutClass);
 
-            let labClass = firstModule.get("LAB");
-            console.log(i + " lab num " + labClass);
+            //so with this response, we have the timetable
+            //in the timetable, we have an array of all the classes
+            //so you access each class with array notation
+            //then, you access the info inside each class
+            //using object notation (x.y)
+            let numberOfClassesInThisModule = response.length
+            let tutClass = currentModuleBeingAdded.get("TUT");
 
-            let sectClass = firstModule.get("SECT");
-            console.log(i + " sect num " + sectClass);
+            let labClass = currentModuleBeingAdded.get("LAB");
 
-            let lectClass = firstModule.get("LEC");
-            console.log(i + " lec num " + lectClass);
+            let sectClass = currentModuleBeingAdded.get("SEC");
 
-            for(let j = 0; j < lengthOfArrayHere; j++) {
-              //console.log("response " + response[j].lessonType + " " + moduleName);
-           
+            let lectClass = currentModuleBeingAdded.get("LEC");
 
-              let currObj = response[j];
+            for(let j = 0; j < numberOfClassesInThisModule; j++) {
+              let currClass = response[j];
+              let classNumber = currClass.classNo;
+              let classType = currClass.lessonType;
+
               let myMap = new Map();
-              myMap.set("day",currObj.day);
-              myMap.set("startTime",currObj.startTime);
-              myMap.set("endTime",currObj.endTime);
-              myMap.set("venue",currObj.venue);
+              myMap.set('day',currClass.day);
+              myMap.set('startTime',currClass.startTime);
+              myMap.set('endTime',currClass.endTime);
+              myMap.set('venue',currClass.venue);
               myMap.set('module',moduleName);
-              console.log("input class num" + currObj.classNo);
+              myMap.set('compare',parseInt(currClass.startTime));
 
-              if(currObj.classNo == tutClass && currObj.lessonType == "Tutorial") {
+              if(classNumber == tutClass && classType == "Tutorial") {
                 myMap.set('type','Tutorial');
-              } else if(currObj.classNo == labClass && currObj.lessonType == "Laboratory") {
+              } else if(classNumber == labClass && classType == "Laboratory") {
                 myMap.set('type','Lab');
-              } else if(currObj.classNo == sectClass && currObj.lessonType == "Sectional") {
+              } else if(classNumber == sectClass && classType == "Sectional") {
                 myMap.set('type','Sectional');
-              } else if(currObj.classNo == lectClass && currObj.lessonType == "Lecture") {
+              } else if(classNumber == lectClass && classType == "Lecture") {
                 myMap.set('type','Lecture');
+              } else {
+                continue;
               }
-              //console.log("This map " + j + " " + myMap.get('type') + " " + myMap.get('module'));
-              if(currObj.day == "Monday") {
+              if(currClass.day == "Monday") {
                 global.monday.push(myMap);
-              } else if (currObj.day = "Tuesday") {
+
+
+              } else if (currClass.day == "Tuesday") {
                 global.tuesday.push(myMap);
-              } else if (currObj.day = "Wednesday") {
+              } else if (currClass.day == "Wednesday") {
                 global.wednesday.push(myMap);
-              } else if (currObj.day = "Thursday") {
+              } else if (currClass.day == "Thursday") {
                 global.thursday.push(myMap);
-              } else if (currObj.day = "Friday") {
+              } else if (currClass.day == "Friday") {
                 global.friday.push(myMap);
               }                       
              }
-             myArrayOfModules.push(myCurrentMap);         
-            return myCurrentMap;
+             myArrayOfModules.push(myCurrentModuleMap);         
+            return myCurrentModuleMap;
           })
           .then((hello) => {
-          console.log(myArrayOfModules[0].get("moduleCode"));
           this.setState({timetable : myArrayOfModules})
           global.timeTable = myArrayOfModules;
+          global.monday.sort(this.comparatorHere)
+          global.tuesday.sort(this.comparatorHere)
+          global.wednesday.sort(this.comparatorHere)
+          global.thursday.sort(this.comparatorHere)
+          global.friday.sort(this.comparatorHere)
+
+
           return myArrayOfModules;
           })
           .catch((err) => console.log(err))
@@ -204,16 +235,22 @@ export class Settings extends Component {
         }
         }
 
+        comparatorHere(a,b) {
+          return a.get('compare') - b.get('compare');
+        }
   
   
        handleResponse = response => {
          this.setState({
-           timetable: response.data.semesterData[0].timetable,
+           timetable: response.data.semesterData[1].timetable,
           })
-          return response.data.semesterData[0].timetable;
+          return response.data.semesterData[1].timetable;
+          //Return the timetable for this semester (2)
+          //timetable contains all the classes
       }
 
-    //CS2100=LAB:09,TUT:03,LEC:1&CS2101=&CS2102=TUT:08,LEC:1&CS2103T=LEC:G13&GEH1074=TUT:W04,LEC:1
+
+
 
 
   render() {

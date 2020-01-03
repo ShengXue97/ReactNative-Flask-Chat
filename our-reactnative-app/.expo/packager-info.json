@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 59908,
+  "expoServerNgrokUrl": "https://y6-i53.tishyakhanna97.our-reactnative-app.exp.direct",
+  "packagerNgrokUrl": "https://packager.y6-i53.tishyakhanna97.our-reactnative-app.exp.direct",
+  "ngrokPid": 59926,
   "webpackServerPort": null
 }
