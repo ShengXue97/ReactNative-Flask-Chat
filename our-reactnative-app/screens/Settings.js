@@ -144,10 +144,21 @@ export class Settings extends Component {
             let firstModule = moduleMap[i];
             let lengthOfArrayHere = response.length
             let tutClass = firstModule.get("TUT");
+            console.log(i + " tut num " + tutClass);
+
             let labClass = firstModule.get("LAB");
+            console.log(i + " lab num " + labClass);
+
             let sectClass = firstModule.get("SECT");
+            console.log(i + " sect num " + sectClass);
+
             let lectClass = firstModule.get("LEC");
+            console.log(i + " lec num " + lectClass);
+
             for(let j = 0; j < lengthOfArrayHere; j++) {
+              //console.log("response " + response[j].lessonType + " " + moduleName);
+           
+
               let currObj = response[j];
               let myMap = new Map();
               myMap.set("day",currObj.day);
@@ -155,7 +166,8 @@ export class Settings extends Component {
               myMap.set("endTime",currObj.endTime);
               myMap.set("venue",currObj.venue);
               myMap.set('module',moduleName);
-              console.log(currObj.classNo)
+              console.log("input class num" + currObj.classNo);
+
               if(currObj.classNo == tutClass && currObj.lessonType == "Tutorial") {
                 myMap.set('type','Tutorial');
               } else if(currObj.classNo == labClass && currObj.lessonType == "Laboratory") {
