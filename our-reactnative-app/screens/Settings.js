@@ -241,10 +241,21 @@ export class Settings extends Component {
   
   
        handleResponse = response => {
+        if(response.data.semesterData.length > 1) {
+
          this.setState({
            timetable: response.data.semesterData[1].timetable,
           })
           return response.data.semesterData[1].timetable;
+        } else {
+          this.setState({
+            timetable: response.data.semesterData[0].timetable,
+           })
+           return response.data.semesterData[0].timetable;
+
+        }
+
+
           //Return the timetable for this semester (2)
           //timetable contains all the classes
       }
