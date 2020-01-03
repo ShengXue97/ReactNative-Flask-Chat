@@ -7,14 +7,19 @@ import {
     Platform,
     StatusBar,
     ScrollView,
-    Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
 } from "react-native";
 import Category from './components/Timetable/Category.js'
 
 import { createStackNavigator } from 'react-navigation'; 
 
+
+
 export class Monday extends Component {
+  constructor(props) {
+    super(props);
+
+  }
     componentWillMount() {
         this.startHeaderHeight = 50
         if (Platform.OS == 'android') {
@@ -131,15 +136,14 @@ export class Monday extends Component {
                       
                       <ScrollView scrollEventThrottle={16} style={{}}>
                           <View style={{ flex: 1, paddingTop: 5 }}>
+      
+
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Monday
                               </Text>
-                              <Category name1="A1 bus from KRMRT to LT27 (1 bus stop)" name2="Board at 1145 HRS, Current Crowd: 25" iconName="bus"/>
-                              <Category name1="MA1101R Tutorial @ S17-0406" name2="1200HRS - 1300HRS" iconName="graduation-cap"/>
-                              <Category name1="Walk to S17-0302" iconName="flag"/>
-                              <Category name1="MA1101R Laboratory @ S17-0302" name2="1600HRS - 1800HRS" iconName="graduation-cap"/>
-                              <Category name1="D2 bus from S17 to OppKRMRT (1 bus stop)" name2="Board at 1800HRS
-                              , Current Crowd: 31" iconName="bus"/>
+                              <Category module = {global.monday[0]} iconName="graduation-cap"/>
+                              <Category module = {global.monday[1]} iconName="graduation-cap"/>
+
                           </View>
                       </ScrollView>
                     </View>
@@ -151,6 +155,10 @@ export class Monday extends Component {
 }
 
 export class Tuesday extends Component {
+  constructor(props) {
+    super(props);
+
+  }
     componentWillMount() {
         this.startHeaderHeight = 50
         if (Platform.OS == 'android') {
@@ -268,15 +276,14 @@ export class Tuesday extends Component {
                       
                       <ScrollView scrollEventThrottle={16} style={{}}>
                           <View style={{ flex: 1, paddingTop: 5 }}>
+      
+
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Tuesday
                               </Text>
-                              <Category name1="A1 bus from KRMRT to LT27 (1 bus stop)" name2="Board at 1145 HRS, Current Crowd: 25" iconName="bus"/>
-                              <Category name1="ST2334 Tutorial @ S17-0406" name2="1200HRS - 1300HRS" iconName="graduation-cap"/>
-                              <Category name1="Walk to S14-0302" iconName="flag"/>
-                              <Category name1="CS2030 Laboratory @ S17-0302" name2="1600HRS - 1800HRS" iconName="graduation-cap"/>
-                              <Category name1="D2 bus from S17 to OppKRMRT (1 bus stop)" name2="Board at 1800HRS
-                              , Current Crowd: 31" iconName="bus"/>
+                              <Category module = {global.tuesday[0]} iconName="graduation-cap"/>
+                              <Category module = {global.tuesday[1]} iconName="graduation-cap"/>
+
                           </View>
                       </ScrollView>
                     </View>
@@ -288,6 +295,10 @@ export class Tuesday extends Component {
 }
 
 export class Wednesday extends Component {
+  constructor(props) {
+    super(props);
+
+  }
     componentWillMount() {
         this.startHeaderHeight = 50
         if (Platform.OS == 'android') {
@@ -405,15 +416,14 @@ export class Wednesday extends Component {
                       
                       <ScrollView scrollEventThrottle={16} style={{}}>
                           <View style={{ flex: 1, paddingTop: 5 }}>
+      
+
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Wednesday
                               </Text>
-                              <Category name1="A1 bus from KRMRT to LT27 (1 bus stop)" name2="Board at 1145 HRS, Current Crowd: 25" iconName="bus"/>
-                              <Category name1="CS2106 Tutorial @ S17-0406" name2="1200HRS - 1300HRS" iconName="graduation-cap"/>
-                              <Category name1="Walk to COM2" iconName="flag"/>
-                              <Category name1="CS2103 Laboratory @ S17-0302" name2="1600HRS - 1800HRS" iconName="graduation-cap"/>
-                              <Category name1="A2 bus from S17 to OppKRMRT (1 bus stop)" name2="Board at 1800HRS
-                              , Current Crowd: 31" iconName="bus"/>
+                              <Category module = {global.tuesday[0]} iconName="graduation-cap"/>
+                              <Category module = {global.tuesday[1]} iconName="graduation-cap"/>
+
                           </View>
                       </ScrollView>
                     </View>
@@ -425,6 +435,10 @@ export class Wednesday extends Component {
 }
 
 export class Thursday extends Component {
+  constructor(props) {
+    super(props);
+
+  }
     componentWillMount() {
         this.startHeaderHeight = 50
         if (Platform.OS == 'android') {
@@ -542,15 +556,14 @@ export class Thursday extends Component {
                       
                       <ScrollView scrollEventThrottle={16} style={{}}>
                           <View style={{ flex: 1, paddingTop: 5 }}>
+      
+
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Thursday
                               </Text>
-                              <Category name1="A1 bus from KRMRT to LT27 (1 bus stop)" name2="Board at 1145 HRS, Current Crowd: 25" iconName="bus"/>
-                              <Category name1="GEH1006 Tutorial @ S17-0406" name2="1200HRS - 1300HRS" iconName="graduation-cap"/>
-                              <Category name1="Walk to S10-0302" iconName="flag"/>
-                              <Category name1="GER1000 Laboratory @ S17-0302" name2="1600HRS - 1800HRS" iconName="graduation-cap"/>
-                              <Category name1="A1 bus from S17 to OppKRMRT (1 bus stop)" name2="Board at 1800HRS
-                              , Current Crowd: 31" iconName="bus"/>
+                              <Category module = {global.tuesday[0]} iconName="graduation-cap"/>
+                              <Category module = {global.tuesday[1]} iconName="graduation-cap"/>
+
                           </View>
                       </ScrollView>
                     </View>
@@ -562,6 +575,10 @@ export class Thursday extends Component {
 }
 
 export class Friday extends Component {
+  constructor(props) {
+    super(props);
+
+  }
     componentWillMount() {
         this.startHeaderHeight = 50
         if (Platform.OS == 'android') {
@@ -679,15 +696,14 @@ export class Friday extends Component {
                       
                       <ScrollView scrollEventThrottle={16} style={{}}>
                           <View style={{ flex: 1, paddingTop: 5 }}>
+      
+
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Friday
                               </Text>
-                              <Category name1="A1 bus from KRMRT to LT27 (1 bus stop)" name2="Board at 1145 HRS, Current Crowd: 25" iconName="bus"/>
-                              <Category name1="CS1101S Tutorial @ S17-0406" name2="1200HRS - 1300HRS" iconName="graduation-cap"/>
-                              <Category name1="Walk to S17-0302" iconName="flag"/>
-                              <Category name1="CS2105 Laboratory @ S17-0302" name2="1600HRS - 1800HRS" iconName="graduation-cap"/>
-                              <Category name1="A2 bus from S17 to OppKRMRT (1 bus stop)" name2="Board at 1800HRS
-                              , Current Crowd: 31" iconName="bus"/>
+                              <Category module = {global.monday[0]} iconName="graduation-cap"/>
+                              <Category module = {global.tuesday[1]} iconName="graduation-cap"/>
+
                           </View>
                       </ScrollView>
                     </View>

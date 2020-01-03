@@ -15,18 +15,21 @@ class Category extends Component {
             <View style={{ flexDirection : 'row', 
             alignItems : 'center', 
             justifyContent : 'flex-start', 
-            height: 50, marginLeft: 5, 
+            height: 80, marginLeft: 5, 
             marginRight: 5, borderWidth: 0.5, borderColor: '#dddddd' }}>
             <View style={{ flex : 1, flexDirection : 'row'}}>
-              <View style={{width: 40, padding : 5 }}>
+              <View style={{width: 46, padding : 5 }}>
                     <Icon name={this.props.iconName} size={30} color="grey" />
               </View>
-              <View style={{width: width - 60, padding : 5, justifyContent: "flex-start" }}>
-                  <View style={{flex: 1}}>
-                      <Text style={{ fontSize: 12, fontWeight: '200'}}>{this.props.name1}</Text>
+              <View style={{height: 40, width: width - 70, padding : 5, justifyContent: "flex-start" }}>
+                  <View>
+                      <Text style={{ fontSize: 14, fontWeight: '300'}}>{this.props.module.get("module") + " " + this.props.module.get("type")}</Text>
                   </View>
-                  <View style={{flex: 1}}>
-                      <Text style={{ fontSize: 9, fontWeight: '300'}}>{this.props.name2}</Text>
+                  <View >
+                      <Text style={{ fontSize: 14, fontWeight: '300'}}>{"@ " + this.props.module.get("venue")}</Text>
+                  </View>
+                  <View >
+                      <Text style={{ fontSize: 14, fontWeight: '300'}}>{this.props.module.get("startTime") + " - " + this.props.module.get("endTime")}</Text>
                   </View>
               </View>  
             </View>

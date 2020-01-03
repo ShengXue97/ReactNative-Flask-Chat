@@ -14,10 +14,11 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
-import { List } from 'react-native-elements';
 
 
-const ip_address = '172.17.125.132'
+
+
+const ip_address = '172.17.124.131'
 const serverURL = 'http://' + ip_address + ':8668';
 const http = axios.create({
   baseURL: serverURL,
@@ -50,6 +51,13 @@ function Item({ message, username }) {
 export class Settings extends Component {
   constructor(props) {
     super(props);
+    global.timeTable = [];
+    global.monday = [];
+    global.tuesday = [];
+    global.wednesday = [];
+    global.thursday = [];
+    global.friday = [];
+
     this.state = {
       distance1: 3,
       distance2: 3,
@@ -58,7 +66,7 @@ export class Settings extends Component {
       maxDistance: 10,
       pointsLeft: 1,
       moduleInput: '',
-      timetable: [],
+      timetable: ["hi"],
     };
   }
 
@@ -78,17 +86,17 @@ export class Settings extends Component {
 
     parseModule(inputModule) {
       let myModuleMap = new Map()
-      var splitModule = inputModule.split('=')
-      var moduleName = splitModule[0]
+      let splitModule = inputModule.split('=')
+      let moduleName = splitModule[0]
       myModuleMap.set("module_Code",moduleName);
       if(splitModule.length == 1) {
         return myModuleMap
       }
-      var classes = splitModule[1]
-      var myClassesSplit = classes.split(',')
+      let classes = splitModule[1]
+      let myClassesSplit = classes.split(',')
       let length = myClassesSplit.length;      
       for(let i = 0; i < length; i++) {
-        var currClass = myClassesSplit[i];
+        let currClass = myClassesSplit[i];
         let currClassSplit = currClass.split(':');
         myModuleMap.set(currClassSplit[0],currClassSplit[1])
       }
@@ -96,13 +104,13 @@ export class Settings extends Component {
     }
 
     parseNusModsLink(link) {
-      var myModules = [];
-      var startIndex = link.indexOf('?') + 1
-      var linkWithoutHTTPS = link.substring(startIndex)
-      var modulesString = linkWithoutHTTPS.split('&')
-      var length = modulesString.length;
+      let myModules = [];
+      let startIndex = link.indexOf('?') + 1
+      let linkWithoutHTTPS = link.substring(startIndex)
+      let modulesString = linkWithoutHTTPS.split('&')
+      let length = modulesString.length;
       for (let i = 0; i < length; i++) {
-      var currModule = this.parseModule(modulesString[i]);
+      let currModule = this.parseModule(modulesString[i]);
       myModules.push(currModule);
       }        
       return myModules;
@@ -125,7 +133,6 @@ export class Settings extends Component {
         for(let i = 0; i< moduleMap.length; i++) {
           let myCurrentMap = new Map();
           let moduleName = moduleMap[i].get("module_Code");
-          console.log("currmodule " + moduleName);
           //moduleName = the current module
           myCurrentMap.set("module_Code",moduleName);
           http.get(serverURL+ '/Timetable/'+ moduleName, {
@@ -134,55 +141,55 @@ export class Settings extends Component {
           .then(this.handleResponse)
           .then((response) => {
             //get the timetable for moduleName module
-            let firstModule = moduleMap[0];
-            let lengthOfArray = response.length
-            console.log("Hi")
+            let firstModule = moduleMap[i];
+            let lengthOfArrayHere = response.length
             let tutClass = firstModule.get("TUT");
             let labClass = firstModule.get("LAB");
             let sectClass = firstModule.get("SECT");
             let lectClass = firstModule.get("LEC");
-            for(let j = 0; j < lengthOfArray; j++) {
+            for(let j = 0; j < lengthOfArrayHere; j++) {
               let currObj = response[j];
+              let myMap = new Map();
+              myMap.set("day",currObj.day);
+              myMap.set("startTime",currObj.startTime);
+              myMap.set("endTime",currObj.endTime);
+              myMap.set("venue",currObj.venue);
+              myMap.set('module',moduleName);
+              console.log(currObj.classNo)
               if(currObj.classNo == tutClass && currObj.lessonType == "Tutorial") {
-                let tutMap = new Map();
-                tutMap.set("day",currObj.day);
-                tutMap.set("startTime",currObj.startTime);
-                tutMap.set("endTime",currObj.endTime);
-                tutMap.set("venue",currObj.venue);
-                myCurrentMap.set("TUT",tutMap);
+                myMap.set('type','Tutorial');
               } else if(currObj.classNo == labClass && currObj.lessonType == "Laboratory") {
-                let labMap = new Map();
-                labMap.set("day",currObj.day);
-                labMap.set("startTime",currObj.startTime);
-                labMap.set("endTime",currObj.endTime);
-                labMap.set("venue",currObj.venue);
-                myCurrentMap.set("LAB",labMap);
+                myMap.set('type','Lab');
               } else if(currObj.classNo == sectClass && currObj.lessonType == "Sectional") {
-                let sectMap = new Map();
-                sectMap.set("day",currObj.day);
-                sectMap.set("startTime",currObj.startTime);
-                sectMap.set("endTime",currObj.endTime);
-                sectMap.set("venue",currObj.venue);
-                myCurrentMap.set("SECT",labMap);
+                myMap.set('type','Sectional');
               } else if(currObj.classNo == lectClass && currObj.lessonType == "Lecture") {
-                let lectMap = new Map();
-                lectMap.set("day",currObj.day);
-                lectMap.set("startTime",currObj.startTime);
-                lectMap.set("endTime",currObj.endTime);
-                lectMap.set("venue",currObj.venue);
-                myCurrentMap.set("LEC",lectMap);
-              }           
+                myMap.set('type','Lecture');
+              }
+              //console.log("This map " + j + " " + myMap.get('type') + " " + myMap.get('module'));
+              if(currObj.day == "Monday") {
+                global.monday.push(myMap);
+              } else if (currObj.day = "Tuesday") {
+                global.tuesday.push(myMap);
+              } else if (currObj.day = "Wednesday") {
+                global.wednesday.push(myMap);
+              } else if (currObj.day = "Thursday") {
+                global.thursday.push(myMap);
+              } else if (currObj.day = "Friday") {
+                global.friday.push(myMap);
+              }                       
              }
              myArrayOfModules.push(myCurrentMap);         
             return myCurrentMap;
           })
           .then((hello) => {
-          console.log(myArrayOfModules);
+          console.log(myArrayOfModules[0].get("moduleCode"));
+          this.setState({timetable : myArrayOfModules})
+          global.timeTable = myArrayOfModules;
           return myArrayOfModules;
           })
           .catch((err) => console.log(err))
+        
         }
-
         }
 
   
@@ -252,10 +259,18 @@ export class Settings extends Component {
               />
 
             <Button
-              title="Update timetable"
+              title="Enter Timetable"
               color="grey"
               onPress={() => this.onGetModule()}
             />
+
+            <Button
+              title="Update timetable"
+              color="grey"
+              onPress={() => this.props.navigation.navigate('Timetable', {myArray: this.state.timetable,})}
+            />
+
+
               
 
             </View>
