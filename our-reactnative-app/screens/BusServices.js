@@ -14,7 +14,7 @@ import axios from 'axios';
 
 
 import BusButton from "./components/Services/BusButton";
-const ip_address = '192.168.1.15'
+const ip_address = '0.0.0.0'
 const serverURL = 'http://' + ip_address + ':8668';const http = axios.create({
   baseURL: serverURL,
 });

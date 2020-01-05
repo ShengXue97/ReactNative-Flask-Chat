@@ -13,12 +13,14 @@ import {
   Slider,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Card, ListItem} from 'react-native-elements';
+import { AsyncStorage } from "react-native";
 import axios from 'axios';
 
 
 
 
-const ip_address = '192.168.1.15'
+const ip_address = '0.0.0.0'
 const serverURL = 'http://' + ip_address + ':8668';
 const http = axios.create({
   baseURL: serverURL,
@@ -51,6 +53,7 @@ function Item({ message, username }) {
 export class Settings extends Component {
   constructor(props) {
     super(props);
+    this.retrieveData();
     global.timeTable = [];
     global.monday = [];
     global.tuesday = [];
@@ -59,12 +62,11 @@ export class Settings extends Component {
     global.friday = [];
 
     this.state = {
-      distance1: 3,
-      distance2: 3,
-      distance3: 3,
+      distance1: 5,
+      distance2: 5,
       minDistance: 0,
       maxDistance: 10,
-      pointsLeft: 1,
+      pointsLeft: 0,
       moduleInput: '',
       timetable: ["hi"],
     };
@@ -76,6 +78,45 @@ export class Settings extends Component {
     if (Platform.OS == 'android') {
       this.startHeaderHeight = 100 + StatusBar.currentHeight;
     }
+  }
+
+  storeData = async () => {
+      
+    try {
+      await AsyncStorage.setItem('@MySuperStore:key1', this.state.distance1.toString() );
+    } catch (error) {
+      // Error saving data
+    }
+
+    try {
+      await AsyncStorage.setItem('@MySuperStore:key2', this.state.distance2.toString() );
+    } catch (error) {
+      // Error saving data
+    }
+
+    alert("Successfully updated user preferences!");
+  }
+
+retrieveData = async () => {
+    try {
+      const value1 = await AsyncStorage.getItem('@MySuperStore:key1');
+      if (value1 !== null) {
+        // We have data!!
+        this.setState({distance1: parseInt(value1)})
+      }
+     } catch (error) {
+       // Error retrieving data
+     }
+
+     try {
+      const value2 = await AsyncStorage.getItem('@MySuperStore:key2');
+      if (value2 !== null) {
+        // We have data!!
+        this.setState({distance2: parseInt(value2)})
+      }
+     } catch (error) {
+       // Error retrieving data
+     }
   }
 
   makeIntoString(objectInput) {
@@ -342,7 +383,7 @@ export class Settings extends Component {
                 fontWeight: '500',
                 paddingHorizontal: 5,
               }}>
-              Allocate importance points(10 total) among the three conditions
+              Allocate importance points(10 total) among the two conditions
             </Text>
 
             <Text
@@ -379,39 +420,34 @@ export class Settings extends Component {
                   }}
                   onSlidingComplete={val => {
                     if (
-                      val + this.state.distance2 + this.state.distance3 >
+                      val + this.state.distance2 >
                       this.state.maxDistance
                     ) {
                       this.setState({
                         distance1:
                           this.state.maxDistance -
-                          this.state.distance2 -
-                          this.state.distance3,
+                          this.state.distance2
                       });
                     }
                     if (
                       this.state.distance1 < 0 ||
-                      this.state.distance2 < 0 ||
-                      this.state.distance3 < 0
+                      this.state.distance2 < 0
                     ) {
-                      this.setState({ distance1: 3 });
-                      this.setState({ distance2: 3 });
-                      this.setState({ distance3: 3 });
+                      this.setState({ distance1: 5 });
+                      this.setState({ distance2: 5 });
                     }
 
                     if (
                       this.state.maxDistance -
                         this.state.distance1 -
-                        this.state.distance2 -
-                        this.state.distance3 >
+                        this.state.distance2 >
                       0
                     ) {
                       this.setState({
                         pointsLeft:
                           this.state.maxDistance -
                           this.state.distance1 -
-                          this.state.distance2 -
-                          this.state.distance3,
+                          this.state.distance2
                       });
                     } else {
                       this.setState({ pointsLeft: 0 });
@@ -443,7 +479,7 @@ export class Settings extends Component {
                 borderColor: '#dddddd',
               }}>
               <View style={{ flex: 1, padding: 5 }}>
-                <Icon name={'tags'} size={40} color="grey" />
+                <Icon name={'bicycle'} size={40} color="grey" />
               </View>
               <View style={{ flex: 5 }}>
                 <Slider
@@ -457,39 +493,34 @@ export class Settings extends Component {
                   }}
                   onSlidingComplete={val => {
                     if (
-                      val + this.state.distance1 + this.state.distance3 >
+                      val + this.state.distance1 >
                       this.state.maxDistance
                     ) {
                       this.setState({
                         distance2:
                           this.state.maxDistance -
-                          this.state.distance1 -
-                          this.state.distance3,
+                          this.state.distance1
                       });
                     }
                     if (
                       this.state.distance1 < 0 ||
-                      this.state.distance2 < 0 ||
-                      this.state.distance3 < 0
+                      this.state.distance2 < 0
                     ) {
-                      this.setState({ distance1: 3 });
-                      this.setState({ distance2: 3 });
-                      this.setState({ distance3: 3 });
+                      this.setState({ distance1: 5 });
+                      this.setState({ distance2: 5 });
                     }
 
                     if (
                       this.state.maxDistance -
                         this.state.distance1 -
-                        this.state.distance2 -
-                        this.state.distance3 >
+                        this.state.distance2 >
                       0
                     ) {
                       this.setState({
                         pointsLeft:
                           this.state.maxDistance -
                           this.state.distance1 -
-                          this.state.distance2 -
-                          this.state.distance3,
+                          this.state.distance2 ,
                       });
                     } else {
                       this.setState({ pointsLeft: 0 });
@@ -506,93 +537,13 @@ export class Settings extends Component {
                 </View>
               </View>
               <View style={{ flex: 1, padding: 5 }}>
-                <Icon name={'tag'} size={40} color="grey" />
-              </View>
-            </View>
-
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'stretch',
-                marginLeft: 5,
-                marginRight: 5,
-                borderWidth: 0.5,
-                borderColor: '#dddddd',
-              }}>
-              <View style={{ flex: 1, padding: 5 }}>
-                <Icon name={'bicycle'} size={40} color="grey" />
-              </View>
-              <View style={{ flex: 5 }}>
-                <Slider
-                  style={{ flex: 1, height: 20 }}
-                  step={1}
-                  minimumValue={this.state.minDistance}
-                  maximumValue={this.state.maxDistance}
-                  value={this.state.distance3}
-                  onValueChange={val => {
-                    this.setState({ distance3: val });
-                  }}
-                  onSlidingComplete={val => {
-                    if (
-                      val + this.state.distance1 + this.state.distance2 >
-                      this.state.maxDistance
-                    ) {
-                      this.setState({
-                        distance3:
-                          this.state.maxDistance -
-                          this.state.distance1 -
-                          this.state.distance2,
-                      });
-                    }
-                    if (
-                      this.state.distance1 < 0 ||
-                      this.state.distance2 < 0 ||
-                      this.state.distance3 < 0
-                    ) {
-                      this.setState({ distance1: 3 });
-                      this.setState({ distance2: 3 });
-                      this.setState({ distance3: 3 });
-                    }
-
-                    if (
-                      this.state.maxDistance -
-                        this.state.distance1 -
-                        this.state.distance2 -
-                        this.state.distance3 >
-                      0
-                    ) {
-                      this.setState({
-                        pointsLeft:
-                          this.state.maxDistance -
-                          this.state.distance1 -
-                          this.state.distance2 -
-                          this.state.distance3,
-                      });
-                    } else {
-                      this.setState({ pointsLeft: 0 });
-                    }
-                  }}
-                  thumbTintColor="#376DCF"
-                  maximumTrackTintColor="#d3d3d3"
-                  minimumTrackTintColor="grey"
-                />
-                <View style={styles.textCon}>
-                  <Text style={styles.colorGrey}>{this.state.minDistance}</Text>
-                  <Text style={styles.colorYellow}>{this.state.distance3}</Text>
-                  <Text style={styles.colorGrey}>{this.state.maxDistance}</Text>
-                </View>
-              </View>
-              <View style={{ flex: 1, padding: 5 }}>
                 <Icon name={'bus'} size={40} color="grey" />
               </View>
             </View>
 
-            <Button
-              title="Update timetable"
-              color="grey"
-              onPress={() => Alert.alert('Timetable successfully updated!')}
-            />
+            <Button style = {{marginHorizontal : 10}} title='Update timetable' onPress={() => this.storeData()} />
+
+
           </View>
         </ScrollView>
       </SafeAreaView>

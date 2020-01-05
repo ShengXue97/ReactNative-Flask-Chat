@@ -1,19 +1,154 @@
-import React from 'react';
-import { StyleSheet, Text, View, TextInput, FlatList, Picker, ScrollView, TouchableOpacity, TouchableWithoutFeedback, Image} from 'react-native';
-import { Card, ListItem, Button, Icon } from 'react-native-elements'
-import { SafeAreaView } from "react-navigation";
+import React, {Component} from "react";
+import { SafeAreaView, StyleSheet, Text, View, TextInput, FlatList, Picker, ScrollView, TouchableOpacity, TouchableWithoutFeedback, Image} from 'react-native';
+import { Card, ListItem, Button, Icon, Divider } from 'react-native-elements'
 import axios from 'axios';
 import tail from 'lodash/tail';
 import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
-import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
+import { AsyncStorage } from "react-native";
+import {Autocomplete, withKeyboardAwareScrollView} from "react-native-dropdown-autocomplete";
 
-
-const ip_address = '192.168.1.15'
-const serverURL = 'http://' + ip_address + ':8668';
-const http = axios.create({
+const ip_address = '0.0.0.0'
+const serverURL = 'http://' + ip_address + ':8668';const http = axios.create({
   baseURL: serverURL,
 });
+
+const data = [
+    "OppKRMRT",
+    "KRMRT",
+    "AS5",
+    "BIZ2",
+    "BGMRT",
+    "OTHBldg",
+    "CLB",
+    "CollegeGreen",
+    "COM2",
+    "EA",
+    "IT",
+    "KRBusTerminal",
+    "KRMRT",
+    "KV",
+    "LT13",
+    "LT27",
+    "Museum",
+    "OppHSSML",
+    "OppKRMRT",
+    "OppNUSS",
+    "OppTCOMS",
+    "OppUHall",
+    "OppUHC",
+    "OppYIH",
+    "PGPHse15",
+    "PGP7",
+    "PGP",
+    "PGPR",
+    "RafflesHall",
+    "S17",
+    "TCOMS",
+    "JapaneseSch",
+    "UHall",
+    "UHC",
+    "UTown",
+    "Ventus",
+    "YIH",
+    "AS1",
+    "AS2",
+    "AS3",
+    "AS4",
+    "AS5",
+    "AS6",
+    "AS7",
+    "AS8",
+    "BIZ1",
+    "BIZ2",
+    "CAPT",
+    "CELS",
+    "COM1",
+    "COM2",
+    "E1",
+    "E2",
+    "E2A",
+    "E3",
+    "E3A",
+    "E4",
+    "E4A",
+    "E5",
+    "EA",
+    "EH",
+    "ENG",
+    "ERC",
+    "EW1",
+    "EW2",
+    "GBT",
+    "HSSMLCR",
+    "I3",
+    "KEVII",
+    "LT1",
+    "LT2",
+    "LT3",
+    "LT4",
+    "LT6",
+    "LT7",
+    "LT7A",
+    "LT8",
+    "LT9",
+    "LT10",
+    "LT11",
+    "LT12",
+    "LT13",
+    "LT14",
+    "LT15",
+    "LT16",
+    "LT17",
+    "LT18",
+    "LT19",
+    "LT20",
+    "LT21",
+    "LT26",
+    "LT28",
+    "LT29",
+    "LT31",
+    "LT32",
+    "LT33",
+    "LT34",
+    "MD1",
+    "MD5",
+    "MD4",
+    "MD7",
+    "MD9",
+    "MD10",
+    "NAK-AUD",
+    "PGPH-FR4",
+    "RC4",
+    "RH",
+    "RMI",
+    "RVR",
+    "S1A",
+    "S2",
+    "S4",
+    "S5",
+    "S6",
+    "S7",
+    "S8",
+    "S11",
+    "S12",
+    "S13",
+    "S14",
+    "S16",
+    "S17",
+    "SDE",
+    "SDE2",
+    "SDE4",
+    "SR_LT19",
+    "TC",
+    "TH",
+    "TP",
+    "USP",
+    "UT",
+    "UTSRC",
+    "WT",
+    "Y",
+];
 
 const DATA = [
       {
@@ -39,144 +174,8 @@ function Item({ message, username }) {
   );
 }
 
-const locations = [
-	{label: "OppKRMRT", value: "OppKR", },
-	{label: "KRMRT", value: "KRMRT", },
-	{label: "AS5", value: "AS5", },
-	{label: "BIZ2", value: "BIZ2", },
-	{label: "BGMRT", value: "BGMRT", },
-	{label: "OTHBldg", value: "OTHBldg", },
-	{label: "CLB", value: "CLB", },
-	{label: "CollegeGreen", value: "CollegeGreen", },
-	{label: "COM2", value: "COM2", },
-	{label: "EA", value: "EA", },
-	{label: "IT", value: "IT", },
-	{label: "KRBusTerminal", value: "KRBusTerminal", },
-	{label: "KRMRT", value: "KRMRT", },
-	{label: "KV", value: "KV", },
-	{label: "LT13", value: "LT13", },
-	{label: "LT27", value: "LT27", },
-	{label: "Museum", value: "Museum", },
-	{label: "OppHSSML", value: "OppHSSML", },
-	{label: "OppKRMRT", value: "OppKRMRT", },
-	{label: "OppNUSS", value: "OppNUSS", },
-	{label: "OppTCOMS", value: "OppTCOMS", },
-	{label: "OppUHall", value: "OppUHall", },
-	{label: "OppUHC", value: "OppUHC", },
-	{label: "OppYIH", value: "OppYIH", },
-	{label: "PGPHse15", value: "PGPHse15", },
-	{label: "PGP7", value: "PGP7", },
-	{label: "PGP", value: "PGP", },
-	{label: "PGPR", value: "PGPR", },
-	{label: "RafflesHall", value: "RafflesHall", },
-	{label: "S17", value: "S17", },
-	{label: "TCOMS", value: "TCOMS", },
-	{label: "JapaneseSch", value: "JapaneseSch", },
-	{label: "UHall", value: "UHall", },
-	{label: "UHC", value: "UHC", },
-	{label: "UTown", value: "UTown", },
-	{label: "Ventus", value: "Ventus", },
-	{label: "YIH", value: "YIH", },
-	{label: "AS1", value: "AS1", },
-	{label: "AS2", value: "AS2", },
-	{label: "AS3", value: "AS3", },
-	{label: "AS4", value: "AS4", },
-	{label: "AS5", value: "AS5", },
-	{label: "AS6", value: "AS6", },
-	{label: "AS7", value: "AS7", },
-	{label: "AS8", value: "AS8", },
-	{label: "BIZ1", value: "BIZ1", },
-	{label: "BIZ2", value: "BIZ2", },
-	{label: "CAPT", value: "CAPT", },
-	{label: "CELS", value: "CELS", },
-	{label: "COM1", value: "COM1", },
-	{label: "COM2", value: "COM2", },
-	{label: "E1", value: "E1", },
-	{label: "E2", value: "E2", },
-	{label: "E2A", value: "E2A", },
-	{label: "E3", value: "E3", },
-	{label: "E3A", value: "E3A", },
-	{label: "E4", value: "E4", },
-	{label: "E4A", value: "E4A", },
-	{label: "E5", value: "E5", },
-	{label: "EA", value: "EA", },
-	{label: "EH", value: "EH", },
-	{label: "ENG", value: "ENG", },
-	{label: "ERC", value: "ERC", },
-	{label: "EW1", value: "EW1", },
-	{label: "EW2", value: "EW2", },
-	{label: "GBT", value: "GBT", },
-	{label: "HSSMLCR", value: "HSSMLCR", },
-	{label: "I3", value: "I3", },
-	{label: "KEVII", value: "KEVII", },
-	{label: "LT1", value: "LT1", },
-	{label: "LT2", value: "LT2", },
-	{label: "LT3", value: "LT3", },
-	{label: "LT4", value: "LT4", },
-	{label: "LT6", value: "LT6", },
-	{label: "LT7", value: "LT7", },
-	{label: "LT7A", value: "LT7A", },
-	{label: "LT8", value: "LT8", },
-	{label: "LT9", value: "LT9", },
-	{label: "LT10", value: "LT10", },
-	{label: "LT11", value: "LT11", },
-	{label: "LT12", value: "LT12", },
-	{label: "LT13", value: "LT13", },
-	{label: "LT14", value: "LT14", },
-	{label: "LT15", value: "LT15", },
-	{label: "LT16", value: "LT16", },
-	{label: "LT17", value: "LT17", },
-	{label: "LT18", value: "LT18", },
-	{label: "LT19", value: "LT19", },
-	{label: "LT20", value: "LT20", },
-	{label: "LT21", value: "LT21", },
-	{label: "LT26", value: "LT26", },
-	{label: "LT28", value: "LT28", },
-	{label: "LT29", value: "LT29", },
-	{label: "LT31", value: "LT31", },
-	{label: "LT32", value: "LT32", },
-	{label: "LT33", value: "LT33", },
-	{label: "LT34", value: "LT34", },
-	{label: "MD1", value: "MD1", },
-	{label: "MD5", value: "MD5", },
-	{label: "MD4", value: "MD4", },
-	{label: "MD7", value: "MD7", },
-	{label: "MD9", value: "MD9", },
-	{label: "MD10", value: "MD10", },
-	{label: "NAK-AUD", value: "NAK-AUD", },
-	{label: "PGPH-FR4", value: "PGPH-FR4", },
-	{label: "RC4", value: "RC4", },
-	{label: "RH", value: "RH", },
-	{label: "RMI", value: "RMI", },
-	{label: "RVR", value: "RVR", },
-	{label: "S1A", value: "S1A", },
-	{label: "S2", value: "S2", },
-	{label: "S4", value: "S4", },
-	{label: "S5", value: "S5", },
-	{label: "S6", value: "S6", },
-	{label: "S7", value: "S7", },
-	{label: "S8", value: "S8", },
-	{label: "S11", value: "S11", },
-	{label: "S12", value: "S12", },
-	{label: "S13", value: "S13", },
-	{label: "S14", value: "S14", },
-	{label: "S16", value: "S16", },
-	{label: "S17", value: "S17", },
-	{label: "SDE", value: "SDE", },
-	{label: "SDE2", value: "SDE2", },
-	{label: "SDE4", value: "SDE4", },
-	{label: "SR_LT19", value: "SR_LT19", },
-	{label: "TC", value: "TC", },
-	{label: "TH", value: "TH", },
-	{label: "TP", value: "TP", },
-	{label: "USP", value: "USP", },
-	{label: "UT", value: "UT", },
-	{label: "UTSRC", value: "UTSRC", },
-	{label: "WT", value: "WT", },
-	{label: "Y", value: "Y", },
-];
 
-export default class App extends React.Component {
+class Path extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -194,8 +193,44 @@ export default class App extends React.Component {
       TextHolderRoute: 'Bus route: ',
       TextInputOrigin: 'OppKRMRT',
       TextInputDest: 'OppKRMRT',
+      distance1: 5,
+      distance2: 5,
       showRoute: true
     };
+  }
+
+  handleSelectItemOrigin(item, index) {
+    this.setState({originLocation: item, TextInputOrigin: item,  TextHolderStart: "Walk from " + item});
+    console.log(item);
+  }
+
+  handleSelectItemDest(item, index) {
+    this.setState({destLocation: item, TextInputDest: item,  TextHolderEnd: "Walk to " + item});
+    console.log(item);
+  }
+
+  retrieveData = async () => {
+      try {
+        const value1 = await AsyncStorage.getItem('@MySuperStore:key1');
+        if (value1 !== null) {
+          // We have data!!
+          this.setState({distance1: parseInt(value1)})
+        }
+       } catch (error) {
+         // Error retrieving data
+       }
+
+       try {
+        const value2 = await AsyncStorage.getItem('@MySuperStore:key2');
+        if (value2 !== null) {
+          // We have data!!
+          this.setState({distance2: parseInt(value2)})
+        }
+       } catch (error) {
+         // Error retrieving data
+       }
+
+       this.onLogin();
   }
 
   toggleShow = () => {
@@ -203,11 +238,13 @@ export default class App extends React.Component {
   }
 
   onLogin(){
-    const { originLocation, destLocation } = this.state;
+    const { originLocation, destLocation, distance1, distance2 } = this.state;
     // POST to Flask Server
       http.post(serverURL + '/login', {
       originLocation : originLocation,
       destLocation : destLocation,
+      crowdPref: distance1,
+      walkPref: distance2,
       })
       .then((response) => this.onLoginSuccess(response))
       .catch((err) => console.log(err));
@@ -228,10 +265,12 @@ export default class App extends React.Component {
 
 
   render() {
+    const {scrollToInput, onDropdownClose, onDropdownShow} = this.props;
     const { recommendedOriginBusStop, recommendedDestBusStop, recommendedBus, recommendedTime, recommendedRoute } = this.state;
     return (
 
     <SafeAreaView style={styles.container}>
+        
         <View
           style={{
             height: this.startHeaderHeight,
@@ -249,77 +288,53 @@ export default class App extends React.Component {
           </View>
         </View>
 
-        <View style = {{flex : 1, marginHorizontal: 10}}>
-          <View style={{flex : 1, flexDirection : 'row'}}>
-              <Icon style={{marginHorizontal : 5, marginVertical : 15}} name='home' type='font-awesome' size={40} color="grey" />
-              <View style={{flex : 1, borderWidth : 2, borderColor : "grey", marginHorizontal : 10, marginVertical : 10, flexDirection : 'row'}}>
-                <View style={{flex : 1}}>
-                    <RNPickerSelect
-                        placeholder={{
-                          label: 'Select origin...', value: null, color: '#9EA0A4'}}
-                        items={locations}
-                        onValueChange={value => {
-                          this.setState({originLocation: value, TextInputOrigin: value, TextHolderStart: "Walk from " + value})
-                        }}
-                        style={{
-                          ...pickerSelectStyles,
-                          iconContainer: {
-                            top: 10,
-                            right: 12,
-                          },
-                        }}
-                        value={this.state.originLocation}
-                        useNativeAndroidPickerStyle={true}
-                        textInputProps={{ underlineColor: 'yellow' }}
-                        Icon={() => {
-                          return <Ionicons name="md-arrow-down" size={24} color="gray" />;
-                        }}
-                      />
-                </View>
-
-                <View style={{flex : 1}}>
-                    <TextInput style={{ flex : 1, marginHorizontal : 10, marginVertical: 10, backgroundColor: '#ededed', height: 30 }} onChangeText={(val) => this.setState({originLocation: val, TextInputOrigin: val,  TextHolderStart: "Walk from " + val})} value={this.state.TextInputOrigin}/>
-                </View>
-              </View>
-          </View>
+        <View style = {{flex : 1, marginHorizontal: 10, paddingVertical: 5, paddingHorizontal: 5}}>
           
-          <View style={{flex : 1, flexDirection : 'row'}}>
-              <Icon style={{marginHorizontal : 5, marginVertical : 15}} name='flag-checkered' type='font-awesome' size={40} color="grey" />
-              <View style={{flex : 1, borderWidth : 2, borderColor : "grey", marginHorizontal : 10, marginVertical : 10, flexDirection : 'row'}}>
-                <View style={{flex : 1}}>
-                    <RNPickerSelect
-                        placeholder={{
-                          label: 'Select origin...', value: null, color: '#9EA0A4'}}
-                        items={locations}
-                        onValueChange={value => {
-                          this.setState({destLocation: value, TextInputDest: value, TextHolderEnd: "Walk to " + value})
-                        }}
-                        style={{
-                          ...pickerSelectStyles,
-                          iconContainer: {
-                            top: 10,
-                            right: 12,
-                          },
-                        }}
-                        value={this.state.destLocation}
-                        useNativeAndroidPickerStyle={true}
-                        textInputProps={{ underlineColor: 'yellow' }}
-                        Icon={() => {
-                          return <Ionicons name="md-arrow-down" size={24} color="gray" />;
-                        }}
-                      />
-                </View>
-
-                <View style={{flex : 1}}>
-                    <TextInput style={{ flex : 1, marginHorizontal : 10, marginVertical: 10, backgroundColor: '#ededed', height: 30 }} onChangeText={(val) => this.setState({destLocation: val, TextHolderDest: val,  TextHolderEnd: "Walk to " + val})} value={this.state.TextInputDest}/>
-                </View>
+          <View style={{flex : 1, borderWidth : 2, borderColor : "grey", flexDirection : 'column'}}>
+              <View style={{flex : 1, flexDirection : 'row'}}>
+                  <View style = {{flex: 7, paddingHorizontal: 5}}>
+                        <Autocomplete style={styles.input}
+                          handleSelectItem={(item, id) => this.handleSelectItemOrigin(item, id)}
+                          inputContainerStyle = {styles.inputContainer}
+                          data={data}
+                          placeholder = {"OppKRMRT"}
+                          minimumCharactersCount={0}
+                          highlightText
+                          valueExtractor={item => item}
+                          />
+                  </View>
+                  <View style={{flex : 1, marginHorizontal : 10, marginVertical : 15, flexDirection : 'column'}}>
+                    <Icon style={{marginHorizontal : 5}} name='home' type='font-awesome' size={40} color="grey" />
+                  </View>
               </View>
-          </View>
 
-          <View style={{flex : 7, borderWidth: 0.5, borderColor: '#dddddd',}}>
+              <View>
+                <Divider>
+                </Divider>
+              </View>
+              <View style={{flex : 1, flexDirection : 'row'}}>
+                  <View style = {{flex: 7, paddingHorizontal: 5}}>
+                        <Autocomplete style={styles.input}
+                          handleSelectItem={(item, id) => this.handleSelectItemDest(item, id)}
+                          inputContainerStyle = {styles.inputContainer}
+                          data={data}
+                          placeholder = {"OppKRMRT"}
+                          minimumCharactersCount={0}
+                          highlightText
+                          valueExtractor={item => item}
+                          />
+                  </View>
+                  <View style={{flex : 1, marginHorizontal : 10, marginVertical : 10, flexDirection : 'column'}}>
+                    <Icon style={{marginHorizontal : 5, marginVertical : 15}} name='flag-checkered' type='font-awesome' size={40} color="grey" />
+                  </View>
+              </View>
+
+            </View>
+
+          <View style={{flex : 7, borderWidth: 0.5, borderColor: '#dddddd', paddingTop: 15}}>
             <ScrollView scrollEventThrottle={16} style={{flex : 1}}>
                 <View style = {{flex : 1}}>
-                    <Button style = {{marginHorizontal : 10}} title='Find Directions' onPress={() => this.onLogin()} />
+                    <Button style = {{marginHorizontal : 10}} title='Find Directions' onPress={() => this.retrieveData()} />
                 </View>
             
             
@@ -408,7 +423,7 @@ export class Route extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: Constants.statusBarHeight,
+    backgroundColor: "#ffffff",
   },
   item: {
     backgroundColor: 'grey',
@@ -419,31 +434,34 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 33,
   },
+  autocompletesContainer: {
+    paddingTop: 0,
+    zIndex: 1,
+    width: "100%",
+    paddingHorizontal: 8,
+  },
+  input: {maxHeight: 40},
+  inputContainer: {
+    flex: 1,
+    display: "flex",
+    flexShrink: 0,
+    flexGrow: 0,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    paddingVertical: 13,
+    paddingHorizontal: 12,
+    justifyContent: "flex-start",
+  },
+  plus: {
+    position: "absolute",
+    left: 15,
+    top: 10,
+  },
 });
 
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: 'gray',
-    borderRadius: 4,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: 'purple',
-    borderRadius: 8,
-    color: 'black',
-    paddingRight: 30, // to ensure the text is never behind the icon
-  },
-});
 /*
 # TODO
 1. add Update(Check for new messages) function
 */
+export default withKeyboardAwareScrollView(Path);

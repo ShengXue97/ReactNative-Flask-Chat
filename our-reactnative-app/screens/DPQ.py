@@ -6,6 +6,16 @@
 import sys
 import math
 import time
+import socket
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+import matplotlib.pyplot as plt
+import pandas as pd
+import datetime as dt
+import os
+
+ip = socket.gethostbyname("")
 
 try:
     import Queue as Q  # ver. < 3.0
@@ -67,7 +77,10 @@ class Graph():
         self.pq = Q.PriorityQueue()
         # busTaken is the bus taken by the student
         self.busTaken = ""
-
+        self.crowdPref = 0
+        self.walkPref = 0
+        self.timePref = "09:00"
+        self.datePref = "24/6/2019"
     # backtrack traces the predecessor array p to return the route taken in order
     def backtrack(self, u):
         if u == "-1":
@@ -79,20 +92,23 @@ class Graph():
 
             if self.p[u] == "Source":
                 pass
-                #self.out.append(self.sourceLocation + "(Source)")
+                # self.out.append(self.sourceLocation + "(Source)")
             else:
                 self.out.append(self.p[u].split(";")[0])
 
     # Funtion that implements Dijkstra's single source
     # shortest path algorithm for a graph represented
     # using adjacency matrix representation
-    def dijkstra(self, src, dest):
+    def dijkstra(self, src, dest, crowdPref, walkPref, timePref, datePref):
         # snow
         self.sourceLocation = src
         self.destLocation = dest
-
+        self.crowdPref = crowdPref
+        self.walkPref = walkPref
+        self.timePref = timePref
+        self.datePref = datePref
         self.pq.put(Node("Source", 0.0))
-
+        print("crowdPref: " + str(crowdPref) + ";" + "walkPref: " + str(walkPref) + "\n")
         # Minimum distance from source to source is 0
         self.dist["Source"] = 0.0
         # Minimum number of bus stops from source to soruce is 0
@@ -113,13 +129,13 @@ class Graph():
         self.backtrack("Destination")
         print("Bus taken: " + self.busTaken)
 
-        #self.out.append(self.destLocation + "(Destination)")
+        # self.out.append(self.destLocation + "(Destination)")
         if len(self.out) == 1 or len(self.out) == 0:
             mockList = ""
-            results = ("None", "None", "Walk", round(self.dist["Destination"],3) * 3, mockList)
+            results = ("None", "None", "Walk", round(self.dist["Destination"], 2) * 3, mockList)
             return results
         else:
-            results = (self.out[0], self.out[-1], self.busTaken, round(self.dist["Destination"],3) * 3, self.out)
+            results = (self.out[0], self.out[-1], self.busTaken, round(self.dist["Destination"]) * 3, self.out)
             return results
 
     def e_Neighbours(self, u):
@@ -148,7 +164,7 @@ class Graph():
         # FIRST CASE: Generate walking edges from source to each of the nearest bus stops
         if (u.node == "Source"):
             # Estimated walking speed of a person
-            walkingSpeedKMPerSecond = 0.0014
+            walkingSpeedKMPerSecond = 0.0014 * (10 - (self.walkPref - 1))
 
             busStopsNames = []
             busStopToCoordinates = []
@@ -173,9 +189,12 @@ class Graph():
             # Do this for every possible bus services available at the bus stop
             for i in range(len(busStopsNames)):
                 busesList = self.getBusesAtBusStop(busStopsNames[i])
+                estimatedCrowd = self.getCrowdLevel(busStopsNames[i], self.datePref, self.timePref)
                 for j in range(len(busesList)):
+                    timeTaken = busStopToCoordinates[i] / walkingSpeedKMPerSecond
+                    edgeWeight = estimatedCrowd * self.crowdPref + timeTaken
                     neighbourList.append(Node(str(busStopsNames[i]) + ";" + str(busesList[j]),
-                                              busStopToCoordinates[i] / walkingSpeedKMPerSecond))
+                                              edgeWeight))
 
             # Special scenario: If the source is within an estimated time of 0.2s, the student
             # should walk instead of taking a bus to reach the destination faster
@@ -201,13 +220,16 @@ class Graph():
                 return
             else:
                 busSpeedKMPerSecond = 0.00833333
-                walkingSpeedKMPerSecond = 0.0014
+                walkingSpeedKMPerSecond = 0.0014 * (10 - (self.walkPref - 1))
                 uC = self.busStopToCoordinates(busStop)
                 vC = self.busStopToCoordinates(nextBusStop)
                 distanceT = self.distance(uC[0], uC[1], vC[0], vC[1], "K")
                 timeTaken = distanceT / busSpeedKMPerSecond
 
-                neighbourList.append(Node(nextBusStop + ";" + bus, timeTaken))
+                estimatedCrowd = self.getCrowdLevel(nextBusStop, self.datePref, self.timePref)
+                edgeWeight = estimatedCrowd * self.crowdPref + timeTaken
+
+                neighbourList.append(Node(nextBusStop + ";" + bus, edgeWeight))
 
             # Generates a walking edge from the bus stop to the destination vertex
             vC2 = self.mapToCoordinates(self.destLocation)
@@ -253,8 +275,86 @@ class Graph():
                         # Update the minimum number of bus stops to take to v
                         self.stops[v.node] = self.stops[u.node] + 1
 
-                # print(str(u.node) + ";" + str(v.node) + ";" + str(self.dist[u.node]) + ";" + str(self.dist[v.node]))
+                #print(str(u.node) + ";" + str(v.node) + ";" + str(self.dist[u.node]) + ";" + str(self.dist[v.node]))
                 self.pq.put(Node(v.node, self.dist[v.node]))
+
+    # Round a datetime object to any time lapse in seconds
+    def roundTime(self, mydt, roundTo):
+        seconds = (mydt.replace(tzinfo=None) - mydt.min).seconds
+        rounding = (seconds + roundTo / 2) // roundTo * roundTo
+        return mydt + dt.timedelta(0, rounding - seconds, -mydt.microsecond)
+
+    #Converts a date to string fromat
+    def dateToStr(self, x):
+        mydatesplit = x.split("-")
+        day = int(mydatesplit[2])
+        month = int(mydatesplit[1])
+        year = int(mydatesplit[0])
+        return 10000 * dt.date(year, month, day).year + 100 * dt.date(year, month, day).month + dt.date(year, month,
+                                                                                                        day).day
+
+    #Return the estimated crowd level from the csv file, using machine learning
+    def getCrowdLevel(self, mylocation, mydate, mytime):
+        mydatesplit = mydate.split("/")
+        day = int(mydatesplit[0])
+        month = int(mydatesplit[1])
+        year = int(mydatesplit[2])
+        DayL = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        mydate = 10000 * dt.date(year, month, day).year + 100 * dt.date(year, month, day).month + dt.date(year, month,
+                                                                                                          day).day
+        myday = DayL[dt.date(year, month, day).weekday()]
+        ignoreList = ["AS5","BGMRT","OTHBldg","CollegeGreen","EA","PGPHse15","PGPR","TCOMS","OppTCOMS", "JapaneseSch", "CLB", "KRMRT", "OppKRMRT"]
+        if mylocation == "COM2":
+            mylocation = "mCOM2"
+
+        if mylocation in ignoreList:
+            #print("Ignoring " + mylocation)
+            return 0.0
+        elif os.path.isfile("output2/" + mylocation + "/" + myday + "/" + "Output_" + mylocation + "_" + myday + "_" + mytime + ".csv"):
+            df = pd.read_csv("output2/" + mylocation + "/" + myday + "/" + "Output_" + mylocation + "_" + myday + "_" + mytime + ".csv")
+            df['dateInt'] = df['date'].apply(self.dateToStr)
+            #print("Found " + mylocation)
+
+            df['date'] = pd.to_datetime(df['date'])
+            df['dayofweek'] = df['date'].dt.day_name()
+            df['date'] = df['date'].map(dt.datetime.toordinal)
+            # Get names of indexes for which column dayofweek is not the needed day of week
+            indexNames = df[df['dayofweek'] != myday].index
+            # Delete these row indexes from dataFrame
+            df.drop(indexNames, inplace=True)
+
+            for DEGREES in range(4, 5):
+                # print("DEGREES: " + str(DEGREES))
+                # Step 2a: Provide data
+                x = np.array(df['dateInt']).reshape((-1, 1))
+                y = df['value']
+                x, y = np.array(x), np.array(y)
+
+                # Step 2b: Transform input data
+                x_ = PolynomialFeatures(degree=DEGREES, include_bias=False).fit_transform(x)
+
+                # Step 3: Create a model and fit it
+                model = LinearRegression().fit(x_, y)
+
+                # Step 4: Get results
+                r_sq = model.score(x_, y)
+                intercept, coefficients = model.intercept_, model.coef_
+
+                # Step 5: Predict
+                y_pred = model.predict(x_)
+
+                px = np.array(mydate).reshape((-1, 1))
+                px_ = PolynomialFeatures(degree=DEGREES, include_bias=False).fit_transform(px)
+                py = model.predict(px_)
+                predicted_crowd = np.float64(py[0]).item()
+                if (predicted_crowd < 0 ):
+                    #print("ALRET: Receiving negative predicted crowd level" )
+                    return 0.0
+                else:
+                    return predicted_crowd
+        else:
+            print("Cannot find " + "output2/" + mylocation + "/" + myday + "/" + "Output_" + mylocation + "_" + myday + "_" + mytime + ".csv")
+            return 0.0
 
     # Returns the distance between two points on Earth, given the latitudes and longtitudes
     def distance(self, lat1, lon1, lat2, lon2, unit):
@@ -410,41 +510,41 @@ class Graph():
     # Converts bus stop location to a tuple of (latitude, longtitude)
     def busStopToCoordinates(self, busStop):
         coordinates = {}
-        coordinates["AS5"] = [1.2935051, 103.7721019]
-        coordinates["BIZ2"] = [1.2936144, 103.7752274]
-        coordinates["BGMRT"] = [1.3227282, 103.8150981]
-        coordinates["OTHBldg"] = [1.3197524, 103.8179355]
-        coordinates["CLB"] = [1.2965560, 103.7725341]
-        coordinates["CollegeGreen"] = [1.3233426, 103.8163148]
-        coordinates["COM2"] = [1.2943179, 103.7737746]
-        coordinates["EA"] = [1.3005759, 103.7701154]
-        coordinates["IT"] = [1.2975026, 103.7729143]
-        coordinates["KRBusTerminal"] = [1.2941805, 103.7697687]
-        coordinates["KRMRT"] = [1.2948452, 103.7843891]
-        coordinates["KV"] = [1.3021181, 103.7690797]
-        coordinates["LT13"] = [1.2943079, 103.7707974]
-        coordinates["LT27"] = [1.2974416, 103.7809810]
-        coordinates["Museum"] = [1.3010831, 103.7737210]
-        coordinates["OppHSSML"] = [1.2927978, 103.7749974]
-        coordinates["OppKRMRT"] = [1.2948703, 103.7845940]
-        coordinates["OppNUSS"] = [1.2933308, 103.7723460]
-        coordinates["OppTCOMS"] = [1.2938430, 103.7770137]
-        coordinates["OppUHall"] = [1.2975153, 103.7781976]
-        coordinates["OppUHC"] = [1.2988242, 103.7756263]
-        coordinates["OppYIH"] = [1.2989717, 103.7741826]
-        coordinates["PGPHse15"] = [1.2930506, 103.7777728]
-        coordinates["PGP7"] = [1.2932500, 103.7777805]
-        coordinates["PGP"] = [1.2917996, 103.7805096]
-        coordinates["PGPR"] = [1.2909979, 103.7809599]
-        coordinates["RafflesHall"] = [1.3009674, 103.7727048]
-        coordinates["S17"] = [1.2975297, 103.7815259]
-        coordinates["TCOMS"] = [1.2936509, 103.7769567]
-        coordinates["JapaneseSch"] = [1.3007345, 103.7699712]
-        coordinates["UHall"] = [1.2972281, 103.7786707]
-        coordinates["UHC"] = [1.2989325, 103.7761967]
-        coordinates["UTown"] = [1.3036077, 103.7745592]
-        coordinates["Ventus"] = [1.2951861, 103.7705070]
-        coordinates["YIH"] = [1.2988997, 103.7743724]
+        coordinates["AS5"] = [1.2935051, 103.7721019]#0
+        coordinates["BIZ2"] = [1.2936144, 103.7752274]#1
+        coordinates["BGMRT"] = [1.3227282, 103.8150981]#0
+        coordinates["OTHBldg"] = [1.3197524, 103.8179355]#0
+        coordinates["CLB"] = [1.2965560, 103.7725341]#??????
+        coordinates["CollegeGreen"] = [1.3233426, 103.8163148]#0
+        coordinates["COM2"] = [1.2943179, 103.7737746]#1
+        coordinates["EA"] = [1.3005759, 103.7701154]#0
+        coordinates["IT"] = [1.2975026, 103.7729143]#1
+        coordinates["KRBusTerminal"] = [1.2941805, 103.7697687]#1
+        coordinates["KRMRT"] = [1.2948452, 103.7843891]#?????
+        coordinates["KV"] = [1.3021181, 103.7690797]#1
+        coordinates["LT13"] = [1.2943079, 103.7707974]#1
+        coordinates["LT27"] = [1.2974416, 103.7809810]#1
+        coordinates["Museum"] = [1.3010831, 103.7737210]#1
+        coordinates["OppHSSML"] = [1.2927978, 103.7749974]#1
+        coordinates["OppKRMRT"] = [1.2948703, 103.7845940]#1
+        coordinates["OppNUSS"] = [1.2933308, 103.7723460]#1
+        coordinates["OppTCOMS"] = [1.2938430, 103.7770137]#1
+        coordinates["OppUHall"] = [1.2975153, 103.7781976]#1
+        coordinates["OppUHC"] = [1.2988242, 103.7756263]#1
+        coordinates["OppYIH"] = [1.2989717, 103.7741826]#1
+        coordinates["PGPHse15"] = [1.2930506, 103.7777728]#0
+        coordinates["PGP7"] = [1.2932500, 103.7777805]#1
+        coordinates["PGP"] = [1.2917996, 103.7805096]#1
+        coordinates["PGPR"] = [1.2909979, 103.7809599]#0
+        coordinates["RafflesHall"] = [1.3009674, 103.7727048]#1
+        coordinates["S17"] = [1.2975297, 103.7815259]#1
+        coordinates["TCOMS"] = [1.2936509, 103.7769567]#0
+        coordinates["JapaneseSch"] = [1.3007345, 103.7699712]#0
+        coordinates["UHall"] = [1.2972281, 103.7786707]#1
+        coordinates["UHC"] = [1.2989325, 103.7761967]#1
+        coordinates["UTown"] = [1.3036077, 103.7745592]#1
+        coordinates["Ventus"] = [1.2951861, 103.7705070]#1
+        coordinates["YIH"] = [1.2988997, 103.7743724]#1
         if busStop not in coordinates:
             return None
         else:
@@ -735,7 +835,11 @@ class Graph():
 
 # Driver program
 g = Graph()
-#Shortest distance from source lesson location to destination lesson location
-#results = g.dijkstra("COM1", "OppUHall");
+# Shortest distance from source lesson location to destination lesson location
+#Round current time to nearest 300 seconds(5 mins)
+now = g.roundTime(dt.datetime.now(), 300)
+datenow = now.strftime("%d/%m/%Y")
+timenow = now.strftime("%H:%M:%S").replace(':', '-')
+#results = g.dijkstra("COM1", "OppUHall", 0, 10, timenow, datenow );
 #print(results)
 
