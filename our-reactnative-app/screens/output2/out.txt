@@ -1,0 +1,34 @@
+ Volume in drive C has no label.
+ Volume Serial Number is 7675-C5E7
+
+ Directory of C:\Users\Administrator\Desktop\ReactNative-Flask-Chat-master 2\our-reactnative-app\screens\output2
+
+03/01/2020  02:38 PM    <DIR>          .
+03/01/2020  02:38 PM    <DIR>          ..
+03/01/2020  09:45 AM    <DIR>          AS8
+03/01/2020  09:45 AM    <DIR>          BIZ2
+03/01/2020  09:46 AM    <DIR>          BTC
+03/01/2020  09:46 AM    <DIR>          IT
+03/01/2020  09:46 AM    <DIR>          KRT
+03/01/2020  09:47 AM    <DIR>          KV
+03/01/2020  09:47 AM    <DIR>          LT13
+03/01/2020  09:47 AM    <DIR>          LT27
+03/01/2020  09:48 AM    <DIR>          mCOM2
+03/01/2020  09:48 AM    <DIR>          MUSM
+03/01/2020  09:48 AM    <DIR>          OHSSL
+03/01/2020  09:48 AM    <DIR>          ONUSS
+03/01/2020  09:49 AM    <DIR>          OUHALL
+03/01/2020  09:49 AM    <DIR>          OUHC
+03/01/2020  02:38 PM                 0 out.txt
+03/01/2020  09:49 AM    <DIR>          OYIH
+03/01/2020  09:50 AM    <DIR>          PGP
+03/01/2020  09:50 AM    <DIR>          PGPH7
+03/01/2020  09:50 AM    <DIR>          RH
+03/01/2020  09:51 AM    <DIR>          S17
+03/01/2020  09:51 AM    <DIR>          UHALL
+03/01/2020  09:51 AM    <DIR>          UHC
+03/01/2020  09:52 AM    <DIR>          UT
+03/01/2020  09:52 AM    <DIR>          VEN
+03/01/2020  09:52 AM    <DIR>          YIH
+               1 File(s)              0 bytes
+              26 Dir(s)  67,458,015,232 bytes free

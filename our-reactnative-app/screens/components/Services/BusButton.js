@@ -3,19 +3,26 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
   TouchableOpacity,
-  Divider
 } from 'react-native';
-
+import { Card, ListItem, Button, Icon, Divider } from 'react-native-elements';
 
 export default class BusButton extends Component {
 	render() {
 		return (
 			<TouchableOpacity
-      style={styles.button} 
-      onPress={this.props.onPress}>
-			<Text style={styles.whiteFont}>{this.props.name}</Text>
+              onPress={this.props.onPress}>
+              <View style = {{flex: 1, flexDirection: 'row', marginHorizontal: 20}}>
+                <Icon style={{marginHorizontal : 5}} name='star' type='font-awesome' size={20} color="grey" />
+			    <Text
+                    style={{
+                                      fontSize: 10,
+                                      fontWeight: '700',
+                                      paddingHorizontal: 20,
+                                    }}>
+                                    {this.props.name}
+                </Text>
+              </View>
 			</TouchableOpacity>
 
 		);
@@ -29,11 +36,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 0,
     borderRadius: 8
-  },
-  whiteFont: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 18
   },
   separator: {
     marginVertical: 8,
