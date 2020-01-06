@@ -1,4 +1,4 @@
 {
-    "python.pythonPath": "/System/Library/Frameworks/Python.framework/Versions/2.7/Resources/Python.app/Contents/MacOS/Python",
+    "python.pythonPath": "/Users/tishya/anaconda3/bin/python",
     "git.ignoreLimitWarning": true
 }

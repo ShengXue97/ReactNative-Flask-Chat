@@ -7,7 +7,8 @@ import axios from 'axios';
 
 import DayButton from "../Services/DayButton";
 import Crowd from "./Crowd";
-const serverURL = 'http://192.168.50.226:8668';
+const ip_address = '0.0.0.0'
+const serverURL = 'http://' + ip_address + ':8668';
 const http = axios.create({
   baseURL: serverURL,
 });

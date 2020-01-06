@@ -9,7 +9,8 @@ import { AsyncStorage } from "react-native";
 import {Autocomplete, withKeyboardAwareScrollView} from "react-native-dropdown-autocomplete";
 
 const ip_address = '0.0.0.0'
-const serverURL = 'http://' + ip_address + ':8668';const http = axios.create({
+const serverURL = 'http://' + ip_address + ':8668';
+const http = axios.create({
   baseURL: serverURL,
 });
 
