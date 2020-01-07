@@ -9,23 +9,96 @@ import {
     ScrollView,
     TouchableOpacity,
 } from "react-native";
-import Category from './components/Timetable/Category.js'
+import axios from 'axios';
 
+import Category from './components/Timetable/Category.js'
+import WalkTransport from './components/Timetable/WalkTransport.js';
+import BusTransport from './components/Timetable/BusTransport.js';
 import { createStackNavigator } from 'react-navigation'; 
 
 
-
+const ip_address = '0.0.0.0'
+const serverURL = 'http://' + ip_address + ':8668';
+const http = axios.create({
+  baseURL: serverURL,
+});
 export class Monday extends Component {
   constructor(props) {
     super(props);
 
+    if (global.monday2.length == 0){
+        for (let i = 0; i < global.monday.length - 1; i++) {
+             // POST to Flask Server
+              http.post(serverURL + '/login', {
+              originLocation : global.monday[i].get("venue").split('-')[0],
+              destLocation : global.monday[i + 1].get("venue").split('-')[0],
+              boardTime : global.monday[i + 1].get("compare"),
+              crowdPref: global.distance1,
+              walkPref: global.distance2,
+              })
+              .then((response) => this.onLoginSuccess(response))
+              .catch((err) => console.log(err));
+        }
+        for (let i = 0; i < global.monday.length; i++) {
+            global.monday2.push(global.monday[i]);
+        }
+
+         global.monday2.sort(this.comparatorHere);
+    }
+    
+
   }
+
+      onLoginSuccess(response){
+        const { recommendedOriginBusStop, recommendedDestBusStop, recommendedBus, recommendedTime, recommendedRoute, boardTime, originLocation, destLocation } = response.data;
+        let myMap2 = new Map();
+        myMap2.set('bus', recommendedBus);
+        myMap2.set('originBusStop', recommendedOriginBusStop);
+        myMap2.set('destBusStop', recommendedDestBusStop);
+        myMap2.set('compare', boardTime);
+        myMap2.set('view', 'Transport');
+        myMap2.set('originLocation', originLocation);
+        myMap2.set('destLocation', destLocation);
+        global.monday2.push(myMap2);
+        global.monday2 = [...new Set(global.monday2)];
+        global.monday2.sort(this.comparatorHere);
+      }
+
+  comparatorHere(a, b) {
+    if (a.get('compare') == b.get('compare')){
+        if (a.get('view') == "Transport" && b.get('view') == "Category"){
+            return -1;  
+		} else if (a.get('view') == "Category" && b.get('view') == "Transport"){
+            return  1;  
+		} else {
+            return 0;  
+		}
+	} else {
+        return a.get('compare') - b.get('compare');
+	}
+  }
+
     componentWillMount() {
         this.startHeaderHeight = 50
         if (Platform.OS == 'android') {
             this.startHeaderHeight = 100 + StatusBar.currentHeight
         }
     }
+
+    genMod(item, key){
+
+        if (item.get("view") == "Category") {
+              return <Category module = {item} iconName = "graduation-cap"/>
+		} else if (item.get("view") == "Transport") {
+            if (item.get("bus") == "Walk") {
+                return <WalkTransport module = {item} iconName = "flag"/>
+            } else {
+                return <BusTransport module = {item} iconName = "bus"/>
+			}
+              
+		}
+    }
+
     render() {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
@@ -47,8 +120,8 @@ export class Monday extends Component {
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
-                              alignItems: 'center',
-                              justifyContent: 'center',
+                              alignItems:'center',
+                              justifyContent:'center',
                               width:60,
                               height:60,
                               backgroundColor:'#fff',
@@ -132,6 +205,7 @@ export class Monday extends Component {
                             </Text>
                             
                           </TouchableOpacity>
+                            
                       </View>
                       
                       <ScrollView scrollEventThrottle={16} style={{}}>
@@ -141,8 +215,9 @@ export class Monday extends Component {
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Monday
                               </Text>
-                              {global.monday.map((item,key) => (
-                              <Category module = {item} iconName = "graduation-cap"/>))}
+
+                              {global.monday2.map((item,key) => this.genMod(item, key))}
+
 
                           </View>
                       </ScrollView>
@@ -158,13 +233,79 @@ export class Tuesday extends Component {
   constructor(props) {
     super(props);
 
+    if (global.tuesday2.length == 0){
+        for (let i = 0; i < global.tuesday.length - 1; i++) {
+             // POST to Flask Server
+              http.post(serverURL + '/login', {
+              originLocation : global.tuesday[i].get("venue").split('-')[0],
+              destLocation : global.tuesday[i + 1].get("venue").split('-')[0],
+              boardTime : global.tuesday[i + 1].get("compare"),
+              crowdPref: global.distance1,
+              walkPref: global.distance2,
+              })
+              .then((response) => this.onLoginSuccess(response))
+              .catch((err) => console.log(err));
+        }
+        for (let i = 0; i < global.tuesday.length; i++) {
+            global.tuesday2.push(global.tuesday[i]);
+        }
+
+         global.tuesday2.sort(this.comparatorHere);
+    }
+    
+
   }
+
+      onLoginSuccess(response){
+        const { recommendedOriginBusStop, recommendedDestBusStop, recommendedBus, recommendedTime, recommendedRoute, boardTime, originLocation, destLocation } = response.data;
+        let myMap2 = new Map();
+        myMap2.set('bus', recommendedBus);
+        myMap2.set('originBusStop', recommendedOriginBusStop);
+        myMap2.set('destBusStop', recommendedDestBusStop);
+        myMap2.set('compare', boardTime);
+        myMap2.set('view', 'Transport');
+        myMap2.set('originLocation', originLocation);
+        myMap2.set('destLocation', destLocation);
+        global.tuesday2.push(myMap2);
+        global.tuesday2 = [...new Set(global.tuesday2)];
+        global.tuesday2.sort(this.comparatorHere);
+      }
+
+  comparatorHere(a, b) {
+    if (a.get('compare') == b.get('compare')){
+        if (a.get('view') == "Transport" && b.get('view') == "Category"){
+            return -1;  
+		} else if (a.get('view') == "Category" && b.get('view') == "Transport"){
+            return  1;  
+		} else {
+            return 0;  
+		}
+	} else {
+        return a.get('compare') - b.get('compare');
+	}
+  }
+
     componentWillMount() {
         this.startHeaderHeight = 50
         if (Platform.OS == 'android') {
             this.startHeaderHeight = 100 + StatusBar.currentHeight
         }
     }
+
+    genMod(item, key){
+
+        if (item.get("view") == "Category") {
+              return <Category module = {item} iconName = "graduation-cap"/>
+		} else if (item.get("view") == "Transport") {
+            if (item.get("bus") == "Walk") {
+                return <WalkTransport module = {item} iconName = "flag"/>
+            } else {
+                return <BusTransport module = {item} iconName = "bus"/>
+			}
+              
+		}
+    }
+
     render() {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
@@ -281,8 +422,9 @@ export class Tuesday extends Component {
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Tuesday
                               </Text>
-                              {global.tuesday.map((item,key) => (
-                              <Category module = {item} iconName = "graduation-cap"/>))}
+
+                              {global.tuesday2.map((item,key) => this.genMod(item, key))}
+
 
                           </View>
                       </ScrollView>
@@ -298,13 +440,79 @@ export class Wednesday extends Component {
   constructor(props) {
     super(props);
 
+    if (global.wednesday2.length == 0){
+        for (let i = 0; i < global.wednesday.length - 1; i++) {
+             // POST to Flask Server
+              http.post(serverURL + '/login', {
+              originLocation : global.wednesday[i].get("venue").split('-')[0],
+              destLocation : global.wednesday[i + 1].get("venue").split('-')[0],
+              boardTime : global.wednesday[i + 1].get("compare"),
+              crowdPref: global.distance1,
+              walkPref: global.distance2,
+              })
+              .then((response) => this.onLoginSuccess(response))
+              .catch((err) => console.log(err));
+        }
+        for (let i = 0; i < global.wednesday.length; i++) {
+            global.wednesday2.push(global.wednesday[i]);
+        }
+
+         global.wednesday2.sort(this.comparatorHere);
+    }
+    
+
   }
+
+      onLoginSuccess(response){
+        const { recommendedOriginBusStop, recommendedDestBusStop, recommendedBus, recommendedTime, recommendedRoute, boardTime, originLocation, destLocation } = response.data;
+        let myMap2 = new Map();
+        myMap2.set('bus', recommendedBus);
+        myMap2.set('originBusStop', recommendedOriginBusStop);
+        myMap2.set('destBusStop', recommendedDestBusStop);
+        myMap2.set('compare', boardTime);
+        myMap2.set('view', 'Transport');
+        myMap2.set('originLocation', originLocation);
+        myMap2.set('destLocation', destLocation);
+        global.wednesday2.push(myMap2);
+        global.wednesday2 = [...new Set(global.wednesday2)];
+        global.wednesday2.sort(this.comparatorHere);
+      }
+
+  comparatorHere(a, b) {
+    if (a.get('compare') == b.get('compare')){
+        if (a.get('view') == "Transport" && b.get('view') == "Category"){
+            return -1;  
+		} else if (a.get('view') == "Category" && b.get('view') == "Transport"){
+            return  1;  
+		} else {
+            return 0;  
+		}
+	} else {
+        return a.get('compare') - b.get('compare');
+	}
+  }
+
     componentWillMount() {
         this.startHeaderHeight = 50
         if (Platform.OS == 'android') {
             this.startHeaderHeight = 100 + StatusBar.currentHeight
         }
     }
+
+    genMod(item, key){
+
+        if (item.get("view") == "Category") {
+              return <Category module = {item} iconName = "graduation-cap"/>
+		} else if (item.get("view") == "Transport") {
+            if (item.get("bus") == "Walk") {
+                return <WalkTransport module = {item} iconName = "flag"/>
+            } else {
+                return <BusTransport module = {item} iconName = "bus"/>
+			}
+              
+		}
+    }
+
     render() {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
@@ -421,8 +629,9 @@ export class Wednesday extends Component {
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Wednesday
                               </Text>
-                              {global.wednesday.map((item,key) => (
-                              <Category module = {item} iconName = "graduation-cap"/>))}
+
+                              {global.wednesday2.map((item,key) => this.genMod(item, key))}
+
 
                           </View>
                       </ScrollView>
@@ -438,13 +647,79 @@ export class Thursday extends Component {
   constructor(props) {
     super(props);
 
+    if (global.thursday2.length == 0){
+        for (let i = 0; i < global.thursday.length - 1; i++) {
+             // POST to Flask Server
+              http.post(serverURL + '/login', {
+              originLocation : global.thursday[i].get("venue").split('-')[0],
+              destLocation : global.thursday[i + 1].get("venue").split('-')[0],
+              boardTime : global.thursday[i + 1].get("compare"),
+              crowdPref: global.distance1,
+              walkPref: global.distance2,
+              })
+              .then((response) => this.onLoginSuccess(response))
+              .catch((err) => console.log(err));
+        }
+        for (let i = 0; i < global.thursday.length; i++) {
+            global.thursday2.push(global.thursday[i]);
+        }
+
+         global.thursday2.sort(this.comparatorHere);
+    }
+    
+
   }
+
+      onLoginSuccess(response){
+        const { recommendedOriginBusStop, recommendedDestBusStop, recommendedBus, recommendedTime, recommendedRoute, boardTime, originLocation, destLocation } = response.data;
+        let myMap2 = new Map();
+        myMap2.set('bus', recommendedBus);
+        myMap2.set('originBusStop', recommendedOriginBusStop);
+        myMap2.set('destBusStop', recommendedDestBusStop);
+        myMap2.set('compare', boardTime);
+        myMap2.set('view', 'Transport');
+        myMap2.set('originLocation', originLocation);
+        myMap2.set('destLocation', destLocation);
+        global.thursday2.push(myMap2);
+        global.thursday2 = [...new Set(global.thursday2)];
+        global.thursday2.sort(this.comparatorHere);
+      }
+
+  comparatorHere(a, b) {
+    if (a.get('compare') == b.get('compare')){
+        if (a.get('view') == "Transport" && b.get('view') == "Category"){
+            return -1;  
+		} else if (a.get('view') == "Category" && b.get('view') == "Transport"){
+            return  1;  
+		} else {
+            return 0;  
+		}
+	} else {
+        return a.get('compare') - b.get('compare');
+	}
+  }
+
     componentWillMount() {
         this.startHeaderHeight = 50
         if (Platform.OS == 'android') {
             this.startHeaderHeight = 100 + StatusBar.currentHeight
         }
     }
+
+    genMod(item, key){
+
+        if (item.get("view") == "Category") {
+              return <Category module = {item} iconName = "graduation-cap"/>
+		} else if (item.get("view") == "Transport") {
+            if (item.get("bus") == "Walk") {
+                return <WalkTransport module = {item} iconName = "flag"/>
+            } else {
+                return <BusTransport module = {item} iconName = "bus"/>
+			}
+              
+		}
+    }
+
     render() {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
@@ -561,8 +836,9 @@ export class Thursday extends Component {
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Thursday
                               </Text>
-                              {global.thursday.map((item,key) => (
-                              <Category module = {item} iconName = "graduation-cap"/>))}
+
+                              {global.thursday2.map((item,key) => this.genMod(item, key))}
+
 
                           </View>
                       </ScrollView>
@@ -578,13 +854,79 @@ export class Friday extends Component {
   constructor(props) {
     super(props);
 
+    if (global.friday2.length == 0){
+        for (let i = 0; i < global.friday.length - 1; i++) {
+             // POST to Flask Server
+              http.post(serverURL + '/login', {
+              originLocation : global.friday[i].get("venue").split('-')[0],
+              destLocation : global.friday[i + 1].get("venue").split('-')[0],
+              boardTime : global.friday[i + 1].get("compare"),
+              crowdPref:global.distance1,
+              walkPref: global.distance2,
+              })
+              .then((response) => this.onLoginSuccess(response))
+              .catch((err) => console.log(err));
+        }
+        for (let i = 0; i < global.friday.length; i++) {
+            global.friday2.push(global.friday[i]);
+        }
+
+         global.friday2.sort(this.comparatorHere);
+    }
+    
+
   }
+
+      onLoginSuccess(response){
+        const { recommendedOriginBusStop, recommendedDestBusStop, recommendedBus, recommendedTime, recommendedRoute, boardTime, originLocation, destLocation } = response.data;
+        let myMap2 = new Map();
+        myMap2.set('bus', recommendedBus);
+        myMap2.set('originBusStop', recommendedOriginBusStop);
+        myMap2.set('destBusStop', recommendedDestBusStop);
+        myMap2.set('compare', boardTime);
+        myMap2.set('view', 'Transport');
+        myMap2.set('originLocation', originLocation);
+        myMap2.set('destLocation', destLocation);
+        global.friday2.push(myMap2);
+        global.friday2 = [...new Set(global.friday2)];
+        global.friday2.sort(this.comparatorHere);
+      }
+
+  comparatorHere(a, b) {
+    if (a.get('compare') == b.get('compare')){
+        if (a.get('view') == "Transport" && b.get('view') == "Category"){
+            return -1;  
+		} else if (a.get('view') == "Category" && b.get('view') == "Transport"){
+            return  1;  
+		} else {
+            return 0;  
+		}
+	} else {
+        return a.get('compare') - b.get('compare');
+	}
+  }
+
     componentWillMount() {
         this.startHeaderHeight = 50
         if (Platform.OS == 'android') {
             this.startHeaderHeight = 100 + StatusBar.currentHeight
         }
     }
+
+    genMod(item, key){
+
+        if (item.get("view") == "Category") {
+              return <Category module = {item} iconName = "graduation-cap"/>
+		} else if (item.get("view") == "Transport") {
+            if (item.get("bus") == "Walk") {
+                return <WalkTransport module = {item} iconName = "flag"/>
+            } else {
+                return <BusTransport module = {item} iconName = "bus"/>
+			}
+              
+		}
+    }
+
     render() {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
@@ -701,8 +1043,8 @@ export class Friday extends Component {
                               <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20 }}>
                                   Friday
                               </Text>
-                              {global.friday.map((item,key) => (
-                              <Category module = {item} iconName = "graduation-cap"/>))}
+
+                              {global.friday2.map((item,key) => this.genMod(item, key))}
 
 
                           </View>
