@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<RCTSafeAreaView
+  emulateUnlessSupported={true}
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "#376DCF",
+          "borderBottomColor": "#dddddd",
+          "borderBottomWidth": 1,
+          "height": 50,
+        }
+      }
+    >
+      <View>
+        <TextInput
+          allowFontScaling={true}
+          placeholder="Timetable"
+          placeholderTextColor="white"
+          rejectResponderTermination={true}
+          style={
+            Object {
+              "flex": 1,
+              "fontWeight": "700",
+              "paddingLeft": 15,
+              "paddingTop": 20,
+            }
+          }
+          underlineColorAndroid="transparent"
+        />
+      </View>
+    </View>
+  </View>
+</RCTSafeAreaView>
+`;

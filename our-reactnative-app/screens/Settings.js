@@ -566,5 +566,5 @@ const styles = StyleSheet.create({
     color: 'rgb(252, 228, 149)',
   },
 });
-
+module.exports = makeIntoString;
 export default Settings;
