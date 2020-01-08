@@ -16,6 +16,7 @@ import datetime as dt
 import os
 
 ip = socket.gethostbyname("")
+#master here
 
 try:
     import Queue as Q  # ver. < 3.0
@@ -99,12 +100,14 @@ class Graph():
     # Funtion that implements Dijkstra's single source
     # shortest path algorithm for a graph represented
     # using adjacency matrix representation
-    def dijkstra(self, src, dest, crowdPref, walkPref, timePref, datePref):
+    def dijkstra(self, src, dest, crowdPref, walkPref, timePref, datePref, boardTime):
         # snow
+        mydatetime = dt.datetime.strptime(str(boardTime), "%H%M") - dt.timedelta(minutes=15)
+        boardTime = mydatetime.strftime("%H%M")
         self.sourceLocation = src
         self.destLocation = dest
-        self.crowdPref = crowdPref
-        self.walkPref = walkPref
+        self.crowdPref = int(crowdPref)
+        self.walkPref = int(walkPref)
         self.timePref = timePref
         self.datePref = datePref
         self.pq.put(Node("Source", 0.0))
@@ -132,10 +135,10 @@ class Graph():
         # self.out.append(self.destLocation + "(Destination)")
         if len(self.out) == 1 or len(self.out) == 0:
             mockList = ""
-            results = ("None", "None", "Walk", round(self.dist["Destination"], 2) * 3, mockList)
+            results = ("None", "None", "Walk", round(self.dist["Destination"], 2) * 3, mockList, boardTime, src, dest)
             return results
         else:
-            results = (self.out[0], self.out[-1], self.busTaken, round(self.dist["Destination"]) * 3, self.out)
+            results = (self.out[0], self.out[-1], self.busTaken, round(self.dist["Destination"]) * 3, self.out, boardTime, src, dest)
             return results
 
     def e_Neighbours(self, u):
@@ -797,13 +800,8 @@ class Graph():
 
         return result
 
-        
-        
-        
-
-
     # Outputs the bus route
-    def getBusRoute(self,bus):
+    def getBusRoute(self, bus):
         hm = {}
         hm["A1"] = ["PGP", "KRMRT", "LT27", "UHall", "OppUHC", "YIH", "CLB", "LT13", "AS5", "COM2", "BIZ2", "OppTCOMS",
                     "PGP7", "PGP"]
@@ -824,15 +822,16 @@ class Graph():
         hm["BTC2"] = ["OTHBldg", "BGMRT", "Museum", "EA", "KRBusTerminal"]
 
         stops = hm[bus]
-        routeWithArrows= ""
+        routeWithArrows = ""
         for n, string in enumerate(stops):
-            if n == len(stops) -1 :
+            if n == len(stops) - 1:
                 routeWithArrows = routeWithArrows + string + " "
-            else :    
+            else:
                 routeWithArrows = routeWithArrows + string + " -> "
         return routeWithArrows
 
 
+        
 # Driver program
 g = Graph()
 # Shortest distance from source lesson location to destination lesson location
@@ -842,4 +841,3 @@ datenow = now.strftime("%d/%m/%Y")
 timenow = now.strftime("%H:%M:%S").replace(':', '-')
 #results = g.dijkstra("COM1", "OppUHall", 0, 10, timenow, datenow );
 #print(results)
-

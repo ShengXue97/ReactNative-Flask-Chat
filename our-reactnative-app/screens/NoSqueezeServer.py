@@ -9,26 +9,67 @@ import socket
 import pandas as pd
 import requests
 
-
 app = Flask(__name__)
 
 @app.route("/")
 def index():
     return "Hi, This is index page :) \n"
 
-@app.route("/login", methods=["GET","POST"])
+@app.route("/add", methods=["POST"])
+def add():
+    num1 = request.json.get('num1')
+    num2 = request.json.get('num2')
+    print(num1)
+    print(request.json)
+    return jsonify({
+        'status': 'OK',
+        'recommendedOriginBusStop': int(num1) + int(num2),
+})
+
+@app.route("/minus", methods=["POST"])
+def minus():
+    num1 = request.json.get('num1')
+    num2 = request.json.get('num2')
+    print(num1)
+    print(request.json)
+    return jsonify({
+        'status': 'OK',
+        'recommendedOriginBusStop': int(num1) - int(num2),
+})
+
+@app.route("/getBus", methods = ["GET","POST"])
+def getBus():
+    busNumber = request.json.get('busNumber',None)
+    g = DPQ.Graph()
+    stops = g.getBusRoute(busNumber)
+    return jsonify({
+    'route': stops
+    })
+
+@app.route("/Timetable/<moduleCode>", methods = ["GET","POST"])
+def getTimeTable(moduleCode):
+    baseUrl = 'https://api.nusmods.com/v2/2019-2020/modules/'
+    moduleCodeJSON = moduleCode + ".json"
+    finalUrl = baseUrl + moduleCodeJSON
+    r = requests.get(finalUrl)
+    #print r.json()
+    return (r.json())
+    
+@app.route("/login", methods=["POST"])
 def login():
-    originLocation = request.json.get('originLocation', None)
-    destLocation = request.json.get('destLocation', None)
-    crowdPref = request.json.get('crowdPref', None)
-    walkPref = request.json.get('walkPref', None)
+    originLocation = request.json.get('originLocation')
+    destLocation = request.json.get('destLocation')
+    crowdPref = request.json.get('crowdPref')
+    walkPref = request.json.get('walkPref')
+    boardTime = request.json.get('boardTime')
+    
     # Driver program
     g = DPQ.Graph()
     # Shortest distance from source lesson location to destination lesson location
     now = g.roundTime(dt.datetime.now(), 300)
     datenow = now.strftime("%d/%m/%Y")
     timenow = now.strftime("%H:%M:%S").replace(':', '-')
-    results = g.dijkstra(originLocation, destLocation, crowdPref, walkPref, timenow, datenow );
+    results = g.dijkstra(originLocation, destLocation, crowdPref, walkPref, timenow, datenow, boardTime );
     print(results)
 
     return jsonify({
@@ -39,13 +80,16 @@ def login():
         'recommendedBus': results[2],
         'recommendedTime': results[3],
         'recommendedRoute': results[4],
+        'boardTime': results[5],
+        'originLocation': results[6],
+        'destLocation': results[7],
 })
 
-@app.route("/graph", methods=["GET","POST"])
+@app.route("/graph", methods=["POST"])
 def getGraphCrowd():
-    location = request.json.get('location', None)
-    week = request.json.get('week', None)
-    dayofweek = request.json.get('dayofweek', None)
+    location = request.json.get('location')
+    week = request.json.get('week')
+    dayofweek = request.json.get('dayofweek')
     date =  ""
     print("???????????????????")
     print(week)
@@ -284,33 +328,6 @@ def getGraphCrowd():
         'time': df['time'].tolist(),
         'value': df['value'].tolist(),
 })
-
-@app.route("/requestIP", methods=["GET","POST"])
-def requestIP():
-    ip = socket.gethostbyname(socket.gethostname())
-    return jsonify({
-        'status': 'OK',
-        'ip': ip,
-})
-
-
-@app.route("/getBus", methods = ["GET","POST"])
-def getBus():
-    busNumber = request.json.get('busNumber',None)
-    g = DPQ.Graph()
-    stops = g.getBusRoute(busNumber)
-    return jsonify({
-    'route': stops
-    })
-
-@app.route("/Timetable/<moduleCode>", methods = ["GET","POST"])
-def getTimeTable(moduleCode):
-    baseUrl = 'https://api.nusmods.com/v2/2019-2020/modules/'
-    moduleCodeJSON = moduleCode + ".json"
-    finalUrl = baseUrl + moduleCodeJSON
-    r = requests.get(finalUrl)
-    #print r.json()
-    return (r.json())
       
 
 

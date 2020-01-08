@@ -13,7 +13,6 @@ import {
   Slider,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Card, ListItem} from 'react-native-elements';
 import { AsyncStorage } from "react-native";
 import axios from 'axios';
 
@@ -61,17 +60,27 @@ export class Settings extends Component {
     global.thursday = [];
     global.friday = [];
 
+    global.monday2 = [];
+    global.tuesday2 = [];
+    global.wednesday2 = [];
+    global.thursday2 = [];
+    global.friday2 = [];
+
+    global.distance1 = 5;
+    global.distance1 = 5;
+
+    global.fridayInit = false;
     this.state = {
+      
       distance1: 5,
       distance2: 5,
       minDistance: 0,
       maxDistance: 10,
       pointsLeft: 0,
       moduleInput: '',
-      timetable: ["hi"],
+      timetable: ['hi'],
     };
   }
-
 
   componentWillMount() {
     this.startHeaderHeight = 50;
@@ -81,229 +90,240 @@ export class Settings extends Component {
   }
 
   storeData = async () => {
-      
     try {
-      await AsyncStorage.setItem('@MySuperStore:key1', this.state.distance1.toString() );
+      await AsyncStorage.setItem(
+        '@MySuperStore:key1',
+        this.state.distance1.toString()
+      );
     } catch (error) {
       // Error saving data
     }
 
     try {
-      await AsyncStorage.setItem('@MySuperStore:key2', this.state.distance2.toString() );
+      await AsyncStorage.setItem(
+        '@MySuperStore:key2',
+        this.state.distance2.toString()
+      );
     } catch (error) {
       // Error saving data
     }
+    global.distance1 = this.state.distance1;
+    global.distance2 = this.state.distance2;
 
-    alert("Successfully updated user preferences!");
-  }
+    alert('Successfully updated user preferences!');
+  };
 
-retrieveData = async () => {
+  retrieveData = async () => {
     try {
       const value1 = await AsyncStorage.getItem('@MySuperStore:key1');
       if (value1 !== null) {
         // We have data!!
-        this.setState({distance1: parseInt(value1)})
+        this.setState({ distance1: parseInt(value1) });
       }
-     } catch (error) {
-       // Error retrieving data
-     }
+    } catch (error) {
+      // Error retrieving data
+    }
 
-     try {
+    try {
       const value2 = await AsyncStorage.getItem('@MySuperStore:key2');
       if (value2 !== null) {
         // We have data!!
-        this.setState({distance2: parseInt(value2)})
+        this.setState({ distance2: parseInt(value2) });
       }
-     } catch (error) {
-       // Error retrieving data
-     }
-  }
+    } catch (error) {
+      // Error retrieving data
+    }
+
+    global.distance1 = this.state.distance1;
+    global.distance2 = this.state.distance2;
+  };
 
   makeIntoString(objectInput) {
     return JSON.stringify(objectInput);
   }
 
-    printModCode() {
-      Alert.alert("TimeTable Updated!");
-      return this.parseNusModsLink(this.state.moduleInput)
-    }
+  printModCode() {
+    Alert.alert('TimeTable Updated!');
+    return this.parseNusModsLink(this.state.moduleInput);
+  }
 
-    parseModule(inputModule) {
-      //represent each module as a map
-      //each map has the following keys and entries:
-      //module_Code = {the module name}
-      //TUT,LEC,LAB,SEC,REC, each giving the respective number
-      let myModuleMap = new Map()
-      //split by = to give the mod code in [0] and the classes in [1]
-      let splitModule = inputModule.split('=')
-      let moduleName = splitModule[0]
-      myModuleMap.set("module_Code",moduleName);
-      if(splitModule.length == 1) {
-        //this basically means that the module has no classes
-        return myModuleMap
-      }
-      let classes = splitModule[1]
-      let myClassesSplit = classes.split(',')
-      //split into the name of the class 
-      //like: TUT LEC LAB SEC REC
-      let length = myClassesSplit.length;      
-      for(let i = 0; i < length; i++) {
-        let currClass = myClassesSplit[i];
-        let currClassSplit = currClass.split(':');
-        myModuleMap.set(currClassSplit[0],currClassSplit[1])
-      }
+  parseModule(inputModule) {
+    //represent each module as a map
+    //each map has the following keys and entries:
+    //module_Code = {the module name}
+    //TUT,LEC,LAB,SEC,REC, each giving the respective number
+    let myModuleMap = new Map();
+    //split by = to give the mod code in [0] and the classes in [1]
+    let splitModule = inputModule.split('=');
+    let moduleName = splitModule[0];
+    myModuleMap.set('module_Code', moduleName);
+    if (splitModule.length == 1) {
+      //this basically means that the module has no classes
       return myModuleMap;
     }
+    let classes = splitModule[1];
+    let myClassesSplit = classes.split(',');
+    //split into the name of the class
+    //like: TUT LEC LAB SEC REC
+    let length = myClassesSplit.length;
+    for (let i = 0; i < length; i++) {
+      let currClass = myClassesSplit[i];
+      let currClassSplit = currClass.split(':');
+      myModuleMap.set(currClassSplit[0], currClassSplit[1]);
+    }
+    return myModuleMap;
+  }
 
-    parseNusModsLink(link) {
-      //myModules is an array of each "module" --> refer to parseModule
-      let myModules = [];
-     //Take the NUS MODS link and remove the useless stuff
+  parseNusModsLink(link) {
+    //myModules is an array of each "module" --> refer to parseModule
+    let myModules = [];
+    //Take the NUS MODS link and remove the useless stuff
 
-      let startIndex = link.indexOf('?') + 1
-      let linkWithoutHTTPS = link.substring(startIndex)
-      //split by & to get an array of the string of each module
-      let modulesString = linkWithoutHTTPS.split('&')
-      let length = modulesString.length;
-      //for each module string, parse it and add to the myModules array as a module
-      for (let i = 0; i < length; i++) {
+    let startIndex = link.indexOf('?') + 1;
+    let linkWithoutHTTPS = link.substring(startIndex);
+    //split by & to get an array of the string of each module
+    let modulesString = linkWithoutHTTPS.split('&');
+    let length = modulesString.length;
+    //for each module string, parse it and add to the myModules array as a module
+    for (let i = 0; i < length; i++) {
       let currModule = this.parseModule(modulesString[i]);
       myModules.push(currModule);
-      }        
-      return myModules;
     }
-      //returns an array of the modules, in which each module
-      //is represented as a map of key value pairs
-      //"module_Code" is the key to the module
-      //rest are "LAB","TUT","LEC","SEC"
+    return myModules;
+  }
+  //returns an array of the modules, in which each module
+  //is represented as a map of key value pairs
+  //"module_Code" is the key to the module
+  //rest are "LAB","TUT","LEC","SEC"
 
-      // https://nusmods.com/timetable/sem-1/share?
-      // CS2100=LAB:09,TUT:03,LEC:1&CS2101=&CS2102=TUT:08,
-      // LEC:1&CS2103T=LEC:G13&GEH1074=TUT:W04,LEC:1
+  // https://nusmods.com/timetable/sem-1/share?
+  // CS2100=LAB:09,TUT:03,LEC:1&CS2101=&CS2102=TUT:08,
+  // LEC:1&CS2103T=LEC:G13&GEH1074=TUT:W04,LEC:1
+
+  onGetModule() {
     
+    let moduleArray = this.printModCode();
+    //moduleArray is the parse array of all modules,
+    //where each module is represented as a map
+    //each map contains module_Code and classes
+    let myArrayOfModules = [];
+    global.monday = [];
+    global.tuesday = [];
+    global.wednesday = [];
+    global.thursday = [];
+    global.friday = [];
 
-      
-    onGetModule() {
-        let moduleArray = this.printModCode();
-        //moduleArray is the parse array of all modules, 
-        //where each module is represented as a map
-        //each map contains module_Code and classes
-        let myArrayOfModules = [];
+    global.monday2 = [];
+    global.tuesday2 = [];
+    global.wednesday2 = [];
+    global.thursday2 = [];
+    global.friday2 = [];
 
-        for(let i = 0; i < moduleArray.length; i++) {
-          let myCurrentModuleMap = new Map();
-          //this map is the final version of each module, 
-          //with all the relevant info
-          let currentModuleBeingAdded = moduleArray[i];
-          let moduleName = currentModuleBeingAdded.get("module_Code");
-          myCurrentModuleMap.set("module_Code",moduleName);
-          //So set the module code for this map
-          http.get(serverURL+ '/Timetable/'+ moduleName, {
-          moduleCode : moduleName,
-          })//get this module info from NUS mods api
-          .then(response => this.handleResponse(response))
-          .then((response) => {
+    for (let i = 0; i < moduleArray.length; i++) {
+      let myCurrentModuleMap = new Map();
+      //this map is the final version of each module,
+      //with all the relevant info
+      let currentModuleBeingAdded = moduleArray[i];
+      let moduleName = currentModuleBeingAdded.get('module_Code');
+      myCurrentModuleMap.set('module_Code', moduleName);
+      //So set the module code for this map
+      http
+        .get(serverURL + '/Timetable/' + moduleName, {
+          moduleCode: moduleName,
+        }) //get this module info from NUS mods api
+        .then(response => this.handleResponse(response))
+        .then(response => {
+          //so with this response, we have the timetable
+          //in the timetable, we have an array of all the classes
+          //so you access each class with array notation
+          //then, you access the info inside each class
+          //using object notation (x.y)
+          let numberOfClassesInThisModule = response.length;
+          let tutClass = currentModuleBeingAdded.get('TUT');
 
-            //so with this response, we have the timetable
-            //in the timetable, we have an array of all the classes
-            //so you access each class with array notation
-            //then, you access the info inside each class
-            //using object notation (x.y)
-            let numberOfClassesInThisModule = response.length
-            let tutClass = currentModuleBeingAdded.get("TUT");
+          let labClass = currentModuleBeingAdded.get('LAB');
 
-            let labClass = currentModuleBeingAdded.get("LAB");
+          let sectClass = currentModuleBeingAdded.get('SEC');
 
-            let sectClass = currentModuleBeingAdded.get("SEC");
+          let lectClass = currentModuleBeingAdded.get('LEC');
 
-            let lectClass = currentModuleBeingAdded.get("LEC");
+          for (let j = 0; j < numberOfClassesInThisModule; j++) {
+            let currClass = response[j];
+            let classNumber = currClass.classNo;
+            let classType = currClass.lessonType;
 
-            for(let j = 0; j < numberOfClassesInThisModule; j++) {
-              let currClass = response[j];
-              let classNumber = currClass.classNo;
-              let classType = currClass.lessonType;
+            let myMap = new Map();
+            myMap.set('day', currClass.day);
+            myMap.set('startTime', currClass.startTime);
+            myMap.set('endTime', currClass.endTime);
+            myMap.set('venue', currClass.venue);
+            myMap.set('module', moduleName);
+            myMap.set('compare', parseInt(currClass.startTime));
+            myMap.set('view', 'Category');
 
-              let myMap = new Map();
-              myMap.set('day',currClass.day);
-              myMap.set('startTime',currClass.startTime);
-              myMap.set('endTime',currClass.endTime);
-              myMap.set('venue',currClass.venue);
-              myMap.set('module',moduleName);
-              myMap.set('compare',parseInt(currClass.startTime));
-
-              if(classNumber == tutClass && classType == "Tutorial") {
-                myMap.set('type','Tutorial');
-              } else if(classNumber == labClass && classType == "Laboratory") {
-                myMap.set('type','Lab');
-              } else if(classNumber == sectClass && classType == "Sectional") {
-                myMap.set('type','Sectional');
-              } else if(classNumber == lectClass && classType == "Lecture") {
-                myMap.set('type','Lecture');
-              } else {
-                continue;
-              }
-              if(currClass.day == "Monday") {
-                global.monday.push(myMap);
-
-
-              } else if (currClass.day == "Tuesday") {
-                global.tuesday.push(myMap);
-              } else if (currClass.day == "Wednesday") {
-                global.wednesday.push(myMap);
-              } else if (currClass.day == "Thursday") {
-                global.thursday.push(myMap);
-              } else if (currClass.day == "Friday") {
-                global.friday.push(myMap);
-              }                       
-             }
-             myArrayOfModules.push(myCurrentModuleMap);         
-            return myCurrentModuleMap;
-          })
-          .then((hello) => {
-          this.setState({timetable : myArrayOfModules})
+            if (classNumber == tutClass && classType == 'Tutorial') {
+              myMap.set('type', 'Tutorial');
+            } else if (classNumber == labClass && classType == 'Laboratory') {
+              myMap.set('type', 'Lab');
+            } else if (classNumber == sectClass && classType == 'Sectional') {
+              myMap.set('type', 'Sectional');
+            } else if (classNumber == lectClass && classType == 'Lecture') {
+              myMap.set('type', 'Lecture');
+            } else {
+              continue;
+            }
+            if (currClass.day == 'Monday') {
+              global.monday.push(myMap);
+            } else if (currClass.day == 'Tuesday') {
+              global.tuesday.push(myMap);
+            } else if (currClass.day == 'Wednesday') {
+              global.wednesday.push(myMap);
+            } else if (currClass.day == 'Thursday') {
+              global.thursday.push(myMap);
+            } else if (currClass.day == 'Friday') {
+              global.friday.push(myMap);
+            }
+          }
+          myArrayOfModules.push(myCurrentModuleMap);
+          return myCurrentModuleMap;
+        })
+        .then(hello => {
+          this.setState({ timetable: myArrayOfModules });
           global.timeTable = myArrayOfModules;
-          global.monday.sort(this.comparatorHere)
-          global.tuesday.sort(this.comparatorHere)
-          global.wednesday.sort(this.comparatorHere)
-          global.thursday.sort(this.comparatorHere)
-          global.friday.sort(this.comparatorHere)
 
+          global.monday.sort(this.comparatorHere);
+          global.tuesday.sort(this.comparatorHere);
+          global.wednesday.sort(this.comparatorHere);
+          global.thursday.sort(this.comparatorHere);
+          global.friday.sort(this.comparatorHere);
 
           return myArrayOfModules;
-          })
-          .catch((err) => console.log(err))
-        
-        }
-        }
+        })
+        .catch(err => console.log(err));
+    }
 
-        comparatorHere(a,b) {
-          return a.get('compare') - b.get('compare');
-        }
-  
-  
-       handleResponse = response => {
-        if(response.data.semesterData.length > 1) {
+  }
 
-         this.setState({
-           timetable: response.data.semesterData[1].timetable,
-          })
-          return response.data.semesterData[1].timetable;
-        } else {
-          this.setState({
-            timetable: response.data.semesterData[0].timetable,
-           })
-           return response.data.semesterData[0].timetable;
+  comparatorHere(a, b) {
+    return a.get('compare') - b.get('compare');
+  }
 
-        }
+  handleResponse = response => {
+    if (response.data.semesterData.length > 1) {
+      this.setState({
+        timetable: response.data.semesterData[1].timetable,
+      });
+      return response.data.semesterData[1].timetable;
+    } else {
+      this.setState({
+        timetable: response.data.semesterData[0].timetable,
+      });
+      return response.data.semesterData[0].timetable;
+    }
 
-
-          //Return the timetable for this semester (2)
-          //timetable contains all the classes
-      }
-
-
-
-
+    //Return the timetable for this semester (2)
+    //timetable contains all the classes
+  };
 
   render() {
     return (
@@ -343,14 +363,13 @@ retrieveData = async () => {
               }}>
               Paste your NusMods sharing link in the box below:
             </Text>
-            
 
             <View style={{ flex: 1, paddingHorizontal: 5 }}>
               <TextInput
                 underlineColorAndroid="transparent"
                 placeholder="NusMods sharing link"
                 placeholderTextColor="black"
-                onChangeText={(moduleInput) => this.setState({moduleInput})}
+                onChangeText={moduleInput => this.setState({ moduleInput })}
                 style={{
                   height: 40,
                   borderColor: 'gray',
@@ -359,23 +378,19 @@ retrieveData = async () => {
                 }}
               />
 
-            <Button
-              title="Enter Timetable"
-              color="grey"
-              onPress={() => this.onGetModule()}
-            />
-
-            <Button
-              title="Update timetable"
-              color="grey"
-              onPress={() => this.props.navigation.navigate('Timetable', {myArray: this.state.timetable,})}
-            />
-
-
-              
-
+              <Button
+                style={{ marginHorizontal: 10, marginVertical: 10 }}
+                title="Update timetable"
+                color="white"
+                onPress={() =>
+                    {
+                      this.onGetModule();
+                      this.props.navigation.navigate('Timetable', {
+                        myArray: this.state.timetable,});
+                    }
+                }
+              />
             </View>
-
 
             <Text
               style={{
@@ -419,20 +434,13 @@ retrieveData = async () => {
                     this.setState({ distance1: val });
                   }}
                   onSlidingComplete={val => {
-                    if (
-                      val + this.state.distance2 >
-                      this.state.maxDistance
-                    ) {
+                    if (val + this.state.distance2 > this.state.maxDistance) {
                       this.setState({
                         distance1:
-                          this.state.maxDistance -
-                          this.state.distance2
+                          this.state.maxDistance - this.state.distance2,
                       });
                     }
-                    if (
-                      this.state.distance1 < 0 ||
-                      this.state.distance2 < 0
-                    ) {
+                    if (this.state.distance1 < 0 || this.state.distance2 < 0) {
                       this.setState({ distance1: 5 });
                       this.setState({ distance2: 5 });
                     }
@@ -447,7 +455,7 @@ retrieveData = async () => {
                         pointsLeft:
                           this.state.maxDistance -
                           this.state.distance1 -
-                          this.state.distance2
+                          this.state.distance2,
                       });
                     } else {
                       this.setState({ pointsLeft: 0 });
@@ -492,20 +500,13 @@ retrieveData = async () => {
                     this.setState({ distance2: val });
                   }}
                   onSlidingComplete={val => {
-                    if (
-                      val + this.state.distance1 >
-                      this.state.maxDistance
-                    ) {
+                    if (val + this.state.distance1 > this.state.maxDistance) {
                       this.setState({
                         distance2:
-                          this.state.maxDistance -
-                          this.state.distance1
+                          this.state.maxDistance - this.state.distance1,
                       });
                     }
-                    if (
-                      this.state.distance1 < 0 ||
-                      this.state.distance2 < 0
-                    ) {
+                    if (this.state.distance1 < 0 || this.state.distance2 < 0) {
                       this.setState({ distance1: 5 });
                       this.setState({ distance2: 5 });
                     }
@@ -520,7 +521,7 @@ retrieveData = async () => {
                         pointsLeft:
                           this.state.maxDistance -
                           this.state.distance1 -
-                          this.state.distance2 ,
+                          this.state.distance2,
                       });
                     } else {
                       this.setState({ pointsLeft: 0 });
@@ -541,9 +542,11 @@ retrieveData = async () => {
               </View>
             </View>
 
-            <Button style = {{marginHorizontal : 10}} title='Update timetable' onPress={() => this.storeData()} />
-
-
+            <Button
+              style={{ marginHorizontal: 10, marginVertical: 10 }}
+              title="Update Preferences"
+              onPress={() => this.storeData()}
+            />
           </View>
         </ScrollView>
       </SafeAreaView>
