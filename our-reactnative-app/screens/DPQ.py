@@ -98,12 +98,17 @@ class Graph():
                 self.out.append(self.p[u].split(";")[0])
 
     #Convert the crowd level to the usable level
-    def normaliseCrowdLevel(crowdPref):
-        return (crowdPref * 100)
+    def normaliseCrowdLevel(self,input):
+        crowdNormaliser = 30
+        #note that crowdNormaliser = 30
+        if(input == 0):
+            return 30
+        return (input * 30)
     
     #Convert the walking level to the usable level
-    def normaliseWalkingLevel(walkingPref):
-        return (walkingPref * 100)
+    def normaliseWalkingLevel(self,input):
+        print(input * 0.055)
+        return (input * 0.055)
 
     
     # Function that implements Dijkstra's single source
@@ -141,26 +146,47 @@ class Graph():
         self.backtrack("Destination")
         print("Bus taken: " + self.busTaken)
 
-        crowdLevelTest = 0;
+
+        startLocation = self.busStopToCoordinates(str(self.out[0]))
+        endLocation = self.busStopToCoordinates(str(self.out[-1]))
+
+        distanceBetweenStartAndEnd = self.distance(startLocation[0], startLocation[1], endLocation[0], endLocation[1], "K")
+        maximumCrowdLevelThatUserCanTake = self.normaliseCrowdLevel(crowdPref)
+        maximumDistanceThatUserCanWalk = self.normaliseWalkingLevel(walkPref)
+
+
+
+        averageCrowdLevel = 0;
         for i in self.out:
             temp = self.getCrowdLevel(i, self.datePref, self.timePref)
-            crowdLevelTest = crowdLevelTest + temp
+            averageCrowdLevel = averageCrowdLevel + temp
+        lengthOfArray = len(self.out)    
+        if(lengthOfArray >= 1):
+            averageCrowdLevel = averageCrowdLevel / len(self.out)               
 
-        crowdLevelTest = crowdLevelTest / len(self.out)
-        print("average crowd level " + str(crowdLevelTest))
         print("my crowd pref " + str(crowdPref))
+        print("my walk pref " + str(walkPref))
+        print("distance " + str(distanceBetweenStartAndEnd))
+        print("crowd level " + str(averageCrowdLevel))
+
 
         # self.out.append(self.destLocation + "(Destination)")
         if len(self.out) == 1 or len(self.out) == 0:
             mockList = ""
             results = ("None", "None", "Walk", round(self.dist["Destination"], 2) * 3, mockList, boardTime, src, dest)
             return results
-        elif crowdLevelTest >= normaliseCrowdLevel(crowdPref):
+
+        elif (averageCrowdLevel >= maximumCrowdLevelThatUserCanTake) and (distanceBetweenStartAndEnd <= maximumDistanceThatUserCanWalk):
             mockList = ""
-            results = ("Too Crowded", "Too Crowded!", "Walk", round(self.dist["Destination"], 2) * 3, mockList, boardTime, src, dest)
+            results = ("Too Crowded!", "Too Crowded!", "Walk", round(self.dist["Destination"], 2), mockList, boardTime, src, dest)
             return results
+
+        elif distanceBetweenStartAndEnd > maximumDistanceThatUserCanWalk:
+            results = (self.out[0], self.out[-1], self.busTaken + " (It's crowded, but too far to walk!)", round(self.dist["Destination"]), self.out, boardTime, src, dest)
+            return results   
+
         else:
-            results = (self.out[0], self.out[-1], self.busTaken, round(self.dist["Destination"]) * 3, self.out, boardTime, src, dest)
+            results = (self.out[0], self.out[-1], self.busTaken, round(self.dist["Destination"]), self.out, boardTime, src, dest)
             return results
 
     def e_Neighbours(self, u):
@@ -217,8 +243,8 @@ class Graph():
                 estimatedCrowd = self.getCrowdLevel(busStopsNames[i], self.datePref, self.timePref)
                 for j in range(len(busesList)):
                     timeTaken = busStopToCoordinates[i] / walkingSpeedKMPerSecond
-                    edgeWeight = estimatedCrowd * self.crowdPref + timeTaken
-                    #edgeWeight = timeTaken
+                    #edgeWeight = estimatedCrowd * self.crowdPref + timeTaken
+                    edgeWeight = timeTaken
 
                     neighbourList.append(Node(str(busStopsNames[i]) + ";" + str(busesList[j]),
                                               edgeWeight))
@@ -254,8 +280,8 @@ class Graph():
                 timeTaken = distanceT / busSpeedKMPerSecond
 
                 estimatedCrowd = self.getCrowdLevel(nextBusStop, self.datePref, self.timePref)
-                edgeWeight = estimatedCrowd * self.crowdPref + timeTaken
-                #edgeWeight = timeTaken
+                #edgeWeight = estimatedCrowd * self.crowdPref + timeTaken
+                edgeWeight = timeTaken
 
                 
 
@@ -384,7 +410,15 @@ class Graph():
                     #print("ALRET: Receiving negative predicted crowd level" )
                     return 0.0
                 else:
-                    return predicted_crowd
+                    #print("predicted crowd " + mylocation + " " + str(predicted_crowd))
+                    if (predicted_crowd > 2000):
+                        return predicted_crowd/6
+                    elif (predicted_crowd > 1500):
+                        return predicted_crowd/5
+                    elif (predicted_crowd > 1000):
+                        return predicted_crowd/4
+                    elif (predicted_crowd > 500):
+                        return predicted_crowd/2
         else:
             print("Cannot find " + "output2/" + mylocation + "/" + myday + "/" + "Output_" + mylocation + "_" + myday + "_" + mytime + ".csv")
             return 0.0

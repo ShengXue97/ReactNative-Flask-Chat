@@ -272,21 +272,17 @@ class Path extends React.Component {
     return (
 
     <SafeAreaView style={styles.container}>
-        
-        <View
+         <View
           style={{
             height: this.startHeaderHeight,
-            backgroundColor: '#376DCF',
+            backgroundColor: 'purple',
             borderBottomWidth: 1,
             borderBottomColor: '#dddddd',
           }}>
           <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-            <TextInput
-              underlineColorAndroid="transparent"
-              placeholder="Path"
-              placeholderTextColor="white"
-              style={{ fontWeight: '700', paddingLeft: 15, paddingTop: 15 }}
-            />
+            <Text
+              style={{ fontWeight: '700', paddingLeft: 175, paddingTop: 20, paddingBottom: 20, color: 'white',textAlign: 'center'}}
+            >Path</Text>
           </View>
         </View>
 
@@ -308,11 +304,6 @@ class Path extends React.Component {
                   <View style={{flex : 1, marginHorizontal : 10, marginVertical : 15, flexDirection : 'column'}}>
                     <Icon style={{marginHorizontal : 5}} name='home' type='font-awesome' size={40} color="grey" />
                   </View>
-              </View>
-
-              <View>
-                <Divider>
-                </Divider>
               </View>
               <View style={{flex : 1, flexDirection : 'row'}}>
                   <View style = {{flex: 7, paddingHorizontal: 5}}>

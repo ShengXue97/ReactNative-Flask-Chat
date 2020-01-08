@@ -23,23 +23,19 @@ export class BusStops extends Component {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
         <View style={{ flex: 1 }}>
-          <View
-            style={{
-              height: this.startHeaderHeight,
-              backgroundColor: '#376DCF',
-              borderBottomWidth: 1,
-              borderBottomColor: '#dddddd',
-            }}>
-            <View
-              style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-              <TextInput
-                underlineColorAndroid="transparent"
-                placeholder="Bus Stops Crowd Level"
-                placeholderTextColor="white"
-                style={{ fontWeight: '700', paddingLeft: 15, paddingTop: 15 }}
-              />
-            </View>
+		<View
+          style={{
+            height: this.startHeaderHeight,
+            backgroundColor: 'purple',
+            borderBottomWidth: 1,
+            borderBottomColor: '#dddddd',
+          }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+            <Text
+              style={{ fontWeight: '700', paddingLeft: 165, paddingTop: 20, paddingBottom: 20, color: 'white',textAlign: 'center'}}
+            >Bus Stops</Text>
           </View>
+        </View>
 
           <ScrollView scrollEventThrottle={16} style={{}}>
               

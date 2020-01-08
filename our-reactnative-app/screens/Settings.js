@@ -53,12 +53,28 @@ export class Settings extends Component {
   constructor(props) {
     super(props);
     this.retrieveData();
+    let emptyMap = new Map();
+    emptyMap.set('day', " ");
+    emptyMap.set('startTime', " ");
+    emptyMap.set('endTime', " ");
+    emptyMap.set('venue', " ");
+    emptyMap.set('module', "No TimeTable Entered yet!");
+    emptyMap.set('compare', " ");
+    emptyMap.set('view', 'Empty');
+    emptyMap.set('type', " ");
     global.timeTable = [];
     global.monday = [];
     global.tuesday = [];
     global.wednesday = [];
     global.thursday = [];
     global.friday = [];
+    global.monday.push(emptyMap)
+    global.tuesday.push(emptyMap)
+    global.wednesday.push(emptyMap)
+    global.thursday.push(emptyMap)
+    global.friday.push(emptyMap)
+
+
 
     global.monday2 = [];
     global.tuesday2 = [];
@@ -328,20 +344,17 @@ export class Settings extends Component {
   render() {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-        <View
+         <View
           style={{
             height: this.startHeaderHeight,
-            backgroundColor: '#376DCF',
+            backgroundColor: 'purple',
             borderBottomWidth: 1,
             borderBottomColor: '#dddddd',
           }}>
           <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-            <TextInput
-              underlineColorAndroid="transparent"
-              placeholder="Settings"
-              placeholderTextColor="white"
-              style={{ fontWeight: '700', paddingLeft: 15, paddingTop: 15 }}
-            />
+            <Text
+              style={{ fontWeight: '700', paddingLeft: 175, paddingTop: 20, paddingBottom: 20, color: 'white',textAlign: 'center'}}
+            >Settings</Text>
           </View>
         </View>
 
@@ -381,7 +394,7 @@ export class Settings extends Component {
               <Button
                 style={{ marginHorizontal: 10, marginVertical: 10 }}
                 title="Update timetable"
-                //color="white"
+                color="purple"
                 onPress={() =>
                     {
                       this.onGetModule();

@@ -14,6 +14,8 @@ import axios from 'axios';
 import Category from './components/Timetable/Category.js'
 import WalkTransport from './components/Timetable/WalkTransport.js';
 import BusTransport from './components/Timetable/BusTransport.js';
+import EmptyTimeTable from './components/Timetable/EmptyTimeTable.js';
+
 import { createStackNavigator } from 'react-navigation'; 
 
 
@@ -97,7 +99,9 @@ export class Monday extends Component {
                 return <BusTransport module = {item} iconName = "bus"/>
 			}
               
-		}
+		} else if(item.get("view") == "Empty") {
+      return <EmptyTimeTable module = {item} iconName = 'cross'/>
+    }
     }
 
     render() {
@@ -105,16 +109,19 @@ export class Monday extends Component {
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
                 <View style={{ flex: 1 }}>
 
-                    <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
-                        <View style={{flexDirection : 'row', justifyContent : 'flex-start'}}>
-                            <TextInput
-                                underlineColorAndroid="transparent"
-                                placeholder="Recommended Timetable"
-                                placeholderTextColor="white"
-                                style={{fontWeight: '700', paddingLeft : 15, paddingTop : 15}}
-                            />
-                        </View>
-                    </View>
+                <View
+          style={{
+            height: this.startHeaderHeight,
+            backgroundColor: 'purple',
+            borderBottomWidth: 1,
+            borderBottomColor: '#dddddd',
+          }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+            <Text
+              style={{ fontWeight: '700', paddingLeft: 115, paddingTop: 20, paddingBottom: 20, color: 'white',textAlign: 'center'}}
+            >Recommended Timetable</Text>
+          </View>
+        </View>
                     <View style={{ flex: 1, flexDirection : 'column'}}>
                       <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
                           <TouchableOpacity onPress={() => {this.props.navigation.navigate('Monday'); }}
@@ -304,7 +311,10 @@ export class Tuesday extends Component {
                 return <BusTransport module = {item} iconName = "bus"/>
 			}
               
-		}
+		} else if(item.get("view") == "Empty") {
+      return <EmptyTimeTable module = {item} iconName = 'cross'/>
+    }
+    
     }
 
     render() {
@@ -512,8 +522,10 @@ export class Wednesday extends Component {
 			}
               
 		}
-    }
-
+   else if(item.get("view") == "Empty") {
+    return <EmptyTimeTable module = {item} iconName = 'cross'/>
+  }
+}
     render() {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
@@ -719,8 +731,10 @@ export class Thursday extends Component {
 			}
               
 		}
-    }
-
+   else if(item.get("view") == "Empty") {
+    return <EmptyTimeTable module = {item} iconName = 'cross'/>
+  }
+}
     render() {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
@@ -926,8 +940,10 @@ export class Friday extends Component {
 			}
               
 		}
-    }
-
+   else if(item.get("view") == "Empty") {
+    return <EmptyTimeTable module = {item} iconName = 'cross'/>
+  }
+}
     render() {
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
