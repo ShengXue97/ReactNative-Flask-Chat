@@ -41,6 +41,7 @@ export class Monday extends Component {
         }
         for (let i = 0; i < global.monday.length; i++) {
             global.monday2.push(global.monday[i]);
+            console.log("here" + global.monday2[i]);
         }
 
          global.monday2.sort(this.comparatorHere);

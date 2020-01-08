@@ -97,7 +97,7 @@ class Graph():
             else:
                 self.out.append(self.p[u].split(";")[0])
 
-    # Funtion that implements Dijkstra's single source
+    # Function that implements Dijkstra's single source
     # shortest path algorithm for a graph represented
     # using adjacency matrix representation
     def dijkstra(self, src, dest, crowdPref, walkPref, timePref, datePref, boardTime):

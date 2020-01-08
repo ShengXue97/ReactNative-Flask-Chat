@@ -381,7 +381,7 @@ export class Settings extends Component {
               <Button
                 style={{ marginHorizontal: 10, marginVertical: 10 }}
                 title="Update timetable"
-                color="white"
+                //color="white"
                 onPress={() =>
                     {
                       this.onGetModule();

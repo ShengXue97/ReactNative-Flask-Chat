@@ -246,6 +246,7 @@ class Path extends React.Component {
       destLocation : destLocation,
       crowdPref: distance1,
       walkPref: distance2,
+      boardTime: '1000'
       })
       .then((response) => this.onLoginSuccess(response))
       .catch((err) => console.log(err));

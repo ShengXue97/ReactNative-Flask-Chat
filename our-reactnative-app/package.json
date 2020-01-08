@@ -53,5 +53,8 @@
     "preset": "react-native",
     "transformIgnorePatterns": [
       "/node_modules/(?!native-base)/"
-    ]}
+    ]},
+    "snapshotSerializers": [
+      "./node_modules/jest-serializer-enzyme"
+    ]
 }
