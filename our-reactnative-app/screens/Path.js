@@ -246,7 +246,7 @@ class Path extends React.Component {
       destLocation : destLocation,
       crowdPref: distance1,
       walkPref: distance2,
-      boardTime: '1000'
+      boardTime: (new Date().getHours() + new Date().getMinutes()),
       })
       .then((response) => this.onLoginSuccess(response))
       .catch((err) => console.log(err));
@@ -339,11 +339,6 @@ class Path extends React.Component {
                     <Button style = {{marginHorizontal : 10}} title='Find Directions' onPress={() => this.retrieveData()} />
                 </View>
             
-            
-
-                <View style = {{flex : 1}}>
-                    <Text style={{fontSize: 20, fontWeight : 'bold'}}> {this.state.TextHolderTime} </Text>
-                </View>
 
                 <View style = {{flex : 1}}>
                     <Text style={{fontSize: 20, fontWeight : '100'}}> {this.state.TextHolderBus} </Text>

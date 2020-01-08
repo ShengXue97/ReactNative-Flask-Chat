@@ -97,6 +97,15 @@ class Graph():
             else:
                 self.out.append(self.p[u].split(";")[0])
 
+    #Convert the crowd level to the usable level
+    def normaliseCrowdLevel(crowdPref):
+        return (crowdPref * 100)
+    
+    #Convert the walking level to the usable level
+    def normaliseWalkingLevel(walkingPref):
+        return (walkingPref * 100)
+
+    
     # Function that implements Dijkstra's single source
     # shortest path algorithm for a graph represented
     # using adjacency matrix representation
@@ -111,7 +120,7 @@ class Graph():
         self.timePref = timePref
         self.datePref = datePref
         self.pq.put(Node("Source", 0.0))
-        print("crowdPref: " + str(crowdPref) + ";" + "walkPref: " + str(walkPref) + "\n")
+        #print("crowdPref: " + str(crowdPref) + ";" + "walkPref: " + str(walkPref) + "\n")
         # Minimum distance from source to source is 0
         self.dist["Source"] = 0.0
         # Minimum number of bus stops from source to soruce is 0
@@ -132,10 +141,23 @@ class Graph():
         self.backtrack("Destination")
         print("Bus taken: " + self.busTaken)
 
+        crowdLevelTest = 0;
+        for i in self.out:
+            temp = self.getCrowdLevel(i, self.datePref, self.timePref)
+            crowdLevelTest = crowdLevelTest + temp
+
+        crowdLevelTest = crowdLevelTest / len(self.out)
+        print("average crowd level " + str(crowdLevelTest))
+        print("my crowd pref " + str(crowdPref))
+
         # self.out.append(self.destLocation + "(Destination)")
         if len(self.out) == 1 or len(self.out) == 0:
             mockList = ""
             results = ("None", "None", "Walk", round(self.dist["Destination"], 2) * 3, mockList, boardTime, src, dest)
+            return results
+        elif crowdLevelTest >= normaliseCrowdLevel(crowdPref):
+            mockList = ""
+            results = ("Too Crowded", "Too Crowded!", "Walk", round(self.dist["Destination"], 2) * 3, mockList, boardTime, src, dest)
             return results
         else:
             results = (self.out[0], self.out[-1], self.busTaken, round(self.dist["Destination"]) * 3, self.out, boardTime, src, dest)
@@ -196,6 +218,8 @@ class Graph():
                 for j in range(len(busesList)):
                     timeTaken = busStopToCoordinates[i] / walkingSpeedKMPerSecond
                     edgeWeight = estimatedCrowd * self.crowdPref + timeTaken
+                    #edgeWeight = timeTaken
+
                     neighbourList.append(Node(str(busStopsNames[i]) + ";" + str(busesList[j]),
                                               edgeWeight))
 
@@ -231,8 +255,13 @@ class Graph():
 
                 estimatedCrowd = self.getCrowdLevel(nextBusStop, self.datePref, self.timePref)
                 edgeWeight = estimatedCrowd * self.crowdPref + timeTaken
+                #edgeWeight = timeTaken
+
+                
 
                 neighbourList.append(Node(nextBusStop + ";" + bus, edgeWeight))
+                #print("estimated crowd level " + str(estimatedCrowd))
+                #print('crowd pref ' + str(self.crowdPref))
 
             # Generates a walking edge from the bus stop to the destination vertex
             vC2 = self.mapToCoordinates(self.destLocation)
@@ -298,6 +327,7 @@ class Graph():
 
     #Return the estimated crowd level from the csv file, using machine learning
     def getCrowdLevel(self, mylocation, mydate, mytime):
+        #print("my time " + str(mytime))
         mydatesplit = mydate.split("/")
         day = int(mydatesplit[0])
         month = int(mydatesplit[1])
