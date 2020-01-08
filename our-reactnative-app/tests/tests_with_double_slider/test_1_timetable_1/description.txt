@@ -1,0 +1,8 @@
+Pref:
+0 Crowd
+10 Bus
+
+TimeTable:
+https://nusmods.com/timetable/sem-2/share?CS2106=TUT:10,LAB:05,LEC:1&CS2107=TUT:07,LEC:1&CS3230=TUT:05,LEC:1&ST2334=TUT:7,LEC:2
+
+
