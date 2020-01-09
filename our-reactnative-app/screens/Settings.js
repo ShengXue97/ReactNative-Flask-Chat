@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   SafeAreaView,
   TextInput,
@@ -14,13 +13,12 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { AsyncStorage } from "react-native";
 import axios from 'axios';
-import { Card, ListItem, Button, Divider } from 'react-native-elements'
+import { Card, ListItem, Button, Divider, Tooltip, Text } from 'react-native-elements'
 
 
 
-const ip_address = '0.0.0.0'
-const serverURL = 'http://' + ip_address + ':8668';
-
+const ip_address = 'nosqueeze.herokuapp.com'
+const serverURL = 'http://' + ip_address + ':80';
 const http = axios.create({
   baseURL: serverURL,
 });
@@ -99,7 +97,7 @@ export class Settings extends Component {
       minDistance: 0,
       maxDistance: 10,
       pointsLeft: 0,
-      moduleInput: '',
+      moduleInput: 'https://nusmods.com/timetable/sem-2/share?ACC1002=LEC:V1,TUT:V07&CG2028=LAB:01,TUT:03,LEC:01&CS1010S=REC:11,LEC:1,TUT:11&EG1311=LAB:01,LEC:01&GES1000=SEC:A1&MA1102R=TUT:11,LAB:3,LEC:1&UTC1102C=SEM:1&UTC1112A=SEM:1&UTC1119=SEM:2',
       timetable: ['hi'],
     };
   }
@@ -165,7 +163,7 @@ export class Settings extends Component {
   }
 
   printModCode() {
-    Alert.alert('TimeTable Updated! Click any of the days to see your timetable!');
+    Alert.alert('TimeTable Updated! Click any of the days to refresh');
     return this.parseNusModsLink(this.state.moduleInput);
   }
 
@@ -463,7 +461,7 @@ export class Settings extends Component {
             <View style={{ flex: 1, paddingHorizontal: 5 }}>
               <TextInput
                 underlineColorAndroid="transparent"
-                placeholder="NusMods sharing link"
+                placeholder="https://nusmods.com/timetable/sem-2/share?ACC1002=LEC:V1,TUT:V07&CG2028=LAB:01,TUT:03,LEC:01&CS1010S=REC:11,LEC:1,TUT:11&EG1311=LAB:01,LEC:01&GES1000=SEC:A1&MA1102R=TUT:11,LAB:3,LEC:1&UTC1102C=SEM:1&UTC1112A=SEM:1&UTC1119=SEM:2"
                 placeholderTextColor="black"
                 onChangeText={moduleInput => this.setState({ moduleInput })}
                 style={{
@@ -501,7 +499,15 @@ export class Settings extends Component {
                 fontWeight: '700',
                 paddingHorizontal: 5,
               }}>
-              Allocate points(10 total) among the two conditions
+              Allocate importance points(10 total) among the two conditions
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                fontWeight: '700',
+                paddingHorizontal: 5,
+                paddingTop: 5,
+              }}>
             </Text>
 
             <Text
@@ -510,8 +516,15 @@ export class Settings extends Component {
                 fontWeight: '500',
                 paddingHorizontal: 5,
               }}>
-              If you hate crowds, we will prioritize walking so that you can avoid crowded buses.
-              If you hate walking, we will prioritize bus trips so that you can avoid walking.
+              Hate crowds? Walk!
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                fontWeight: '500',
+                paddingHorizontal: 5,
+              }}>
+              Hate walking? Take the bus! 
             </Text>
 
             <Text
@@ -519,9 +532,8 @@ export class Settings extends Component {
                 fontSize: 12,
                 fontWeight: '700',
                 paddingHorizontal: 5,
-                paddingTop: 10,
+                paddingTop: 5,
               }}>
-              Points Left: {this.state.pointsLeft} /10
             </Text>
 
             <View
@@ -577,33 +589,16 @@ export class Settings extends Component {
                       value={this.state.distance1}
                       onValueChange={val => {
                         this.setState({ distance1: val });
+                        this.setState({ distance2:  this.state.maxDistance - val });
                       }}
                       onSlidingComplete={val => {
                         if (val + this.state.distance2 > this.state.maxDistance) {
-                          this.setState({
-                            distance1:
-                              this.state.maxDistance - this.state.distance2,
-                          });
+                          this.setState({ distance1: 5 });
+                          this.setState({ distance2: 5 });
                         }
                         if (this.state.distance1 < 0 || this.state.distance2 < 0) {
                           this.setState({ distance1: 5 });
                           this.setState({ distance2: 5 });
-                        }
-
-                        if (
-                          this.state.maxDistance -
-                            this.state.distance1 -
-                            this.state.distance2 >
-                          0
-                        ) {
-                          this.setState({
-                            pointsLeft:
-                              this.state.maxDistance -
-                              this.state.distance1 -
-                              this.state.distance2,
-                          });
-                        } else {
-                          this.setState({ pointsLeft: 0 });
                         }
                       }}
                       thumbTintColor="#376DCF"
@@ -664,7 +659,7 @@ export class Settings extends Component {
                 marginRight: 5
               }}>
               <View style={{ flex: 1, padding: 5 }}>
-                <Icon name={'bicycle'} size={40} color="F19F86" />
+                <Icon name={'street-view'} size={40} color="F19F86" /> 
               </View>
               <View style={{ flex: 5 }}>
                 <Slider
@@ -675,34 +670,18 @@ export class Settings extends Component {
                   value={this.state.distance2}
                   onValueChange={val => {
                     this.setState({ distance2: val });
+                    this.setState({ distance1:  this.state.maxDistance - val });
                   }}
                   onSlidingComplete={val => {
                     if (val + this.state.distance1 > this.state.maxDistance) {
-                      this.setState({
-                        distance2:
-                          this.state.maxDistance - this.state.distance1,
-                      });
+                      this.setState({ distance1: 5 });
+                      this.setState({ distance2: 5 });
                     }
                     if (this.state.distance1 < 0 || this.state.distance2 < 0) {
                       this.setState({ distance1: 5 });
                       this.setState({ distance2: 5 });
                     }
 
-                    if (
-                      this.state.maxDistance -
-                        this.state.distance1 -
-                        this.state.distance2 >
-                      0
-                    ) {
-                      this.setState({
-                        pointsLeft:
-                          this.state.maxDistance -
-                          this.state.distance1 -
-                          this.state.distance2,
-                      });
-                    } else {
-                      this.setState({ pointsLeft: 0 });
-                    }
                   }}
                   thumbTintColor="#376DCF"
                   maximumTrackTintColor="#d3d3d3"

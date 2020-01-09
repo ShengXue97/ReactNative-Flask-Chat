@@ -107,8 +107,8 @@ class Graph():
     
     #Convert the walking level to the usable level
     def normaliseWalkingLevel(self,input):
-        print(input * 0.055)
-        return (input * 0.055)
+        print((10 - input) * 0.055)
+        return ((10 - input) * 0.055)
 
     
     # Function that implements Dijkstra's single source
@@ -145,6 +145,9 @@ class Graph():
         print("Total time taken: " + str(self.dist["Destination"] / 60) + " minutes")
         self.backtrack("Destination")
         print("Bus taken: " + self.busTaken)
+        print("start location " + self.out[0])
+        print("end location " + self.out[-1])
+
 
 
         startLocation = self.busStopToCoordinates(str(self.out[0]))
@@ -158,6 +161,7 @@ class Graph():
 
         averageCrowdLevel = 0;
         for i in self.out:
+            print ("wa fuck la " + i)
             temp = self.getCrowdLevel(i, self.datePref, self.timePref)
             averageCrowdLevel = averageCrowdLevel + temp
         lengthOfArray = len(self.out)    
@@ -168,6 +172,7 @@ class Graph():
         print("my walk pref " + str(walkPref))
         print("distance " + str(distanceBetweenStartAndEnd))
         print("crowd level " + str(averageCrowdLevel))
+        print(" length of list " + str(len(self.out)))
 
 
         # self.out.append(self.destLocation + "(Destination)")
@@ -176,12 +181,12 @@ class Graph():
             results = ("None", "None", "Walk", round(self.dist["Destination"], 2) * 3, mockList, boardTime, src, dest)
             return results
 
-        elif (averageCrowdLevel >= maximumCrowdLevelThatUserCanTake) and (distanceBetweenStartAndEnd <= maximumDistanceThatUserCanWalk):
+        elif ((averageCrowdLevel != 0 and averageCrowdLevel > maximumCrowdLevelThatUserCanTake) and (distanceBetweenStartAndEnd < maximumDistanceThatUserCanWalk)):
             mockList = ""
             results = ("Too Crowded!", "Too Crowded!", "Walk", round(self.dist["Destination"], 2), mockList, boardTime, src, dest)
             return results
 
-        elif distanceBetweenStartAndEnd > maximumDistanceThatUserCanWalk:
+        elif distanceBetweenStartAndEnd >= maximumDistanceThatUserCanWalk:
             results = (self.out[0], self.out[-1], self.busTaken + " (It's crowded, but too far to walk!)", round(self.dist["Destination"]), self.out, boardTime, src, dest)
             return results   
 
@@ -215,7 +220,7 @@ class Graph():
         # FIRST CASE: Generate walking edges from source to each of the nearest bus stops
         if (u.node == "Source"):
             # Estimated walking speed of a person
-            walkingSpeedKMPerSecond = 0.0014 * (10 - (self.walkPref - 1))
+            walkingSpeedKMPerSecond = 0.0014 #* (10 - (self.walkPref - 1))
 
             busStopsNames = []
             busStopToCoordinates = []
@@ -273,7 +278,7 @@ class Graph():
                 return
             else:
                 busSpeedKMPerSecond = 0.00833333
-                walkingSpeedKMPerSecond = 0.0014 * (10 - (self.walkPref - 1))
+                walkingSpeedKMPerSecond = 0.0014 #* (10 - (self.walkPref - 1))
                 uC = self.busStopToCoordinates(busStop)
                 vC = self.busStopToCoordinates(nextBusStop)
                 distanceT = self.distance(uC[0], uC[1], vC[0], vC[1], "K")
