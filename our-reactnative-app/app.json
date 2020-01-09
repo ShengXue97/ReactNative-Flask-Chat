@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "nosqueeze-app",
+    "name": "NoSqueeze",
     "description": "Our snack",
     "slug": "snack-af811347-c240-4a94-ba55-ac945f63fd06",
     "privacy": "unlisted",
@@ -8,7 +8,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "primaryColor": "#cccccc",
-    "icon": "https://d1wp6m56sqw74a.cloudfront.net/~assets/c9aa1be8a6a6fe81e20c3ac4106a2ebc",
+    "icon": "icon.png",
     "loading": {
       "icon": "https://d1wp6m56sqw74a.cloudfront.net/~assets/c9aa1be8a6a6fe81e20c3ac4106a2ebc",
       "hideExponentText": false
@@ -22,7 +22,11 @@
       ]
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+	  "bundleIdentifier": "sg.edu.nus.enterprise.nosqueeze"
+    },
+	"android": {
+      "package": "com.acecoders.NoSqueeze"
     },
     "platforms": [
       "android",
@@ -30,3 +34,4 @@
     ]
   }
 }
+

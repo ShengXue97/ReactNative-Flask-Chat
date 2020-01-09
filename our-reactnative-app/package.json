@@ -32,6 +32,7 @@
     "react-native-dropdown-autocomplete": "^1.0.18",
     "react-native-elements": "0.18.5",
     "react-native-gesture-handler": "^1.5.3",
+    "react-native-line-chart": "^1.0.4",
     "react-native-picker-select": "^6.3.3",
     "react-native-really-awesome-button": "1.5.0",
     "react-native-safe-area-context": "0.6.0",
@@ -53,8 +54,9 @@
     "preset": "react-native",
     "transformIgnorePatterns": [
       "/node_modules/(?!native-base)/"
-    ]},
-    "snapshotSerializers": [
-      "./node_modules/jest-serializer-enzyme"
     ]
+  },
+  "snapshotSerializers": [
+    "./node_modules/jest-serializer-enzyme"
+  ]
 }
