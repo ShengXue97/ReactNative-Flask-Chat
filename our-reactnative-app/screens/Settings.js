@@ -9,18 +9,18 @@ import {
   StatusBar,
   ScrollView,
   Alert,
-  Button,
   Slider,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { AsyncStorage } from "react-native";
 import axios from 'axios';
-
+import { Card, ListItem, Button, Divider } from 'react-native-elements'
 
 
 
 const ip_address = '0.0.0.0'
 const serverURL = 'http://' + ip_address + ':8668';
+
 const http = axios.create({
   baseURL: serverURL,
 });
@@ -52,6 +52,7 @@ function Item({ message, username }) {
 export class Settings extends Component {
   constructor(props) {
     super(props);
+
     this.retrieveData();
     let emptyMap = new Map();
     emptyMap.set('day', " ");
@@ -74,7 +75,12 @@ export class Settings extends Component {
     global.thursday.push(emptyMap)
     global.friday.push(emptyMap)
 
-
+    global.mondayNavigate = 'None';
+    global.tuesdayNavigate = 'None';
+    global.wednesdayNavigate = 'None';
+    global.thursdayNavigate = 'None';
+    global.fridayNavigate = 'None';
+    global.defaultDay ='None',
 
     global.monday2 = [];
     global.tuesday2 = [];
@@ -159,7 +165,7 @@ export class Settings extends Component {
   }
 
   printModCode() {
-    Alert.alert('TimeTable Updated!');
+    Alert.alert('TimeTable Updated! Click any of the days to see your timetable!');
     return this.parseNusModsLink(this.state.moduleInput);
   }
 
@@ -263,6 +269,66 @@ export class Settings extends Component {
 
           let lectClass = currentModuleBeingAdded.get('LEC');
 
+          if (global.monday.length == 0){
+              let emptyMap = new Map();
+              emptyMap.set('view', 'Empty');
+              emptyMap.set('module', "No Lesson On Monday!");
+              emptyMap.set('day', " ");
+              emptyMap.set('startTime', " ");
+              emptyMap.set('endTime', " ");
+              emptyMap.set('venue', " ");
+              emptyMap.set('compare', " ");
+              emptyMap.set('type', " ");
+              global.monday.push(emptyMap);
+		  }
+          if (global.tuesday.length == 0){
+              let emptyMap = new Map();
+              emptyMap.set('view', 'Empty');
+              emptyMap.set('module', "No Lesson On Tuesday!");
+              emptyMap.set('day', " ");
+              emptyMap.set('startTime', " ");
+              emptyMap.set('endTime', " ");
+              emptyMap.set('venue', " ");
+              emptyMap.set('compare', " ");
+              emptyMap.set('type', " ");
+              global.tuesday.push(emptyMap);
+		  }
+          if (global.wednesday.length == 0){
+              let emptyMap = new Map();
+              emptyMap.set('view', 'Empty');
+              emptyMap.set('module', "No Lesson On Wednesday!");
+              emptyMap.set('day', " ");
+              emptyMap.set('startTime', " ");
+              emptyMap.set('endTime', " ");
+              emptyMap.set('venue', " ");
+              emptyMap.set('compare', " ");
+              emptyMap.set('type', " ");
+              global.wednesday.push(emptyMap);
+		  }
+          if (global.thursday.length == 0){
+              let emptyMap = new Map();
+              emptyMap.set('view', 'Empty');
+              emptyMap.set('module', "No Lesson On Thursday!");
+              emptyMap.set('day', " ");
+              emptyMap.set('startTime', " ");
+              emptyMap.set('endTime', " ");
+              emptyMap.set('venue', " ");
+              emptyMap.set('compare', " ");
+              emptyMap.set('type', " ");
+              global.thursday.push(emptyMap);
+		  }
+          if (global.friday.length == 0){
+              let emptyMap = new Map();
+              emptyMap.set('view', 'Empty');
+              emptyMap.set('module', "No Lesson On Friday!");
+              emptyMap.set('day', " ");
+              emptyMap.set('startTime', " ");
+              emptyMap.set('endTime', " ");
+              emptyMap.set('venue', " ");
+              emptyMap.set('compare', " ");
+              emptyMap.set('type', " ");
+              global.friday.push(emptyMap);
+		  }
           for (let j = 0; j < numberOfClassesInThisModule; j++) {
             let currClass = response[j];
             let classNumber = currClass.classNo;
@@ -289,14 +355,29 @@ export class Settings extends Component {
               continue;
             }
             if (currClass.day == 'Monday') {
+              if (global.monday.length == 1 && global.monday[0].get('view') == 'Empty'){
+                global.monday = [];     
+			  }
               global.monday.push(myMap);
             } else if (currClass.day == 'Tuesday') {
+              if (global.tuesday.length == 1 && global.tuesday[0].get('view') == 'Empty'){
+                global.tuesday = [];     
+			  }
               global.tuesday.push(myMap);
             } else if (currClass.day == 'Wednesday') {
+              if (global.wednesday.length == 1 && global.wednesday[0].get('view') == 'Empty'){
+                global.wednesday = [];     
+			  }
               global.wednesday.push(myMap);
             } else if (currClass.day == 'Thursday') {
+                if (global.thursday.length == 1 && global.thursday[0].get('view') == 'Empty'){
+                global.thursday = [];     
+			  }
               global.thursday.push(myMap);
             } else if (currClass.day == 'Friday') {
+                if (global.friday.length == 1 && global.friday[0].get('view') == 'Empty'){
+                global.friday = [];     
+			  }
               global.friday.push(myMap);
             }
           }
@@ -316,6 +397,8 @@ export class Settings extends Component {
           return myArrayOfModules;
         })
         .catch(err => console.log(err));
+
+        
     }
 
   }
@@ -394,9 +477,16 @@ export class Settings extends Component {
               <Button
                 style={{ marginHorizontal: 10, marginVertical: 10 }}
                 title="Update timetable"
-                color="purple"
+                backgroundColor="purple"
+                color="white"
                 onPress={() =>
                     {
+                      global.mondayNavigate = 'Monday';
+                      global.tuesdayNavigate = 'Tuesday';
+                      global.wednesdayNavigate = 'Wednesday';
+                      global.thursdayNavigate = 'Thursday';
+                      global.fridayNavigate = 'Friday';
+                      global.defaultDay ='Monday',
                       this.onGetModule();
                       this.props.navigation.navigate('Timetable', {
                         myArray: this.state.timetable,});
@@ -408,10 +498,10 @@ export class Settings extends Component {
             <Text
               style={{
                 fontSize: 12,
-                fontWeight: '500',
+                fontWeight: '700',
                 paddingHorizontal: 5,
               }}>
-              Allocate importance points(10 total) among the two conditions
+              Allocate points(10 total) among the two conditions
             </Text>
 
             <Text
@@ -420,12 +510,23 @@ export class Settings extends Component {
                 fontWeight: '500',
                 paddingHorizontal: 5,
               }}>
+              If you hate crowds, we will prioritize walking so that you can avoid crowded buses.
+              If you hate walking, we will prioritize bus trips so that you can avoid walking.
+            </Text>
+
+            <Text
+              style={{
+                fontSize: 12,
+                fontWeight: '700',
+                paddingHorizontal: 5,
+                paddingTop: 10,
+              }}>
               Points Left: {this.state.pointsLeft} /10
             </Text>
 
             <View
               style={{
-                flexDirection: 'row',
+                flexDirection: 'column',
                 justifyContent: 'space-between',
                 alignItems: 'stretch',
                 marginLeft: 5,
@@ -433,74 +534,137 @@ export class Settings extends Component {
                 borderWidth: 0.5,
                 borderColor: '#dddddd',
               }}>
-              <View style={{ flex: 1, padding: 5 }}>
-                <Icon name={'users'} size={40} color="grey" />
-              </View>
-              <View style={{ flex: 5 }}>
-                <Slider
-                  style={{ flex: 1, height: 10 }}
-                  step={1}
-                  minimumValue={this.state.minDistance}
-                  maximumValue={this.state.maxDistance}
-                  value={this.state.distance1}
-                  onValueChange={val => {
-                    this.setState({ distance1: val });
-                  }}
-                  onSlidingComplete={val => {
-                    if (val + this.state.distance2 > this.state.maxDistance) {
-                      this.setState({
-                        distance1:
-                          this.state.maxDistance - this.state.distance2,
-                      });
-                    }
-                    if (this.state.distance1 < 0 || this.state.distance2 < 0) {
-                      this.setState({ distance1: 5 });
-                      this.setState({ distance2: 5 });
-                    }
 
-                    if (
-                      this.state.maxDistance -
-                        this.state.distance1 -
-                        this.state.distance2 >
-                      0
-                    ) {
-                      this.setState({
-                        pointsLeft:
-                          this.state.maxDistance -
-                          this.state.distance1 -
-                          this.state.distance2,
-                      });
-                    } else {
-                      this.setState({ pointsLeft: 0 });
-                    }
-                  }}
-                  thumbTintColor="#376DCF"
-                  maximumTrackTintColor="#d3d3d3"
-                  minimumTrackTintColor="grey"
-                />
-                <View style={styles.textCon}>
-                  <Text style={styles.colorGrey}>{this.state.minDistance}</Text>
-                  <Text style={styles.colorYellow}>{this.state.distance1}</Text>
-                  <Text style={styles.colorGrey}>{this.state.maxDistance}</Text>
-                </View>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'stretch', padding: 5 }}>
+                  <View style={{ flex: 1, padding: 5 }}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontWeight: '700',
+                      }}>
+                      Loves Crowd
+                    </Text>
+                  </View>
+                  <View style={{ flex: 1, padding: 5 }}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontWeight: '700',
+                        paddingLeft: 90,
+                      }}>
+                      Hates Crowd
+                    </Text>
+                  </View>
               </View>
-              <View style={{ flex: 1, padding: 5 }}>
-                <Icon name={'user'} size={40} color="grey" />
-              </View>
-            </View>
 
-            <View
+              <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'stretch',
                 marginLeft: 5,
                 marginRight: 5,
+              }}>
+                  <View style={{ flex: 1, padding: 5 }}>
+                    <Icon name={'users'} size={40} color="F19F86" />
+                  </View>
+                  <View style={{ flex: 5 }}>
+                    <Slider
+                      style={{ flex: 1, height: 10 }}
+                      step={1}
+                      minimumValue={this.state.minDistance}
+                      maximumValue={this.state.maxDistance}
+                      value={this.state.distance1}
+                      onValueChange={val => {
+                        this.setState({ distance1: val });
+                      }}
+                      onSlidingComplete={val => {
+                        if (val + this.state.distance2 > this.state.maxDistance) {
+                          this.setState({
+                            distance1:
+                              this.state.maxDistance - this.state.distance2,
+                          });
+                        }
+                        if (this.state.distance1 < 0 || this.state.distance2 < 0) {
+                          this.setState({ distance1: 5 });
+                          this.setState({ distance2: 5 });
+                        }
+
+                        if (
+                          this.state.maxDistance -
+                            this.state.distance1 -
+                            this.state.distance2 >
+                          0
+                        ) {
+                          this.setState({
+                            pointsLeft:
+                              this.state.maxDistance -
+                              this.state.distance1 -
+                              this.state.distance2,
+                          });
+                        } else {
+                          this.setState({ pointsLeft: 0 });
+                        }
+                      }}
+                      thumbTintColor="#376DCF"
+                      maximumTrackTintColor="#d3d3d3"
+                      minimumTrackTintColor="grey"
+                    />
+                    <View style={styles.textCon}>
+                      <Text style={styles.colorGrey}>{this.state.minDistance}</Text>
+                      <Text style={styles.colorYellow}>{this.state.distance1}</Text>
+                      <Text style={styles.colorGrey}>{this.state.maxDistance}</Text>
+                    </View>
+                  </View>
+                  <View style={{ flex: 1, padding: 5 }}>
+                    <Icon name={'user'} size={40} color="F19F86" />
+                  </View>
+            </View>
+            </View>
+            
+
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                alignItems: 'stretch',
+                marginLeft: 5,
+                marginRight: 5,
                 borderWidth: 0.5,
                 borderColor: '#dddddd',
               }}>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'stretch', padding: 5 }}>
+                  <View style={{ flex: 1, padding: 5 }}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontWeight: '700',
+                      }}>
+                      Loves Walking
+                    </Text>
+                  </View>
+                  <View style={{ flex: 1, padding: 5 }}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontWeight: '700',
+                        paddingLeft: 90,
+                      }}>
+                      Hates Walking
+                    </Text>
+                  </View>
+              </View>
+
+              <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'stretch',
+                marginLeft: 5,
+                marginRight: 5
+              }}>
               <View style={{ flex: 1, padding: 5 }}>
-                <Icon name={'bicycle'} size={40} color="grey" />
+                <Icon name={'bicycle'} size={40} color="F19F86" />
               </View>
               <View style={{ flex: 5 }}>
                 <Slider
@@ -551,13 +715,18 @@ export class Settings extends Component {
                 </View>
               </View>
               <View style={{ flex: 1, padding: 5 }}>
-                <Icon name={'bus'} size={40} color="grey" />
+                <Icon name={'bus'} size={40} color="F19F86" />
               </View>
             </View>
+              
+            </View>
+
+            
 
             <Button
               style={{ marginHorizontal: 10, marginVertical: 10 }}
               title="Update Preferences"
+              backgroundColor="purple"
               onPress={() => this.storeData()}
             />
           </View>

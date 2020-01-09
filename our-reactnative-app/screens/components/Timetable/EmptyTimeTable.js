@@ -18,12 +18,9 @@ class Category extends Component {
             height: 80, marginLeft: 5, 
             marginRight: 5, borderWidth: 0.5, borderColor: '#dddddd' }}>
             <View style={{ flex : 1, flexDirection : 'row'}}>
-              <View style={{width: 46, padding : 5 }}>
-                    <Icon name={this.props.iconName} size={30} color="grey" />
-              </View>
               <View style={{height: 40, width: width - 70, padding : 5, justifyContent: "flex-start" }}>
                   <View>
-                      <Text style={{ fontSize: 14, fontWeight: '800'}}>{this.props.module.get("module")}</Text>
+                      <Text style={{ fontSize: 14, fontWeight: '500'}}>{this.props.module.get("module")}</Text>
                   </View>
               </View>  
             </View>

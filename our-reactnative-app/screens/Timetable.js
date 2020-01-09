@@ -21,9 +21,11 @@ import { createStackNavigator } from 'react-navigation';
 
 const ip_address = '0.0.0.0'
 const serverURL = 'http://' + ip_address + ':8668';
+
 const http = axios.create({
   baseURL: serverURL,
 });
+
 export class Monday extends Component {
   constructor(props) {
     super(props);
@@ -100,7 +102,7 @@ export class Monday extends Component {
 			}
               
 		} else if(item.get("view") == "Empty") {
-      return <EmptyTimeTable module = {item} iconName = 'cross'/>
+        return <EmptyTimeTable module = {item} iconName = 'cross'/>
     }
     }
 
@@ -124,7 +126,7 @@ export class Monday extends Component {
         </View>
                     <View style={{ flex: 1, flexDirection : 'column'}}>
                       <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Monday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.mondayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -142,7 +144,7 @@ export class Monday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Tuesday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.tuesdayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -160,7 +162,7 @@ export class Monday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Wednesday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.wednesdayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -172,7 +174,7 @@ export class Monday extends Component {
                               borderRadius:50,
                             }}
                             >
-                            <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20, color :'grey' }}>
+                            <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20, color :'F19F86' }}>
                                   W
                             </Text>
                             
@@ -196,7 +198,7 @@ export class Monday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Friday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.fridayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -322,19 +324,22 @@ export class Tuesday extends Component {
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
                 <View style={{ flex: 1 }}>
 
-                    <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
-                        <View style={{flexDirection : 'row', justifyContent : 'flex-start'}}>
-                            <TextInput
-                                underlineColorAndroid="transparent"
-                                placeholder="Recommended Timetable"
-                                placeholderTextColor="white"
-                                style={{fontWeight: '700', paddingLeft : 15, paddingTop : 15}}
-                            />
-                        </View>
+                    <View
+                      style={{
+                        height: this.startHeaderHeight,
+                        backgroundColor: 'purple',
+                        borderBottomWidth: 1,
+                        borderBottomColor: '#dddddd',
+                      }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                        <Text
+                          style={{ fontWeight: '700', paddingLeft: 115, paddingTop: 20, paddingBottom: 20, color: 'white',textAlign: 'center'}}
+                        >Recommended Timetable</Text>
+                      </View>
                     </View>
                     <View style={{ flex: 1, flexDirection : 'column'}}>
                       <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Monday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.mondayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -352,7 +357,7 @@ export class Tuesday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Tuesday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.tuesdayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -370,7 +375,7 @@ export class Tuesday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Wednesday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.wednesdayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -406,7 +411,7 @@ export class Tuesday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Friday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.fridayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -531,19 +536,22 @@ export class Wednesday extends Component {
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
                 <View style={{ flex: 1 }}>
 
-                    <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
-                        <View style={{flexDirection : 'row', justifyContent : 'flex-start'}}>
-                            <TextInput
-                                underlineColorAndroid="transparent"
-                                placeholder="Recommended Timetable"
-                                placeholderTextColor="white"
-                                style={{fontWeight: '700', paddingLeft : 15, paddingTop : 15}}
-                            />
-                        </View>
+                    <View
+                      style={{
+                        height: this.startHeaderHeight,
+                        backgroundColor: 'purple',
+                        borderBottomWidth: 1,
+                        borderBottomColor: '#dddddd',
+                      }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                        <Text
+                          style={{ fontWeight: '700', paddingLeft: 115, paddingTop: 20, paddingBottom: 20, color: 'white',textAlign: 'center'}}
+                        >Recommended Timetable</Text>
+                      </View>
                     </View>
                     <View style={{ flex: 1, flexDirection : 'column'}}>
                       <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Monday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.mondayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -561,7 +569,7 @@ export class Wednesday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Tuesday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.tuesdayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -579,7 +587,7 @@ export class Wednesday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Wednesday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.wednesdayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -615,7 +623,7 @@ export class Wednesday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Friday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.fridayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -740,19 +748,22 @@ export class Thursday extends Component {
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
                 <View style={{ flex: 1 }}>
 
-                    <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
-                        <View style={{flexDirection : 'row', justifyContent : 'flex-start'}}>
-                            <TextInput
-                                underlineColorAndroid="transparent"
-                                placeholder="Recommended Timetable"
-                                placeholderTextColor="white"
-                                style={{fontWeight: '700', paddingLeft : 15, paddingTop : 15}}
-                            />
-                        </View>
+                    <View
+                      style={{
+                        height: this.startHeaderHeight,
+                        backgroundColor: 'purple',
+                        borderBottomWidth: 1,
+                        borderBottomColor: '#dddddd',
+                      }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                        <Text
+                          style={{ fontWeight: '700', paddingLeft: 115, paddingTop: 20, paddingBottom: 20, color: 'white',textAlign: 'center'}}
+                        >Recommended Timetable</Text>
+                      </View>
                     </View>
                     <View style={{ flex: 1, flexDirection : 'column'}}>
                       <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Monday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.mondayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -770,7 +781,7 @@ export class Thursday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Tuesday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.tuesdayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -788,7 +799,7 @@ export class Thursday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Wednesday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.wednesdayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -824,7 +835,7 @@ export class Thursday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Friday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.fridayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -949,19 +960,22 @@ export class Friday extends Component {
             <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
                 <View style={{ flex: 1 }}>
 
-                    <View style={{ height: this.startHeaderHeight, backgroundColor: '#376DCF', borderBottomWidth: 1, borderBottomColor: '#dddddd'}}>
-                        <View style={{flexDirection : 'row', justifyContent : 'flex-start'}}>
-                            <TextInput
-                                underlineColorAndroid="transparent"
-                                placeholder="Recommended Timetable"
-                                placeholderTextColor="white"
-                                style={{fontWeight: '700', paddingLeft : 15, paddingTop : 15}}
-                            />
-                        </View>
+                    <View
+                      style={{
+                        height: this.startHeaderHeight,
+                        backgroundColor: 'purple',
+                        borderBottomWidth: 1,
+                        borderBottomColor: '#dddddd',
+                      }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                        <Text
+                          style={{ fontWeight: '700', paddingLeft: 115, paddingTop: 20, paddingBottom: 20, color: 'white',textAlign: 'center'}}
+                        >Recommended Timetable</Text>
+                      </View>
                     </View>
                     <View style={{ flex: 1, flexDirection : 'column'}}>
                       <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Monday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.mondayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -979,7 +993,7 @@ export class Friday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Tuesday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.tuesdayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -997,7 +1011,7 @@ export class Friday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Wednesday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.wednesdayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -1033,7 +1047,7 @@ export class Friday extends Component {
                             
                           </TouchableOpacity>
 
-                          <TouchableOpacity onPress={() => {this.props.navigation.navigate('Friday'); }}
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.fridayNavigate); }}
                             style={{
                               borderWidth:1,
                               borderColor:'grey',
@@ -1074,15 +1088,160 @@ export class Friday extends Component {
     }
 }
 
+export class None extends Component {
+  
+
+  constructor(props) {
+    super(props);
+  }
+
+
+    componentWillMount() {
+        this.startHeaderHeight = 50
+        if (Platform.OS == 'android') {
+            this.startHeaderHeight = 100 + StatusBar.currentHeight
+        }
+    }
+
+    render() {
+        return (
+            <SafeAreaView style={{ flex: 1, backgroundColor: 'white'}}>
+                <View style={{ flex: 1 }}>
+
+                    <View
+                      style={{
+                        height: this.startHeaderHeight,
+                        backgroundColor: 'purple',
+                        borderBottomWidth: 1,
+                        borderBottomColor: '#dddddd',
+                      }}>
+                      <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                        <Text
+                          style={{ fontWeight: '700', paddingLeft: 115, paddingTop: 20, paddingBottom: 20, color: 'white',textAlign: 'center'}}
+                        >Recommended Timetable</Text>
+                      </View>
+                    </View>
+                    <View style={{ flex: 1, flexDirection : 'column'}}>
+                      <View style={{ flexDirection : 'row', paddingTop: 5, justifyContent : 'space-around' }}>
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.mondayNavigate); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20, color :'grey' }}>
+                                  M
+                            </Text>
+                            
+                          </TouchableOpacity>
+
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.tuesdayNavigate); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20, color :'grey' }}>
+                                  T
+                            </Text>
+                            
+                          </TouchableOpacity>
+
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.wednesdayNavigate); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20, color :'grey' }}>
+                                  W
+                            </Text>
+                            
+                          </TouchableOpacity>
+
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.thursdayNavigate); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20, color :'grey' }}>
+                                  T
+                            </Text>
+                            
+                          </TouchableOpacity>
+
+                          <TouchableOpacity onPress={() => {this.props.navigation.navigate(global.fridayNavigate); }}
+                            style={{
+                              borderWidth:1,
+                              borderColor:'grey',
+                              alignItems:'center',
+                              justifyContent:'center',
+                              width:60,
+                              height:60,
+                              backgroundColor:'#fff',
+                              borderRadius:50,
+                            }}
+                            >
+                            <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20, color :'grey' }}>
+                                  F
+                            </Text>
+                            
+                          </TouchableOpacity>
+                            
+                      </View>
+                      
+                      <ScrollView scrollEventThrottle={16} style={{}}>
+                          <View style={{ flex: 1, paddingTop: 5 }}>
+                              <Text style={{ fontSize: 24, fontWeight: '700', paddingHorizontal: 20, color :'grey', paddingTop : 10 }}>
+                                  No Timetable Entered Yet!
+                            </Text>
+
+                          </View>
+                      </ScrollView>
+                    </View>
+
+                </View>
+            </SafeAreaView>
+        );
+    }
+
+}
+
 export default createStackNavigator (
     {
+        None: None,
         Monday:Monday,
         Tuesday:Tuesday,
         Wednesday:Wednesday,
         Thursday:Thursday,
         Friday:Friday
     },{
-        initialRouteName:'Monday',
+        initialRouteName: global.defaultDay,
         headerMode: 'none',
         transitionConfig: () => ({
         transitionSpec: {

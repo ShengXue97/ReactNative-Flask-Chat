@@ -10,6 +10,7 @@ import {Autocomplete, withKeyboardAwareScrollView} from "react-native-dropdown-a
 
 const ip_address = '0.0.0.0'
 const serverURL = 'http://' + ip_address + ':8668';
+
 const http = axios.create({
   baseURL: serverURL,
 });
@@ -231,6 +232,7 @@ class Path extends React.Component {
          // Error retrieving data
        }
 
+       
        this.onLogin();
   }
 
@@ -263,6 +265,7 @@ class Path extends React.Component {
         TextHolderRoute: 'Bus route: ' + response.data.recommendedRoute,
         recommendedRoute: response.data.recommendedRoute,
     })
+    alert('Successfully updated path information!');
   }
 
 
@@ -302,7 +305,7 @@ class Path extends React.Component {
                           />
                   </View>
                   <View style={{flex : 1, marginHorizontal : 10, marginVertical : 15, flexDirection : 'column'}}>
-                    <Icon style={{marginHorizontal : 5}} name='home' type='font-awesome' size={40} color="grey" />
+                    <Icon style={{marginHorizontal : 5}} name='home' type='font-awesome' size={40} color="F19F86" />
                   </View>
               </View>
               <View style={{flex : 1, flexDirection : 'row'}}>
@@ -318,7 +321,7 @@ class Path extends React.Component {
                           />
                   </View>
                   <View style={{flex : 1, marginHorizontal : 10, marginVertical : 10, flexDirection : 'column'}}>
-                    <Icon style={{marginHorizontal : 5, marginVertical : 15}} name='flag-checkered' type='font-awesome' size={40} color="grey" />
+                    <Icon style={{marginHorizontal : 5, marginVertical : 15}} name='flag-checkered' type='font-awesome' size={40} color="F19F86" />
                   </View>
               </View>
 
@@ -327,7 +330,7 @@ class Path extends React.Component {
           <View style={{flex : 7, borderWidth: 0.5, borderColor: '#dddddd', paddingTop: 15}}>
             <ScrollView scrollEventThrottle={16} style={{flex : 1}}>
                 <View style = {{flex : 1}}>
-                    <Button style = {{marginHorizontal : 10}} title='Find Directions' onPress={() => this.retrieveData()} />
+                    <Button style = {{marginHorizontal : 10}} backgroundColor='purple' title='Find Directions' onPress={() => this.retrieveData()} />
                 </View>
             
 
@@ -336,7 +339,7 @@ class Path extends React.Component {
                 </View>
 
                 <View style={{flex : 1, flexDirection : 'row', borderWidth: 0.5, borderColor: '#dddddd',}}>
-                  <Icon style={{marginHorizontal : 5}} name='home' type='font-awesome' size={40} color="grey" />
+                  <Icon style={{marginHorizontal : 5}} name='home' type='font-awesome' size={40} color="F19F86" />
                   <View style={{flex : 1, marginHorizontal : 10, marginVertical : 0, flexDirection : 'row'}}>
                       <Text style={{ marginVertical : 5, fontSize: 20}}> {this.state.TextHolderStart} </Text>
                   </View>
@@ -346,12 +349,12 @@ class Path extends React.Component {
                   
                   <TouchableOpacity onPress={() => this.toggleShow()}  style={{flex : 1, marginVertical : 10, flexDirection : 'row', justifyContent : 'space-between'}}>
                     <View style={{flexDirection : 'row'}}>
-                        <Icon style={{ marginHorizontal : 5}} name='bus' type='font-awesome' size={40} color="grey" />
+                        <Icon style={{ marginHorizontal : 5}} name='bus' type='font-awesome' size={40} color="F19F86" />
                         <Text style={{ marginVertical : 5, marginHorizontal : 5, fontSize: 20}}> {this.state.TextHolderOrigin} </Text>
                     </View>
 
                     <View style={{}}>
-                        <Icon style={{ marginHorizontal : 5, marginVertical : 15}} name='ellipsis-v' type='font-awesome' size={40} color="grey" />
+                        <Icon style={{ marginHorizontal : 5, marginVertical : 15}} name='ellipsis-v' type='font-awesome' size={40} color="F19F86" />
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -363,14 +366,14 @@ class Path extends React.Component {
 
                 <View style={{flex : 1, flexDirection : 'row', borderWidth: 0.5, borderColor: '#dddddd',}}>
 
-                  <Icon style={{marginHorizontal : 5}} name='bus' type='font-awesome' size={40} color="grey" />
+                  <Icon style={{marginHorizontal : 5}} name='bus' type='font-awesome' size={40} color="F19F86" />
                   <View style={{flex : 1, marginHorizontal : 10, marginVertical : 10, flexDirection : 'row'}}>
                       <Text style={{ marginVertical : 0, fontSize: 20}}> {this.state.TextHolderDest} </Text>
                   </View>
                 </View>
 
                 <View style={{flex : 1, flexDirection : 'row', borderWidth: 0.5, borderColor: '#dddddd',}}>
-                  <Icon style={{marginHorizontal : 5}} name='flag-checkered' type='font-awesome' size={40} color="grey" />
+                  <Icon style={{marginHorizontal : 5}} name='flag-checkered' type='font-awesome' size={40} color="F19F86" />
                   <View style={{flex : 1, marginHorizontal : 10, marginVertical : 10, flexDirection : 'row'}}>
                       <Text style={{  fontSize: 20}}> {this.state.TextHolderEnd} </Text>
                   </View>
@@ -397,7 +400,7 @@ export class Route extends React.Component {
         data={this.props.recommendedRoute}
         renderItem={({ item }) => 
         <View style={{flex : 0.5, flexDirection : 'row', paddingLeft : 10, borderWidth: 0.5, borderColor: '#dddddd'}}>
-            <Icon style={{marginHorizontal : 5, paddingTop : 13, paddingLeft: 5}} name='bars' type='font-awesome' size={15} color="grey" />
+            <Icon style={{marginHorizontal : 5, paddingTop : 13, paddingLeft: 5}} name='bars' type='font-awesome' size={15} color="F19F86" />
             <View style={{flex : 1, marginHorizontal : 10, flexDirection : 'row'}}>
             <Text style={{ fontSize: 15}}> {item} </Text>
             </View>

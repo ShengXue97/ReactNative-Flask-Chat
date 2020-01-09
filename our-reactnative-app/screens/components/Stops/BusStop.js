@@ -38,7 +38,7 @@ export default class BusStop extends Component {
                     <TouchableOpacity
                       onPress={() => this.ShowHideComponent()}>
                         <View style={{ flex: 1, paddingTop: 1, flexDirection: 'row' }}>
-                            <Icon style={{marginHorizontal : 5}} name='star' type='font-awesome' size={20} color="grey" />
+                            <Icon style={{marginHorizontal : 5}} name='star' type='font-awesome' size={20} color="F19F86" />
                             <View style={{ flex: 1, paddingTop: 5, flexDirection: 'column' }}>
                                 <Text
                                     style={{

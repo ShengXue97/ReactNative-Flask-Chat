@@ -3,8 +3,8 @@
   "expoServerPort": null,
   "packagerPort": null,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://3g-fcd.tishyakhanna97.our-reactnative-app.exp.direct",
+  "packagerNgrokUrl": "https://packager.3g-fcd.tishyakhanna97.our-reactnative-app.exp.direct",
+  "ngrokPid": 28982,
   "webpackServerPort": null
 }

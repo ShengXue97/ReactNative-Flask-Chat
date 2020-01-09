@@ -7,8 +7,9 @@ import axios from 'axios';
 
 import DayButton from "../Services/DayButton";
 import Crowd from "./Crowd";
-const ip_address = '0.0.0.0'
-const serverURL = 'http://' + ip_address + ':8668';
+
+const ip_address = 'nosqueeze.herokuapp.com'
+const serverURL = 'http://' + ip_address + ':80';
 const http = axios.create({
   baseURL: serverURL,
 });
@@ -27,6 +28,7 @@ export default class Day extends Component {
       }
 
       ShowHideComponent = () => {
+        alert('Fetching Crowd Level Data!');
         if (this.state.show == true) {
           this.setState({ show: false });
         } else {
