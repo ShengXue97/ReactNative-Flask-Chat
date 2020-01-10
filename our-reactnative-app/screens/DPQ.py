@@ -103,12 +103,16 @@ class Graph():
         #note that crowdNormaliser = 30
         if(input == 0):
             return 30
-        return (input * 30)
+        else:   
+            return (input * 30)
     
     #Convert the walking level to the usable level
     def normaliseWalkingLevel(self,input):
-        print((10 - input) * 0.055)
-        return ((10 - input) * 0.055)
+        if(input == 10):
+            return 0.1
+        else:    
+            print("distance real " + str((10 - input) * 0.055))
+            return ((10 - input) * 0.055)
 
     
     # Function that implements Dijkstra's single source
@@ -154,14 +158,13 @@ class Graph():
         endLocation = self.busStopToCoordinates(str(self.out[-1]))
 
         distanceBetweenStartAndEnd = self.distance(startLocation[0], startLocation[1], endLocation[0], endLocation[1], "K")
-        maximumCrowdLevelThatUserCanTake = self.normaliseCrowdLevel(crowdPref)
+        maximumCrowdLevelThatUserCanTake = self.normaliseCrowdLevel((10-crowdPref))
         maximumDistanceThatUserCanWalk = self.normaliseWalkingLevel(walkPref)
 
 
 
         averageCrowdLevel = 0;
         for i in self.out:
-            print ("wa fuck la " + i)
             temp = self.getCrowdLevel(i, self.datePref, self.timePref)
             averageCrowdLevel = averageCrowdLevel + temp
         lengthOfArray = len(self.out)    
@@ -181,7 +184,7 @@ class Graph():
             results = ("None", "None", "Walk", round(self.dist["Destination"], 2) * 3, mockList, boardTime, src, dest)
             return results
 
-        elif ((averageCrowdLevel != 0 and averageCrowdLevel > maximumCrowdLevelThatUserCanTake) and (distanceBetweenStartAndEnd < maximumDistanceThatUserCanWalk)):
+        elif ((averageCrowdLevel > maximumCrowdLevelThatUserCanTake) and (distanceBetweenStartAndEnd < maximumDistanceThatUserCanWalk)):
             mockList = ""
             results = ("Too Crowded!", "Too Crowded!", "Walk", round(self.dist["Destination"], 2), mockList, boardTime, src, dest)
             return results
