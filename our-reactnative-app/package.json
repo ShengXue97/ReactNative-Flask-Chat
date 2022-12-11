@@ -20,7 +20,7 @@
     "@react-native-community/slider": "2.0.7",
     "axios": "^0.19.0",
     "expo": "^36.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "formik": "^2.0.8",
     "jest-expo": "^36.0.1",
     "native-base": "2.13.8",
